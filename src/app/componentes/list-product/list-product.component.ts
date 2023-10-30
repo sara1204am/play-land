@@ -28,7 +28,7 @@ export class ListProductComponent implements AfterViewChecked {
     ) {}
 
   ngOnInit() {
-    this.isMobile = window.innerWidth <= 800;
+    this.isMobile = window?.innerWidth <= 800;
     this.getData()
   }
 

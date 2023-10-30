@@ -37,6 +37,7 @@
 
 
 <div class="cards">
+    {{ listProductos[0] | json }}
     <ng-container  *ngFor="let item of listProductos">
         <div class="card">
             <div class="card__image-holder  overflow_hidden">
