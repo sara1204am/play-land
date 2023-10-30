@@ -13,6 +13,7 @@ export class ListProductComponent implements AfterViewChecked {
   private isThereCard = false;
   public textSearch: string = '';
 
+  public error: any;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -28,7 +29,7 @@ export class ListProductComponent implements AfterViewChecked {
     ) {}
 
   ngOnInit() {
-    this.isMobile = window?.innerWidth <= 800;
+    this.isMobile = window?.innerWidth <= 800; 
     this.getData()
   }
 
@@ -73,7 +74,14 @@ export class ListProductComponent implements AfterViewChecked {
   }
 
   async getData() {
-    this.listProductos = await lastValueFrom(this.listProductService.getProductos())
+    try {
+      this.listProductos = await lastValueFrom(this.listProductService.getProductos())
+      this.error= 'poo'
+    } catch(e) {
+      this.error = e
+    }
+
+
   }
 
   async orderPrice(type: string){
