@@ -20,7 +20,6 @@ html {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       background-image: url('../../../assets/imagenes/img-banner-1-962x450.jpg');
       background-size: cover;
       background-repeat: no-repeat;
@@ -28,7 +27,7 @@ html {
   }
   
   .app {
-       position: relative;
+      position: relative;
       min-width: 850px;
       height: 540px;
       box-shadow: 0 0 60px $appShadowClr;
@@ -150,7 +149,6 @@ html {
   }
   
   .initial {
-    margin-top: 35px;
       .app__img {
           transform: translate3d(0, 0, 0);
       }
@@ -286,6 +284,16 @@ html {
     top: 48px!important;
     right: 27px;
   }
+  .box--1-mobile {
+    width: 325px;
+    top: 48px !important;
+    left: 31%;
+  }
+
+  .box--2-mobile {
+    left: 34%;
+    top: 200px !important;
+  }
   
   *, *:before, *:after {
     margin: 0;
@@ -304,7 +312,7 @@ html {
 
 .msg {
     font-family: 'Righteous', serif;
-    font-size: 18px;
+    font-size: 16px;
     color: #000;
     font-weight: bolder;
 }

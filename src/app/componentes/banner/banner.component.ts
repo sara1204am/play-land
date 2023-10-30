@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-banner',
@@ -6,6 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent {
+
+  public isMobile: boolean = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.isMobile = window.innerWidth <= 800;
+  }
+  
   app!: HTMLElement;
   img!: HTMLElement;
   pageNav1!: HTMLElement;
@@ -16,6 +24,8 @@ export class BannerComponent {
   nextSlide!: number;
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 800;
+
     this.app = document.querySelector('.app') as HTMLElement;
     this.img = document.querySelector('.app__img') as HTMLElement;
     this.pageNav1 = document.querySelector('.pages__item--1') as HTMLElement;
@@ -29,14 +39,14 @@ export class BannerComponent {
       this.animation = false;
     }, 4500);
     
-    setInterval(() => {
+     setInterval(() => {
      if(this.curSlide === 1){
       this.handlePageItemClick(2)
      } else {
       this.handlePageItemClick(1)
      } 
 
-    }, 7000);
+    }, 7000);  
   }
 
   pagination(slide: number, target?: number): void {

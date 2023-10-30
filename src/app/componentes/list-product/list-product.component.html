@@ -1,18 +1,70 @@
 <div class="d-flex">
     <div class="line-toys"> </div>
-    <div class="text-righteous text-title" >
-        <p class="mb-0">Juguetes</p> </div>
+    <div class="text-righteous text-title">
+        <p class="mb-0">Productos</p>
+    </div>
 </div>
-<div class="d-flex justify-content-between px-5 pt-5">
-    <div class="d-flex">
-            <div class="pt-2"> 
+<div class="container px-5">
+    <div class="d-flex justify-content-between flex-wrap px-5 pt-5">
+        <div class="d-flex">
+            <div class="pt-2">
                 <span class="text-righteous light-green"> Ordenar </span>
             </div>
             <div class="pl-order">
-                <p class="mb-0 light-green"> <i class="mdi mdi-arrow-up-drop-circle-outline"></i> </p>
-                <p class="mb-0 light-green" style="position: relative; top: -8px;"> <i class="mdi mdi-arrow-down-drop-circle-outline"></i> </p>
+                <p class="mb-0 light-green" (click)="orderPrice('asc')"> <i class="mdi mdi-arrow-up-drop-circle-outline"></i> </p>
+                <p class="mb-0 light-green" (click)="orderPrice('desc')" style="position: relative; top: -8px;"> <i
+                        class="mdi mdi-arrow-down-drop-circle-outline"></i> </p>
             </div>
-            <div class="text-righteous light-green-2 bg-light-green-2 px-4 pt-2 badge-custom text-center"> <p class="mb-0"> Precio </p>  </div>
+            <div class="text-righteous light-green-2 bg-light-green-2 px-4 pt-2 badge-custom text-center">
+                <p class="mb-0"> Precio </p>
+            </div>
+        </div>
+        <div class="text-righteous light-green flex-grow-0 mt-2" [ngClass]="{'w-100': isMobile}">
+            <div class="input-group">
+                <input class="form-control border-end-0 border rounded-pill  position-search" type="search" [(ngModel)]="textSearch"
+                    id="example-search-input">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
+                        type="button" (click)="search()">
+                        <i class="mdi mdi-magnify"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
     </div>
-    <div class="text-righteous light-green"> Precio </div>
+</div>
+
+
+
+<div class="cards">
+    <ng-container  *ngFor="let item of listProductos">
+        <div class="card">
+            <div class="card__image-holder  overflow_hidden">
+                <img class="card__image" [src]="buildImg(item)" alt="wave" />
+            </div>
+            <div class="card-title">
+                <a class="toggle-info btn">
+                    <span class="left" ></span>
+                    <span class="right"></span>
+                </a>
+                <h2>
+                    {{item.nombre_corto}}
+                    <small>{{item.precio_maximo}} Bs.</small>
+                </h2>
+            </div>
+            <div class="card-flap flap1" >
+                <div class="card-description">
+                    Peluche hipoalergenico de 35cm en colores, rosa, verde, amarillo
+                </div>
+                <div class="card-flap flap2">
+                    <div class="card-actions">
+                       <i class="mdi mdi-cart mdi-24px"></i>
+                       <i class="mdi mdi-heart mdi-24px text-red" ></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+
 </div>

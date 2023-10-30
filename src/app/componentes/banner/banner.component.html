@@ -1,3 +1,4 @@
+
 <div class="cont">
     <div class="mouse"></div>
     <div class="app">
@@ -8,21 +9,21 @@
       <div class="app__img">
         <img (mousedown)="preventDefault($event)" src="../../../assets/imagenes/whiteTest5.png" alt="city" />
       </div>
-  
-      <div class="app__text app__text--1 box--1">
+      <div class="app__text app__text--1 " [ngClass]="!isMobile ? 'box--1' : 'box--1-mobile'">
         <div class="app__text-line app__text-line--4">
-          <h1 data-shadow='Play Land!'>Play Land!</h1>
+          <h1 data-shadow='Play Land!' > Play Land! </h1>
         </div>
         <div class="app__text-line app__text-line--2 text-center" >
           <p class="msg">  Los juguetes mas novedosos para los mas consentidos de la casa  </p>
-         </div>
+        </div>
       </div>
-  
-      <div class="app__text app__text--2">
+
+      <div class="app__text app__text--2"  [ngClass]="{'box--2-mobile': isMobile}">
         <div class="app__text-line app__text-line--4 text-righteous">Juguetes</div>
         <div class="app__text-line app__text-line--3 text-righteous">peluches</div>
         <div class="app__text-line app__text-line--2 text-righteous">y mucho mas!!</div>
       </div>
+
     </div>
     <div class="pages">
       <ul class="pages__list">
