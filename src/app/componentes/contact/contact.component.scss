@@ -1,0 +1,58 @@
+.line-contactos {
+    background-color: #E0C743;
+    border-radius: 0px 50px 50px 0px;
+    width: 80%;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.text-righteous {
+    font-family: 'Righteous', serif;
+}
+
+.text-title {
+    font-size: 50px;
+    color: #E0C743;
+    margin: auto;
+}
+
+.line {
+    animation: slide-in-right 10s ease;
+}
+
+@keyframes slide-in-right {
+    from {
+        margin-left: 100%;
+    }
+
+    to {
+        margin-left: 0;
+    }
+}
+
+.facebook-link {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: #1877F2; /* Color azul de Facebook */
+    font-weight: bold; /* Fuente en negrita */
+    font-size: 22px; /* Tamaño de fuente */
+}
+
+.facebook-link:hover {
+    color: #135AEC; /* Cambiar el color cuando el usuario pasa el mouse por encima */
+}
+
+.subtitle {
+    font-weight: 900;
+    font-size: 23px;
+    background: linear-gradient(#95a1b3, #1d2129);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.cel {
+    position: relative;left: 10px;
+}
+
+.icon-whatsap {
+    color: #25D366;
+    font-size: 22px;
+}

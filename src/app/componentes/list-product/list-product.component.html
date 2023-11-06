@@ -1,6 +1,6 @@
 <div class="d-flex">
     <div class="line-toys"> </div>
-    <div class="text-righteous text-title">
+    <div class="text-righteous text-title line">
         <p class="mb-0">Productos</p>
     </div>
 </div>
@@ -21,8 +21,11 @@
         </div>
         <div class="text-righteous light-green flex-grow-0 mt-2" [ngClass]="{'w-100': isMobile}">
             <div class="input-group">
-                <input class="form-control border-end-0 border rounded-pill  position-search" type="search" [(ngModel)]="textSearch"
-                    id="example-search-input">
+                <input 
+                 class="form-control border-end-0 border rounded-pill  position-search"
+                 type="search" [(ngModel)]="textSearch"
+                 (keydown.enter)="search()"
+                 id="example-search-input">
                 <span class="input-group-append">
                     <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
                         type="button" (click)="search()">
@@ -34,11 +37,9 @@
     </div>
 </div>
 
-
-
 <div class="cards">
     <ng-container  *ngFor="let item of listProductos">
-        <div class="card">
+        <div class="card" *ngIf="item.active === true">
             <div class="card__image-holder  overflow_hidden">
                 <img class="card__image" [src]="buildImg(item)" alt="wave" />
             </div>
@@ -49,22 +50,26 @@
                 </a>
                 <h2>
                     {{item.nombre_corto}}
-                    <small>{{item.precio_maximo}} Bs.</small>
+               <!--      <small style="font-size: 12px;">Cel: 70315404  | 65470262  </small>  -->
+                 <small>{{item.precio_maximo}} Bs.</small> 
                 </h2>
             </div>
             <div class="card-flap flap1" >
                 <div class="card-description">
-                    Peluche hipoalergenico de 35cm en colores, rosa, verde, amarillo
+                    {{item.descripcion}}
                 </div>
                 <div class="card-flap flap2">
                     <div class="card-actions">
-                       <i class="mdi mdi-cart mdi-24px"></i>
-                       <i class="mdi mdi-heart mdi-24px text-red" ></i>
+                     <!--   <i class="mdi mdi-cart mdi-24px"></i> -->
+                       <i class="mdi mdi-heart mdi-24px text-red" (click)="appearHeart(item)"></i>
                     </div>
                 </div>
             </div>
         </div>
     </ng-container>
 
-
 </div>
+
+
+
+<div class="corazon" *ngIf="viewHeart" >&#x2665;</div>

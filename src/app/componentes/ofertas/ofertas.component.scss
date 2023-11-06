@@ -1,0 +1,117 @@
+.card-oferta {
+    width: 450px;
+}
+
+.line-ofertas {
+    background-color: #E02C5E;
+    border-radius: 0px 50px 50px 0px;
+    width: 80%;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.text-righteous {
+    font-family: 'Righteous', serif;
+}
+
+.text-title {
+    font-size: 50px;
+    color: #E02C5E;
+    margin: auto;
+}
+
+
+.line {
+    animation: slide-in-right 10s ease;
+}
+
+@keyframes slide-in-right {
+    from {
+        margin-left: 100%;
+    }
+
+    to {
+        margin-left: 0;
+    }
+}
+
+
+.subtitle {
+    opacity: 0.4;
+    font-weight: 900;
+    font-size: 50px;
+    background: linear-gradient(#c8c89a,#e02c5e);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.top-70 {
+    position: relative;
+    top: 70px;
+}
+
+.text-one {
+    font-size: 22px;
+    opacity: 0.8;
+}
+
+.text-two {
+    font-size: 20px;
+    opacity: 0.6;
+}
+
+.text-three {
+    font-size: 18px;
+    opacity: 0.4;
+}
+
+
+.img-1 {
+    position: absolute;
+    top: -588px;
+    width: 375px;
+    left: 100px;
+    border-radius: 50%;
+}
+
+.monto-1 {
+    position: absolute;
+    left: 27%;
+    top: -162px;
+    font-size: 79px;
+}
+
+.bs-1 {
+    position: absolute;
+    top: -62px;
+    font-size: 34px;
+    left: 30%;
+}
+
+
+.img-2 {
+    position: absolute;
+    top: -588px;
+    width: 375px;
+    left:7%;
+    border-radius: 50%;
+}
+
+.monto-2 {
+    position: absolute;
+    left: 16%;
+    top: -162px;
+    font-size: 79px;
+}
+
+.bs-2 {
+    position: absolute;
+    top: -62px;
+    font-size: 34px;
+    left: 20%;
+}
+
+.date-expired {
+    background: linear-gradient(#c8c89a, #e02c5e);
+    -webkit-background-clip: text;
+    color: transparent;
+}

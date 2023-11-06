@@ -15,6 +15,9 @@ export class ListProductComponent implements AfterViewChecked {
 
   public error: any;
 
+
+  public viewHeart: boolean= false;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.isMobile = window.innerWidth <= 800;
@@ -43,7 +46,6 @@ export class ListProductComponent implements AfterViewChecked {
         this.renderer.listen(card, 'click', (event) => {
           event.preventDefault();
           let isShowing = false;
-          console.log( (card.classList.contains('show')) )
           if (card.classList.contains('show')) {
             isShowing = true;
           }
@@ -73,12 +75,50 @@ export class ListProductComponent implements AfterViewChecked {
     
   }
 
+  updateListCards(){
+    const cards = this.el.nativeElement.querySelectorAll('.card');
+    this.isThereCard = true;
+    let zindex = 10;
+console.log(cards)
+    cards.forEach((card: any) => {
+      this.renderer.listen(card, 'click', (event) => {
+        console.log(event)
+        event.preventDefault();
+        console.log('event', event)
+        let isShowing = false;
+        console.log( (card.classList.contains('show')) )
+        if (card.classList.contains('show')) {
+          isShowing = true;
+        }
+
+        const cardsContainer = this.el.nativeElement.querySelector('.cards');
+        if (cardsContainer.classList.contains('showing')) {
+          const showingCard = this.el.nativeElement.querySelector('.card.show');
+          this.renderer.removeClass(showingCard, 'show');
+
+          if (isShowing) {
+            this.renderer.removeClass(cardsContainer, 'showing');
+          } else {
+            this.renderer.setStyle(card, 'z-index', zindex);
+            this.renderer.addClass(card, 'show');
+          }
+
+          zindex++;
+        } else {
+          this.renderer.addClass(cardsContainer, 'showing');
+          this.renderer.setStyle(card, 'z-index', zindex);
+          this.renderer.addClass(card, 'show');
+          zindex++;
+        }
+      });
+    });
+  }
+
   async getData() {
     try {
       this.listProductos = await lastValueFrom(this.listProductService.getProductos())
-      this.error= 'poo'
     } catch(e) {
-      this.error = e
+       console.log(e)
     }
 
 
@@ -91,14 +131,25 @@ export class ListProductComponent implements AfterViewChecked {
   async search(){
     if(this.textSearch.length > 1){
       this.listProductos = await lastValueFrom( this.listProductService.getSearch(this.textSearch))
+      this.isThereCard = false;
     } else {
-      this.getData()
+      this.listProductos = await lastValueFrom(this.listProductService.getProductos())
+      this.isThereCard = false;
     }
+
   }
 
 
   buildImg(e:any){
     return `../../../assets/imagenes/tienda/${e.id}-1.jpg`
+  }
+
+  appearHeart(e:any) {
+    this.viewHeart = true;
+    setTimeout(() => {
+      this.viewHeart = false;
+    }, 1000);
+    console.log(e)
   }
 
 }

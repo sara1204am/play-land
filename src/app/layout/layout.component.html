@@ -7,15 +7,15 @@
     <!-- Botones en el centro -->
     <div class="navbar-nav mx-auto d-flex align-items-center">
         <a class="nav-item nav-link menu-toy text-center" href="#">Productos</a>
-        <a class="nav-item nav-link menu-teddy mx-4 text-center" href="#">Ofertas</a>
-        <a class="nav-item nav-link menu-other text-center" href="#">Contáctanos</a>
+        <a class="nav-item nav-link menu-teddy mx-4 text-center" [routerLink]="['/ofertas']"  >Ofertas</a>
+        <a class="nav-item nav-link menu-other text-center"  [routerLink]="['/contactos']" >Contáctanos</a>
     </div>
 
-    <!-- Íconos en la parte derecha alineados al final -->
+    <!-- Íconos en la parte derecha a lineados al final -->
     <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link" href="#">
+  <!--       <a class="nav-item nav-link" href="#">
             <i class="mdi mdi-cart mdi-24px gray" ></i>
-        </a>
+        </a> -->
         <a class="nav-item nav-link" href="#">
             <i class="mdi mdi-facebook mdi-24px gray"></i>
         </a>
