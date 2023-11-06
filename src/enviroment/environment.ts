@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    host: 'http://localhost:3000/api',
+    host: 'https://play-land-backend-9cde6f1ea645.herokuapp.com/api',
     platformSeed: '9qxs2n3k',
     production: false,
     appVersion: 'v2.0.0',
