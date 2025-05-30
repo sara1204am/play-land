@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/enviroment/environment';
 import { HttpClient } from "@angular/common/http";
 
@@ -9,6 +9,8 @@ const API_PRODUCT_URL = `${environment.host}/articulo`;
   providedIn: 'root'
 })
 export class ListProductService {
+
+  private eventData = new Subject<any>();
 
   constructor(private http: HttpClient) { }
 
@@ -49,6 +51,15 @@ export class ListProductService {
     return this.http.get<any[]>(
       `${API_PRODUCT_URL}?filter=${obj}`
     );
+  }
+
+
+  emitEvent(data: any) {
+    this.eventData.next(data);
+  }
+
+  getEvent() {
+    return this.eventData.asObservable();
   }
 
 }

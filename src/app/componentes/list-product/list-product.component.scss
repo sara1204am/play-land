@@ -64,6 +64,10 @@ a.btn {
   transition: all 0.1s 0s ease-out;
 }
 
+.bg-open {
+  background: #88bdc1 !important;
+}
+
 .no-touch a.btn:hover {
   background: lighten(#0096a0, 2.5);
   box-shadow: 0px 8px 2px 0 rgba(0, 0, 0, 0.075);
@@ -132,15 +136,6 @@ div.card {
         width: 12px;
       }
 
-      span.left {
-        right: 14px;
-        transform: rotate(45deg);
-      }
-
-      span.right {
-        left: 14px;
-        transform: rotate(-45deg);
-      }
     }
 
     h2 {
@@ -171,76 +166,18 @@ div.card {
     text-align: center;
   }
 
-  div.card-flap {
-    background: darken(#ffffff, 15);
-    position: absolute;
-    width: 100%;
-    transform-origin: top;
-    transform: rotateX(-90deg);
-  }
-
-  div.flap1 {
-    transition: all 0.3s 0.3s ease-out;
-    z-index: -1;
-  }
-
-  div.flap2 {
-    transition: all 0.3s 0s ease-out;
-    z-index: -2;
-  }
-
 }
 
-div.cards.showing {
-  div.card {
-    cursor: pointer;
-    opacity: 0.6;
-    transform: scale(0.88);
-  }
-}
 
-.no-touch div.cards.showing {
-  div.card:hover {
-    opacity: 0.94;
-    transform: scale(0.92);
-  }
-}
 
-div.card.show {
-  opacity: 1 !important;
-  transform: scale(1) !important;
 
-  div.card-title {
-    a.toggle-info {
-      background: #ff6666 !important;
+ div.card.show {
 
-      span {
-        top: 15px;
-      }
-
-      span.left {
-        right: 10px;
-      }
-
-      span.right {
-        left: 10px;
-      }
-    }
-  }
-
-  div.card-flap {
+ div.card-flap {
     background: #ffffff;
     transform: rotateX(0deg);
   }
-
-  div.flap1 {
-    transition: all 0.3s 0s ease-out;
-  }
-
-  div.flap2 {
-    transition: all 0.3s 0.2s ease-out;
-  }
-}
+} 
 
 
 .text-red {
@@ -292,4 +229,62 @@ div.card.show {
   to {
       margin-left: 0;
   }
+}
+
+
+.top-icon {
+  position: relative;
+  top: 5px;
+}
+
+.btn-cart {
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  height: 25px;
+  font-size: 10px;
+  font-weight: bolder;
+}
+
+.btn-cart:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+}
+
+.input-number-cart {
+    width: 55px;
+    display: inline;
+    height: 25px;
+    border: 1px solid #dee2e6;
+    padding-right: 0px;
+    font-size: 10px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+.card-open {
+  position: absolute;
+  background: #ffffff;
+  width: 100.5%;
+  top: 97%;
+  border: 2px solid #dee2e6;
+  border-top: none;
+  left: -1px;
+}
+
+.backdrop {
+  z-index: 10;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  height: 100%;
+}
+.opacity-card {
+  opacity: 0.3;
+  pointer-events: none;
 }

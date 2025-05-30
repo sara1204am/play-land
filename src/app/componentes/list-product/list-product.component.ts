@@ -18,6 +18,10 @@ export class ListProductComponent implements AfterViewChecked {
 
   public viewHeart: boolean= false;
 
+  public quantity:number= 1;
+
+  public selectId: any= null;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.isMobile = window.innerWidth <= 800;
@@ -79,7 +83,6 @@ export class ListProductComponent implements AfterViewChecked {
     const cards = this.el.nativeElement.querySelectorAll('.card');
     this.isThereCard = true;
     let zindex = 10;
-console.log(cards)
     cards.forEach((card: any) => {
       this.renderer.listen(card, 'click', (event) => {
         console.log(event)
@@ -149,7 +152,19 @@ console.log(cards)
     setTimeout(() => {
       this.viewHeart = false;
     }, 1000);
-    console.log(e)
+  }
+
+  addCart(e:any){
+    e.quantityBuy = e.quantityBuy ? e.quantityBuy : 1;
+    let listProduct: any = sessionStorage.getItem('playLandCart');
+    listProduct = listProduct ? JSON.parse(listProduct): [];
+    listProduct.push(e);
+
+    sessionStorage.setItem('playLandCart', JSON.stringify(listProduct) );
+    e.quantityBuy = 1;
+    this.selectId = null;
+    this.listProductService.emitEvent(listProduct);
+
   }
 
 }

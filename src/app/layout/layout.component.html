@@ -13,16 +13,16 @@
 
     <!-- Íconos en la parte derecha a lineados al final -->
     <div class="navbar-nav ml-auto">
-  <!--       <a class="nav-item nav-link" href="#">
-            <i class="mdi mdi-cart mdi-24px gray" ></i>
-        </a> -->
-        <a class="nav-item nav-link" href="#">
+        <a class="nav-item nav-link" (click)="openCart()">
             <i class="mdi mdi-facebook mdi-24px gray"></i>
+            <i class="mdi mdi-cart mdi-24px gray relative text-center">
+                <span class="bubble"> {{listProductToBuy.length}}</span>
+            </i>
         </a>
     </div>
 </nav>
 <div>
-    <app-banner></app-banner>
+    <app-banner *ngIf="routePage !=='/ofertas' && routePage !=='/contactos' && routePage !=='/shopping' "></app-banner>
 </div>
 
 <router-outlet></router-outlet>

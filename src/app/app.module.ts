@@ -9,6 +9,8 @@ import { BannerComponent } from './componentes/banner/banner.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ContactComponent } from './componentes/contact/contact.component';
 import { OfertasComponent } from './componentes/ofertas/ofertas.component';
+import { LayoutAdminComponent } from './layout-admin/layout-admin.component';
+
 
 @NgModule({
   declarations: [
@@ -17,6 +19,7 @@ import { OfertasComponent } from './componentes/ofertas/ofertas.component';
     BannerComponent,
     ContactComponent,
     OfertasComponent,
+    LayoutAdminComponent,
   ],
   imports: [
     BrowserModule,

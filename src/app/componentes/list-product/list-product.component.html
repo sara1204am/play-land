@@ -36,32 +36,37 @@
         </div>
     </div>
 </div>
-
 <div class="cards">
     <ng-container  *ngFor="let item of listProductos">
-        <div class="card" *ngIf="item.active === true">
+        <div class="card" [ngClass]="selectId && selectId !== item.id ? 'opacity-card ' : ''">
             <div class="card__image-holder  overflow_hidden">
                 <img class="card__image" [src]="buildImg(item)" alt="wave" />
             </div>
             <div class="card-title">
-                <a class="toggle-info btn">
-                    <span class="left" ></span>
-                    <span class="right"></span>
+                <a *ngIf="item.open === false || !item.open" class="toggle-info btn" (click)="item.open = true; selectId = item.id">
+                   <i class="mdi mdi-chevron-down mdi-24px" ></i>
                 </a>
+                <a *ngIf="item.open === true" class="toggle-info btn bg-open" (click)="item.open = false; selectId = null ">
+                    <i class="mdi mdi-chevron-up mdi-24px" ></i>
+                 </a>
                 <h2>
                     {{item.nombre_corto}}
                <!--      <small style="font-size: 12px;">Cel: 70315404  | 65470262  </small>  -->
                  <small>{{item.precio_maximo}} Bs.</small> 
                 </h2>
             </div>
-            <div class="card-flap flap1" >
+            <div *ngIf="item.open === true "  class="card-open ">
                 <div class="card-description">
                     {{item.descripcion}}
                 </div>
-                <div class="card-flap flap2">
+                <div class="">
                     <div class="card-actions">
                      <!--   <i class="mdi mdi-cart mdi-24px"></i> -->
-                       <i class="mdi mdi-heart mdi-24px text-red" (click)="appearHeart(item)"></i>
+                       <div class="flex">
+                            <i class="mdi mdi-heart mdi-24px mx-2 text-red top-icon" (click)="appearHeart(item)"></i>
+                            <button class="btn btn-cart btn-sm" (click)="addCart(item); item.open = false"> Agregar al carrito </button>
+                            <input type="number" min="1" name="quantity" class="form-control input-number-cart"   placeholder="1" [(ngModel)]="item.quantityBuy">
+                       </div>
                     </div>
                 </div>
             </div>

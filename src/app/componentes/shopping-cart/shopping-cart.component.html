@@ -1,1 +1,58 @@
-<p>shopping-cart works!</p>
+<div class="d-flex">
+    <div class="line-ofertas"> </div>
+    <div class="text-righteous text-title line">
+        <p class="mb-0">Compras</p>
+    </div>
+</div>
+<div class="row container py-5">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <ng-container *ngFor="let item of listProductToBuy">
+            <div class="card p-2">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <img  [src]="'../../../assets/imagenes/tienda/'+item.id+'-1.jpg'" height="60px" alt="img">
+                        <div class="max-width-desc p-2">
+                            <b>{{item.nombre_corto}}</b>
+                            <p> {{item.descripcion}} </p>
+                        </div>
+                    </div>
+    
+                    <div class="d-flex">
+                            <input type="number" min="1" name="quantity" class="form-control input-number-cart"   placeholder="1" [(ngModel)]="item.quantityBuy">
+                             <p class="number-cart px-2 pt-2 nowrap ">x Bs {{item.precio_maximo}} = </p>
+                             <p class="number-cart px-2 pt-2"><b> Bs {{item.precio_maximo * item.quantityBuy}} </b> </p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <h4 class="py-2">Seleccione el envío de su preferencia</h4>
+        <div class="card px-3" *ngFor="let option of deliveryOptions">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex">
+                    <div class="pr-2">
+                        <input type="radio" name="deliveryOption" [value]="option" [(ngModel)]="selectedOption">
+                    </div>
+                    <div style="margin-left: 10px;">
+                        <p class="mb-0">{{ option.title }}</p>
+                        <p class="mb-0 text-orange"><small>{{ option.subtitle }}</small></p>
+                        <p *ngIf="option.address" class="mb-0 text-gray"><small>{{ option.address }}</small></p>    
+                    </div>
+                 </div>
+                <div>
+                    <strong>{{ option.price }}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="py-2">
+            <button class="btn btn-primary w-100">Enviar pedido </button>
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="d-flex justify-content-end">
+            <strong>TOTAL {{listProductToBuy | sum }} Bs </strong>
+        </div>
+    </div>
+</div>
