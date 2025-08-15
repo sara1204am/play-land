@@ -42,6 +42,7 @@ export class HomeService {
 
   getProductosAll(): Observable<any> {
     const filter = {
+      where: { active: true },
       include: {
         imagenes: true
       }
