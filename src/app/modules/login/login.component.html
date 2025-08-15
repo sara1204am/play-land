@@ -1,0 +1,76 @@
+<div class="flex flex-col min-h-screen bg-image">
+  <!-- Contenido centrado -->
+  <div class="flex flex-1 items-center justify-center px-4">
+    <div
+      class="w-full max-w-lg bg-white bg-opacity-90 rounded-xl p-8 shadow-md backdrop-blur"
+      (keydown.enter)="login()"
+      tabindex="0"
+    >
+      <p class="font-sans font-bold text-2xl text-center  text-primary-400 mb-2">
+        Bienvenido a Play Land Admin
+      </p>
+      
+      <div class="flex justify-center w-full">
+        <img
+          src="/assets/imagenes/logo.png"
+          class="h-32 w-auto"
+          alt="Play Land Logo"
+        />
+      </div>
+
+      <h3 class="text-gray-300 text-center mb-6">
+        Por favor ingrese su usuario y contraseña para entrar a la aplicación
+      </h3>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+        <!-- Username -->
+        <div>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            pInputText
+            class="w-full"
+            placeholder="Usuario"
+          />
+          @if (loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)) {
+            <div class="text-red-600 text-sm mt-1">
+              El usuario es requerido.
+            </div>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            pInputText
+            class="w-full"
+            placeholder="Contraseña"
+          />
+          <div
+            *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
+            class="text-red-600 text-sm mt-1"
+          >
+            La contraseña es requerida.
+          </div>
+        </div>
+
+        <!-- Botón -->
+        <button
+          pButton
+          type="submit"
+          label="Ingresar"
+          class="w-full"
+        ></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer fijo abajo -->
+  <footer class="w-full py-2 bg-white bg-opacity-80 text-center text-sm text-gray-700">
+    <login-footer></login-footer>
+  </footer>
+</div>

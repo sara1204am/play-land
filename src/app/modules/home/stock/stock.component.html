@@ -1,0 +1,94 @@
+<div class=" w-full h-full p-5 overflow-auto bg-white dark:bg-gray-900">
+    <div class="container mx-auto h-full p-5 ">
+        <ng-template #buttonTemplate let-row>
+            <div class="flex flex-col gap-3">
+                <button
+                    class="bg-primary-500 w-full h-fit text-white px-4 py-1 rounded mr-2 hover:bg-primary-300 transition"
+                    (click)="addFile(row)" type="button">
+                    Agregar Cant.
+                </button>
+                <button
+                    class="bg-green-700 w-full h-fit text-white px-4 py-1 rounded mr-2 hover:bg-primary-300 transition"
+                    (click)="edit(row)" type="button">
+                    Edit
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #quantityTotalTemplate  let-row>
+            <div class="p-1" [ngClass]="{'bg-red-200': !row.active}">
+                {{ getTotalCantidad(row.stock_by_option) }}
+            </div>
+
+        </ng-template>
+        
+        <ng-template #quantityTemplate let-row> 
+            @if(viewQuantity){
+                @for(option of row.stock_by_option; track $index){
+                <div class="space-y-2 p-3 border rounded-md shadow-sm bg-white">
+                    <!-- Vista normal -->
+                    @if(
+                    !editQuantity
+                    || editQuantity.index !== $index
+                    || editQuantity.option.id !== option.id
+                    || editQuantity.row.id !== row.id
+                    ){
+                        <!-- Datos -->
+                        <div class="flex flex-col space-y-1">
+                            <span class="font-semibold text-gray-700">
+                                Color:
+                                <span class="font-normal text-gray-600">{{ option.color || '(vacío)' }}</span>
+                            </span>
+                            <span class="font-semibold text-gray-700">
+                                Cantidad:
+                                <span class="font-normal text-gray-600">{{ option.cantidad }}</span>
+                            </span>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="flex space-x-2">
+                            <button class="btn btn-sm bg-primary-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                                (click)="startEdit($event, $index, option, row)" type="button">
+                                Editar
+                            </button>
+                            <button class="btn btn-sm bg-red-700 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                                (click)="deleteOption( $index, row)" type="button">
+                                Eliminar
+                            </button>
+                        </div>
+                    }
+                    @if(
+                    editQuantity
+                    && editQuantity.index === $index
+                    && editQuantity.option.id === option.id
+                    && editQuantity.row.id === row.id
+                    ){
+                    <input type="text" [(ngModel)]="editedOption.color" placeholder="Color"
+                        class="border border-gray-300 rounded px-3 py-1 mb-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="number" [(ngModel)]="editedOption.cantidad" min="0" placeholder="Cantidad"
+                        class="border border-gray-300 rounded px-3 py-1 mb-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <button class="bg-green-600 text-white px-4 py-1 rounded mr-2 hover:bg-green-700 transition"
+                        (click)="saveEdit($index,option, row)" type="button">
+                        Guardar
+                    </button>
+                    <button class="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400 transition"
+                        (click)="cancelEdit()" type="button">
+                        Cancelar
+                    </button>
+                    }
+                </div>
+
+                }
+            }
+        </ng-template>
+
+        <ng-template #actionsTpl>
+            <button class="btn btn-primary" (click)="add()">Agregar Articulo</button>
+        </ng-template>
+        @if(view){
+        <play-table [uid]="'stok'" [columns]="columns" [data]="data" [catalogs]="catalogs" [config]="config"
+            [saveState]="false" [actionsTemplate]="actionsTpl" (selectItem)="onSelectItem($event)"></play-table>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.sidebar,
+.main-content {
+  overflow-y: auto;
+  scrollbar-width: thin; 
+  scrollbar-color: #94a3b8 transparent; 
+}
+
+.sidebar::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #94a3b8; /* gris */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track {
+  background-color: transparent;
+}

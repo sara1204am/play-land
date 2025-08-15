@@ -1,0 +1,152 @@
+<div class="p-6 rounded-lg shadow-md bg-white">
+
+    <!-- Título y tipo de venta -->
+    <div class="flex flex-wrap gap-4">
+
+        <div class="flex items-center">
+            <p-radiobutton name="tipoVenta" value="tienda" [(ngModel)]="tipoVenta" inputId="tienda" />
+            <label for="ingredient2" class="ml-2">Tienda</label>
+        </div>
+
+        <div class="flex items-center">
+            <p-radiobutton name="tipoVenta" value="envio" [(ngModel)]="tipoVenta" inputId="envio" />
+            <label for="ingredient3" class="ml-2">Envio</label>
+        </div>
+
+        <div class="flex items-center">
+            <p-radiobutton name="pizza" value="entrega" [(ngModel)]="tipoVenta" inputId="entrega" />
+            <label for="ingredient4" class="ml-2">Entrega</label>
+        </div>
+    </div>
+    <div>
+        <ng-template #buttonTemplate let-row>
+            <div class="flex flex-col gap-3">
+                <button (click)="addProduct(row)"
+                    class="bg-primary-500 w-full h-fit text-white px-4 py-1 rounded mr-2 hover:bg-primary-300 transition"
+                    type="button">
+                    Agregar Producto
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #quantityTemplate let-row>
+            @for(option of row.stock_by_option; track $index){
+            <div class="space-y-2 p-3 border rounded-md shadow-sm bg-white">
+                <!-- Vista normal -->
+                <div class="flex flex-col space-y-1">
+                    <span class="font-semibold text-gray-700">
+                        Color:
+                        <span class="font-normal text-gray-600">{{ option.color || '(vacío)' }}</span>
+                    </span>
+                    <span class="font-semibold text-gray-700">
+                        Cantidad:
+                        <span class="font-normal text-gray-600">{{ option.cantidad }}</span>
+                    </span>
+                </div>
+            </div>
+            }
+        </ng-template>
+
+        <play-table [uid]="'stok-modal'" [columns]="columns" [catalogs]="catalogs" [config]="config" [data]="data"
+            [saveState]="false" [rows]="2" [rowsPerPageOptions]="[2]">
+        </play-table>
+
+        <br>
+        @if(viewProduct) {
+        <div class="mt-6" [formGroup]="form">
+            <label class="block font-bold mb-2">Productos:</label>
+            <div class="overflow-auto rounded border">
+                <table class="min-w-full table-fixed text-sm" formArrayName="productos">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700">
+                            <th class="w-1/4 p-2">Producto</th>
+                            <th class="w-1/4 p-2">Modelo</th>
+                            <th class="w-1/6 p-2">Cantidad</th>
+                            <th class="w-1/6 p-2">Precio</th>
+                            <th class="w-1/6 p-2">Tipo de Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(producto of productos.controls; track $index) {
+                        <tr [formGroupName]="$index">
+                            <!-- Producto -->
+                            <td class="p-2">
+                                <input type="text" pInputText class="w-full" formControlName="nombre" required />
+                                @if (producto.get('nombre')?.invalid && (producto.get('nombre')?.touched ||
+                                producto.get('nombre')?.dirty)) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    El nombre es obligatorio
+                                </div>
+                                }
+                            </td>
+
+                            <!-- Modelo -->
+                            <td class="p-2">
+                                <p-dropdown [options]="modelosDisponibles[$index]" formControlName="modelo"
+                                    optionLabel="label" optionValue="value" placeholder="Seleccione un modelo"
+                                    appendTo="body" [showClear]="true" required>
+                                </p-dropdown>
+                                @if (producto.get('modelo')?.invalid && (producto.get('modelo')?.touched ||
+                                producto.get('modelo')?.dirty)) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    Seleccione un modelo
+                                </div>
+                                }
+                            </td>
+
+                            <!-- Cantidad -->
+                            <td class="p-2">
+                                <input type="number" pInputText class="w-full" formControlName="cantidad" required
+                                    min="1" />
+                                @if (producto.get('cantidad')?.invalid && (producto.get('cantidad')?.touched ||
+                                producto.get('cantidad')?.dirty)) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    Ingrese una cantidad válida
+                                </div>
+                                }
+                            </td>
+
+                            <!-- Precio -->
+                            <td class="p-2">
+                                <input type="number" pInputText class="w-full" formControlName="precio" required
+                                    min="0" />
+                                @if (producto.get('precio')?.invalid && (producto.get('precio')?.touched ||
+                                producto.get('precio')?.dirty)) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    Ingrese un precio válido
+                                </div>
+                                }
+                            </td>
+
+                            <!-- Tipo de Pago -->
+                            <td class="p-2">
+                                <p-dropdown [options]="tiposPago" formControlName="tipoPago" optionLabel="label"
+                                    optionValue="value" appendTo="body" placeholder="Seleccione tipo de pago" required>
+                                </p-dropdown>
+                                @if (producto.get('tipoPago')?.invalid && (producto.get('tipoPago')?.touched ||
+                                producto.get('tipoPago')?.dirty)) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    Seleccione un tipo de pago
+                                </div>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-4">
+            <div class="text-lg font-bold">
+                Total: {{ totalCompra }} Bs.
+            </div>
+        </div>
+
+        }
+        <div class="flex justify-end gap-3 mt-4">
+            <button class="btn btn-sm bg-gray-600 text-white py-3 px-4" (click)="ref.close()"> Cancelar </button>
+            <button class="btn btn-sm btn-primary py-3 px-4" (click)="save()"> Guardar </button>
+        </div>
+    </div>
+    <br><br><br>
+</div>

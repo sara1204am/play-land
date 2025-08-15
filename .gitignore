@@ -1,4 +1,4 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
 /dist
@@ -10,6 +10,8 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
+bun.lock
 
 # IDEs and editors
 .idea/
@@ -36,6 +38,10 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+
+# Compodoc
+documentation/*
+!documentation/.gitkeep
 
 # System files
 .DS_Store

@@ -1,0 +1,134 @@
+<div class="w-full h-full overflow-hidden flex flex-col gap-2 flex-nowrap p-4">
+  <div class="flex-grow overflow-auto">
+    <form [formGroup]="productForm">
+      <!-- GRID RESPONSIVE -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Columna 1 -->
+        <div class="flex flex-col gap-2">
+          <label>Tipo:</label>
+            <p-dropdown 
+            [options]="tipoOptions" 
+            formControlName="tipo"
+            optionLabel="label" 
+            optionValue="value"
+            placeholder="Selecciona tipo"
+            class="w-full">
+          </p-dropdown>
+          
+          @if(productForm.get('tipo')?.touched && productForm.get('tipo')?.invalid){
+            <div class="text-red-500 text-sm">
+              El tipo es requerido
+            </div>
+          }
+
+          <label>Nombre:</label>
+          <input type="text" pInputText class="input w-full" formControlName="nombre" />
+           @if(productForm.get('nombre')?.touched && productForm.get('nombre')?.invalid){
+            <div class="text-red-500 text-sm">
+              El nombre es requerido
+            </div>
+          }
+
+          <label>Costo Unitario:</label>
+          <input type="number" pInputText class="input w-full" formControlName="costo_unitario" />
+
+          <label>Precio de Venta:</label>
+          <input type="number" pInputText class="input w-full" formControlName="precio" />
+
+          <label>Lote:</label>
+          <input type="text" pInputText class="input w-full" formControlName="lote" />
+        </div>
+
+        <!-- Columna 2 -->
+        <div class="flex flex-col gap-2">
+
+          <label>Método de carga:</label>
+          <div class="flex gap-4 mb-2">
+            <label class="flex items-center gap-1">
+              <input type="radio" name="uploadMethod" value="camera" [(ngModel)]="uploadMethod" [ngModelOptions]="{standalone: true}" />
+              Cámara
+            </label>
+            <label class="flex items-center gap-1">
+              <input type="radio" name="uploadMethod" value="file" [(ngModel)]="uploadMethod" [ngModelOptions]="{standalone: true}" />
+              Subir imagen
+            </label>
+          </div>
+
+          <!-- Subir imagen -->
+          @if(uploadMethod === 'file'){
+          <label>Subir Imagen:</label>
+          <input type="file" accept="image/*" (change)="onImageChange($event)" class="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-blue-50 file:text-blue-700
+                  hover:file:bg-blue-100
+                  cursor-pointer mt-1" />
+          }
+
+          <!-- Cámara -->
+          @if(uploadMethod === 'camera'){
+          <div class="flex flex-col items-center gap-4">
+            <video #video autoplay class="rounded border w-80 h-60 bg-black"></video>
+            <button (click)="takePhoto()" class="btn btn-primary text-white px-4 py-2 rounded">
+              Tomar Foto
+            </button>
+            <canvas #canvas class="hidden"></canvas>
+          </div>
+          }
+
+        </div>
+
+        <!-- Columna 3 -->
+        <div class="flex flex-col gap-2 items-center">
+          <label>Imagen</label>
+          <img [src]="imagePreview || defaultImage" alt="Preview" class="w-40 h-32 object-cover border rounded" />
+          <br/>
+          <label>Cantidad Actual</label>
+          <p-tag severity="success" [value]="colores.controls | sumQuantity " />
+        </div>
+
+      </div>
+
+      <!-- Colores -->
+      <div class="mt-6">
+        <label class="block font-bold mb-2">Colores y cantidades:</label>
+        <div class="overflow-auto rounded border">
+          <table class="min-w-full table-fixed text-sm" formArrayName="colores">
+            <thead>
+              <tr class="bg-gray-100 text-gray-700">
+              <!--              <th class="w-1/6 p-2">Id</th> -->
+                <th class="w-1/2 p-2">Color/Tipo</th>
+                <th class="w-1/2 p-2">Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+            @for(color of colores.controls; track $index){
+              <tr [formGroupName]="$index">
+                <td class="p-2">
+                  <input type="text" pInputText class="input w-full" formControlName="color" />
+                </td>
+                <td class="p-2">
+                  <input type="number" pInputText class="input w-full" formControlName="cantidad" />
+                </td>
+              </tr>
+            }
+            </tbody>
+
+
+          </table>
+          
+        </div>
+
+        <button type="button" class="flex items-center gap-2 mt-2 text-blue-600 hover:underline" (click)="addItem()">
+          <span class="text-xl font-bold">+</span> Agregar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex flex-row justify-end gap-4 mt-4 flex-wrap">
+    <button class="btn btn-primary-outline" (click)="ref.close()">Cancel</button>
+    <button class="btn btn-primary" (click)="submitForm()">Save</button>
+  </div>
+</div>

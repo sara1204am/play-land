@@ -1,0 +1,79 @@
+
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+@import "./theme/buttons.css";
+
+html {
+  font-size: 14px;
+  font-family: "Montserrat", serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: 'inter';
+  src: URL('../public/assets/fonts/inter.ttf') format('truetype');
+}
+
+@layer base {
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    color: var(--color-primary-500);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+
+  label {
+    font-family: 'inter';
+  }
+}
+
+@theme {
+  --color-secondary-50: #edfffd;
+  --color-secondary-100: #c1fffb;
+  --color-secondary-200: #84fff8;
+  --color-secondary-300: #3efff5;
+  --color-secondary-400: #05f0e0;
+  --color-secondary-500: #00ddd0;
+  --color-secondary-600: #00b3ab;
+  --color-secondary-700: #008d8a;
+  --color-secondary-800: #006f6e;
+  --color-secondary-900: #065b5b;
+  --color-secondary-950: #003839;
+
+  --color-primary: #2D73AB;
+  --color-primary-50: #e4f0f9;
+  --color-primary-100: #c7dff1;
+  --color-primary-200: #a9cdea;
+  --color-primary-300: #8bbbe2;
+  --color-primary-400: #0F5BA7;
+  --color-primary-500: #2D73AB;
+  --color-primary-600: #276696;
+  --color-primary-700: #205780;
+  --color-primary-800: #1a496b;
+  --color-primary-900: #143b58;
+  --color-primary-950: #0F5BA7;
+
+  --color-red-50: #fde8ed;
+  --color-red-100: #fbd1dc;
+  --color-red-200: #f7a7bb;
+  --color-red-300: #f2789a;
+  --color-red-400: #ef4c79;
+  --color-red-500: #EE2C5C;
+  --color-red-600: #d82652;
+  --color-red-700: #bd2047;
+  --color-red-800: #a11a3d;
+  --color-red-900: #851432;
+  --color-red-950: #52061e;
+}
+

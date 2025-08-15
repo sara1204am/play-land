@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<div class="w-screen h-screen overflow-hidden block">
+  <p-toast
+    [breakpoints]="{ '382px': { width: '100%', right: '0', left: '0' } }"
+    preventOpenDuplicates="true"
+    [life]="3000"
+  ></p-toast>
+  <router-outlet />
+</div>

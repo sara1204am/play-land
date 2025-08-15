@@ -1,0 +1,349 @@
+<p-table
+  #dt2
+  [value]="tableData"
+  [columns]="columns()"
+  dataKey="id"
+  [rows]="rows()"
+  [rowsPerPageOptions]="rowsPerPageOptions()"
+  [loading]="loading"
+  [paginator]="true"
+  [globalFilterFields]="columns() | filterFields"
+  [pageLinks]="3"
+  [scrollable]="true"
+  scrollHeight="flex"
+  [showFirstLastIcon]="!isMobile"
+  [showCurrentPageReport]="!isMobile"
+  [currentPageReportTemplate]="'PlayTable.currentPageReportTemplate' | translate"
+  selectionMode="single"
+  [(selection)]="selectedItem"
+  (onRowSelect)="onRowSelect($event)"
+  [stateStorage]="'local'"
+  [stateKey]="uid()"
+  paginatorStyleClass="bg-gray-100"
+  stripedRows
+>
+  <ng-template pTemplate="caption">
+    <div class="flex flex-wrap justify-between gap-2">
+      <div class="flex">
+        @if (config().globalSearch) {
+          <input
+            class="border border-primary-300 p-1"
+            type="search"
+            [(ngModel)]="searchValue"
+            (ngModelChange)="filterData()"
+            [placeholder]="'PlayTable.search' | translate"
+          />
+        }
+        <!-- (input)="dt2.filterGlobal($any($event.target).value, 'contains')" -->
+        @if (config().configColumns) {
+          <button
+            class="btn-icon"
+            (click)="viewFields = true"
+            [pTooltip]="'PlayTable.configureTable' | translate"
+            tooltipPosition="bottom"
+          >
+            <span class="material-symbols-outlined"> list_alt_check </span>
+          </button>
+        }
+        @if (config().resetButton) {
+          <button
+            class="btn-icon"
+            (click)="clear(dt2)"
+            tooltipPosition="bottom"
+            [pTooltip]="'PlayTable.resetTable' | translate"
+          >
+            <span class="material-symbols-outlined"> restart_alt </span>
+          </button>
+        }
+      </div>
+      <div class="flex">
+        @if (actionsTemplate()) {
+          <ng-container [ngTemplateOutlet]="actionsTemplate()!" />
+        }
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (c of columns; track c.key) {
+        @if (c.hidden === false) {
+          @if (c.sortable === true) {
+            <th class="text-nowrap" [pSortableColumn]="c.key">
+              <div class="flex items-center">
+                {{ c.header | translate }}
+                <p-sortIcon [field]="c.key" />
+                @if (c.filterable) {
+                  @switch (c.type) {
+                    @case ("text") {
+                      <p-columnFilter
+                        type="text"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("number") {
+                      <p-columnFilter
+                        type="numeric"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("date") {
+                      <p-columnFilter
+                        type="date"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("select") {
+                      <p-columnFilter
+                        type="text"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                  }
+                }
+              </div>
+            </th>
+          } @else {
+            <th class="text-nowrap">
+              <div class="flex items-center">
+                {{ c.header | translate }}
+                @if (c.filterable) {
+                  @switch (c.type) {
+                    @case ("text") {
+                      <p-columnFilter
+                        type="text"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("number") {
+                      <p-columnFilter
+                        type="numeric"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("date") {
+                      <p-columnFilter
+                        type="date"
+                        [field]="c.key"
+                        display="menu"
+                      />
+                    }
+                    @case ("select") {
+                      <p-columnFilter
+                        [field]="c.key"
+                        matchMode="in"
+                        display="menu"
+                        [showMatchModes]="false"
+                        [showOperator]="false"
+                        [showAddButton]="false"
+                      >
+                        <ng-template pTemplate="header">
+                          <div class="px-3 pt-3 pb-0">
+                            <span class="font-bold">
+                              {{ "PlayTable.selectOptions" | translate }}
+                            </span>
+                          </div>
+                        </ng-template>
+                        <ng-template
+                          pTemplate="filter"
+                          let-value
+                          let-filter="filterCallback"
+                        >
+                          <p-multiSelect
+                            [ngModel]="value"
+                            optionLabel="label"
+                            optionValue="value"
+                            [options]="catalogs()[c.catalogCode]"
+                            [placeholder]="'PlayTable.any' | translate"
+                            (onChange)="filter($event.value)"
+                          >
+                          </p-multiSelect>
+                        </ng-template>
+                      </p-columnFilter>
+                    }
+                    @case ("multi-select") {
+                      <p-columnFilter
+                        [field]="c.key"
+                        matchMode="contains"
+                        display="menu"
+                        operator="or"
+                        [showMatchModes]="false"
+                        [showOperator]="true"
+                        [showAddButton]="true"
+                      >
+                        <ng-template pTemplate="header">
+                          <div class="px-3 pt-3 pb-0">
+                            <span class="font-bold">
+                              {{ "PlayTable.selectOptions" | translate }}
+                            </span>
+                          </div>
+                        </ng-template>
+                        <ng-template
+                          pTemplate="filter"
+                          let-value
+                          let-filter="filterCallback"
+                        >
+                          <p-dropdown
+                            [ngModel]="value"
+                            optionLabel="label"
+                            optionValue="value"
+                            [options]="catalogs()[c.catalogCode]"
+                            [placeholder]="'PlayTable.any' | translate"
+                            (onChange)="filter($event.value)"
+                          />
+                        </ng-template>
+                      </p-columnFilter>
+                    }
+                  }
+                }
+              </div>
+            </th>
+          }
+        }
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-data let-columns="columns">
+    <tr [pSelectableRow]="data">
+      @for (c of columns; track c.key) {
+        @if (c.hidden === false) {
+          @switch (c.type) {
+            @case ("template"){
+               <td
+                >
+                  <ng-container
+                    [ngTemplateOutlet]="c.cellTemplate"
+                    [ngTemplateOutletContext]="{ $implicit: data }"
+                  ></ng-container>
+                </td>
+            }
+            @case ("text") {
+              <td>{{ data[c.key] }}</td>
+            }
+            @case ("number") {
+              <td>
+                {{ c.prefix }}
+                {{ data[c.key] }}
+                <small>{{ c.suffix }}</small>
+              </td>
+            }
+            @case ("select") {
+              @if (c.tagMap && c.tagMap.length > 0) {
+                <td>
+                  <span class="{{ getTagClass(c.tagMap, data[c.key]) }}">
+                    {{ data[c.key] | getCatalogLabel: c.catalogCode }}
+                  </span>
+                </td>
+              } @else {
+                <td>
+                  {{ data[c.key] | getCatalogLabel: c.catalogCode }}
+                </td>
+              }
+            }
+            @case ("img") {
+              <td>
+                <img
+                  [src]="data[c.key] ? data[c.key] : defaultImg()"
+                  alt="img"
+                  class="h-10"
+                />
+              </td>
+            }
+            @case ("multi-select") {
+              <td>
+                @for (i of data[c.key]; track $index) {
+                  <span
+                    class="bg-primary-100 text-primary-800 text-xs font-medium me-2 px-2.5 py-0.5"
+                  >
+                    {{ i | getCatalogLabel: c.catalogCode }}
+                  </span>
+                }
+              </td>
+            }
+            @case ("date") {
+              <td>
+                {{
+                  gDate(data[c.key])
+                    | dfnsFormat: (c.format ? c.format : "MMM d y") ?? "-"
+                }}
+              </td>
+            }
+          }
+        }
+      }
+    </tr>
+    <!-- } -->
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    @if (noDataTemplate()) {
+      <tr>
+        <td [attr.colspan]="columns().length">
+          <ng-container [ngTemplateOutlet]="noDataTemplate()!" />
+        </td>
+      </tr>
+    } @else {
+      <tr>
+        <td [attr.colspan]="columns().length">
+          <div class="flex flex-col p-10 justify-center items-center gap-2">
+            <span class="material-symbols-outlined text-6xl text-gray-300">
+              chat_error
+            </span>
+            <span>{{ "PlayTable.noData" | translate }}</span>
+          </div>
+        </td>
+      </tr>
+    }
+  </ng-template>
+</p-table>
+
+<!-- FIELDS -->
+<p-dialog
+  [(visible)]="viewFields"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [header]="'ZnBrowser.fields' | translate"
+>
+  <div
+    class="flex flex-col gap-1"
+    cdkDropList
+    (cdkDropListDropped)="onDrop($event)"
+  >
+    @for (c of columns(); track $index) {
+      <div class="flex justify-between items-center" cdkDrag>
+        <label class="flex gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            id="react-option"
+            value=""
+            class="hidden peer"
+            [(ngModel)]="c.hidden"
+          />
+          <span
+            class="material-symbols-outlined text-xl text-green-600 block peer-checked:hidden"
+          >
+            visibility
+          </span>
+          <span
+            class="material-symbols-outlined text-xl text-red-600 hidden peer-checked:block"
+          >
+            visibility_off
+          </span>
+          <span class="font-bold peer-checked:font-light select-none">
+            {{ c.header | translate }}</span
+          >
+        </label>
+        <span class="material-symbols-outlined text-lg cursor-move">
+          drag_indicator
+        </span>
+      </div>
+    }
+    <!-- } -->
+  </div>
+</p-dialog>
