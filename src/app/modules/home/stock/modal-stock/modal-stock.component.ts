@@ -96,7 +96,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      this.stream = await navigator.mediaDevices.getUserMedia(
+        { video: { facingMode: { ideal: "environment" } }});
 
       if (this.videoRef?.nativeElement && this.stream) {
         this.videoRef.nativeElement.srcObject = this.stream;
