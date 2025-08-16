@@ -187,28 +187,35 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     this.ref.close(fullData);
   }
 
-  async changeCamara(): Promise<void> {
-
-    if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop());
-    }
-
-    const facingMode = this.stream?.getVideoTracks()[0].getSettings().facingMode === "user"
-      ? "environment"
-      : "user";
-
-    try {
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode }
-      });
-
-      if (this.videoRef?.nativeElement) {
-        this.videoRef.nativeElement.srcObject = this.stream;
-      }
-    } catch (err) {
-      console.error("Error al cambiar de cámara:", err);
-    }
+async changeCamara(): Promise<void> {
+  if (this.stream) {
+    this.stream.getTracks().forEach(track => track.stop());
   }
+
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === "videoinput");
+
+    // buscar si ya estabas usando la frontal o la trasera
+    const currentId = this.stream?.getVideoTracks()[0].getSettings().deviceId;
+    const currentIndex = videoDevices.findIndex(d => d.deviceId === currentId);
+
+    // alternar entre cámaras disponibles
+    const nextIndex = (currentIndex + 1) % videoDevices.length;
+    const nextDeviceId = videoDevices[nextIndex].deviceId;
+
+    this.stream = await navigator.mediaDevices.getUserMedia({
+      video: { deviceId: { exact: nextDeviceId } }
+    });
+
+    if (this.videoRef?.nativeElement) {
+      this.videoRef.nativeElement.srcObject = this.stream;
+    }
+  } catch (err) {
+    console.error("Error al cambiar de cámara:", err);
+  }
+}
+
 
 
   ngOnDestroy(): void {
