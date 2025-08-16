@@ -1,19 +1,24 @@
 <div class="w-screen h-screen flex flex-col overflow-hidden">
   <!-- Header -->
   <header class="h-22 flex items-center justify-between px-4 bg-white border-b border-gray-300 sticky top-0 z-50 px-8">
-    <!-- Logo -->
+  
+  <!-- Botón hamburguesa visible solo en móvil -->
+    <button 
+    class="md:hidden  rounded"
+    (click)="isMenuOpen = !isMenuOpen"
+  >
+    <span class="material-symbols-outlined">
+      menu
+    </span>
+  </button>
+
+    
+  <!-- Logo -->
     <div class="flex items-center gap-2">
       <img src="../../assets/imagenes/logo.png" alt="Logo" class="h-20 w-auto" />
       <span class="font-semibold text-lg">Play Land</span>
     </div>
 
-<!-- Botón hamburguesa visible solo en móvil -->
-    <button 
-    class="md:hidden p-2 rounded bg-gray-100"
-    (click)="isMenuOpen = !isMenuOpen"
-  >
-    <i class="pi pi-bars"></i>
-  </button>
 
   <!-- Menú desplegable para móvil -->
    @if(isMenuOpen){
@@ -42,9 +47,15 @@
 
     <!-- User Info -->
     <div class="flex items-center gap-2 text-sm text-gray-600">
-      <i class="pi pi-user text-lg text-gray-600"></i>
-      <span>Bienvenida, Sara</span>
+      <div class="hidden md:flex md:items-center">
+        <span class="material-symbols-outlined">
+        account_circle
+        </span>
+        <span>Bienvenida, Sara</span>
+      </div>
+      <button class="btn btn-danger-outline" (click)="logout()">Cerrar Cesión</button>
     </div>
+
   </header>
 
   <!-- Content + Sidebar (if any) -->

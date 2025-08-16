@@ -33,7 +33,7 @@ export class LoginService {
       created: 'created',
       ttl: 'ttl',
       id: 'id',
-      appName: 'tp41-quickstart',
+      appName: 'play-land',
     };
 
     if (data && data.userId && data.access) {
@@ -48,9 +48,9 @@ export class LoginService {
       Object.entries(tmp).filter(([key]) => toPick.includes(key))
       );
       const keys = Object.values(picked);
-
       keys.forEach((key) => {
         if (key != 'user' && data[key as keyof any]) {
+
           sessionStorage.setItem(
             `${appName}.${key}`,
             `${data[key as keyof any]}`,

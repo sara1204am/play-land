@@ -96,8 +96,19 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this.stream = await navigator.mediaDevices.getUserMedia(
-        { video: { facingMode: { ideal: "environment" } }});
+       const devices = await navigator.mediaDevices.enumerateDevices();
+      const backCamera = devices.find(
+        d => d.kind === "videoinput" && d.label.toLowerCase().includes("back")
+      );
+
+      if (backCamera) {
+        this.stream = await navigator.mediaDevices.getUserMedia({
+          video: { deviceId: { exact: backCamera.deviceId } }
+        });
+      } else {
+        // 👉 Fallback final: pedir cualquier cámara disponible
+        this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
 
       if (this.videoRef?.nativeElement && this.stream) {
         this.videoRef.nativeElement.srcObject = this.stream;
