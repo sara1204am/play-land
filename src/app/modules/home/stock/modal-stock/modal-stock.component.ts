@@ -96,19 +96,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     }
 
     try {
-       const devices = await navigator.mediaDevices.enumerateDevices();
-      const backCamera = devices.find(
-        d => d.kind === "videoinput" && d.label.toLowerCase().includes("back")
-      );
-
-      if (backCamera) {
-        this.stream = await navigator.mediaDevices.getUserMedia({
-          video: { deviceId: { exact: backCamera.deviceId } }
-        });
-      } else {
-        // 👉 Fallback final: pedir cualquier cámara disponible
-        this.stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      }
+      this.stream = await navigator.mediaDevices.getUserMedia(
+        { video: { facingMode: { exact: "environment" } } });
 
       if (this.videoRef?.nativeElement && this.stream) {
         this.videoRef.nativeElement.srcObject = this.stream;
@@ -192,11 +181,35 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       ...formData,
       imagen: image,
     };
-    if(this.initial?.id){
+    if (this.initial?.id) {
       fullData.id = this.initial.id;
     }
     this.ref.close(fullData);
   }
+
+  async changeCamara(): Promise<void> {
+
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+
+    const facingMode = this.stream?.getVideoTracks()[0].getSettings().facingMode === "user"
+      ? "environment"
+      : "user";
+
+    try {
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode }
+      });
+
+      if (this.videoRef?.nativeElement) {
+        this.videoRef.nativeElement.srcObject = this.stream;
+      }
+    } catch (err) {
+      console.error("Error al cambiar de cámara:", err);
+    }
+  }
+
 
   ngOnDestroy(): void {
     if (this.stream) {

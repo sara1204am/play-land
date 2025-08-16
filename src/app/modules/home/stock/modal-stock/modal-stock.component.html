@@ -69,6 +69,9 @@
           <!-- Cámara -->
           @if(uploadMethod === 'camera'){
           <div class="flex flex-col items-center gap-4">
+            <button class="btn border rounded-xl" (click)="changeCamara()"> <span class="material-symbols-outlined">
+            compare_arrows
+            </span></button>
             <video #video autoplay class="rounded border w-80 h-60 bg-black"></video>
             <button (click)="takePhoto()" class="btn btn-primary text-white px-4 py-2 rounded">
               Tomar Foto
