@@ -60,6 +60,7 @@
 
         <!-- Botón -->
         <button
+          [disabled]="disabled"
           pButton
           type="submit"
           label="Ingresar"
@@ -74,3 +75,4 @@
     <login-footer></login-footer>
   </footer>
 </div>
+<p-toast  position="top-right" [baseZIndex]="10000"></p-toast>

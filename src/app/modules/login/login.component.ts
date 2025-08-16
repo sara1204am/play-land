@@ -8,6 +8,8 @@ import { LoginService } from './login.service';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-login',
@@ -17,17 +19,19 @@ import { ButtonModule } from 'primeng/button';
     LoginFooterComponent,
     CommonModule,
     ReactiveFormsModule,
-    InputTextModule, 
-    ButtonModule
+    InputTextModule,
+    ButtonModule,
+    ToastModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
- loginForm!: FormGroup;
+  loginForm!: FormGroup;
   private service: LoginService = inject(LoginService);
+  private messageService: MessageService = inject(MessageService);
   private router: Router = inject(Router);
-
+  disabled = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,10 +44,21 @@ export class LoginComponent {
 
   public login(): void {
     if (this.loginForm.valid) {
+      this.disabled = true;
       const loginData = this.loginForm.value;
-        this.service.login(loginData).then(data=>{
-          this.postLogin(data);
+      this.service.login(loginData)
+      .then(data => {
+         this.messageService.add({
+          severity: 'success',
+          summary: 'Login',
+          detail: 'Datos correctos, ingresando...',
+           life: 2000
         });
+        this.postLogin(data);
+      })
+      .catch(()=>{
+        this.disabled = false;
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }
@@ -52,6 +67,7 @@ export class LoginComponent {
   private postLogin(userData: any): void {
     this.service.setUserToken(userData);
     this.router.navigate(['/home/stock']);
+    this.disabled = false;
   }
 
 }

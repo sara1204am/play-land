@@ -6,6 +6,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalStockComponent } from './modal-stock/modal-stock.component';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 interface DynamicDialogRefWithContent<T = any> extends DynamicDialogRef {
   content?: T;
@@ -16,7 +18,8 @@ interface DynamicDialogRefWithContent<T = any> extends DynamicDialogRef {
   imports: [
     PlayTableComponent,
     FormsModule,
-    NgClass
+    NgClass,
+    ToastModule
   ],
   templateUrl: './stock.component.html',
   styleUrl: './stock.component.css'
@@ -36,6 +39,8 @@ export class StockComponent implements OnInit {
   public ref?: DynamicDialogRefWithContent<ModalStockComponent>;
 
   private service: HomeService = inject(HomeService);
+
+  private messageService: MessageService = inject(MessageService);
 
   public columns!: any[];
 
@@ -212,7 +217,12 @@ export class StockComponent implements OnInit {
       const dataImg = { nombre: temp, id_articulo: respProduct.id }
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
-
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Stock',
+      detail: 'Datos editados  correctamente',
+      life: 2000
+    });
     this.getData();
 
   }
@@ -250,6 +260,13 @@ export class StockComponent implements OnInit {
       const dataImg = { nombre: temp, id_articulo: respProduct.id }
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Login',
+      detail: 'Datos guardados correctamente',
+      life: 2000
+    });
     this.getData();
   }
 
@@ -258,7 +275,7 @@ export class StockComponent implements OnInit {
     event.stopPropagation();
     this.editQuantity = { index, option, row }
     this.editedOption = {
-      id:option.id,
+      id: option.id,
       color: option.color,
       cantidad: option.cantidad
     };
@@ -279,7 +296,7 @@ export class StockComponent implements OnInit {
 
     const finalRow = { ...row };
     const stock = finalRow.stock_by_option;
-    const totalStock = stock?.reduce((sum:any, item:any) => sum + (item.cantidad || 0), 0) || 0;
+    const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
 
     finalRow.active = totalStock > 0;
 
@@ -299,11 +316,17 @@ export class StockComponent implements OnInit {
     finalRow.stock_by_option.splice(index, 1);
 
     const stock = finalRow.stock_by_option;
-    const totalStock = stock?.reduce((sum:any, item:any) => sum + (item.cantidad || 0), 0) || 0;
+    const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
 
     finalRow.active = totalStock > 0;
 
     await lastValueFrom(this.service.editProduct(finalRow));
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Login',
+      detail: 'Datos eliminados correctamente',
+      life: 2000
+    });
     this.getData();
   }
 
