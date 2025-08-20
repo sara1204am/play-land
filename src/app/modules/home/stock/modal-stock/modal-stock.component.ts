@@ -27,7 +27,7 @@ import { SumQuantityPipe } from '../sum-quantity.pipe';
 export class ModalStockComponent implements OnInit, OnDestroy {
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
-  uploadMethod: 'camera' | 'file' = 'camera';
+  uploadMethod: 'camera' | 'file' = 'file';
   imagePreview: string | null = null;
   defaultImage = './assets/imagenes/default.png';
   public stream: MediaStream | null = null;

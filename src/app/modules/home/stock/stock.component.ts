@@ -125,7 +125,7 @@ export class StockComponent implements OnInit {
         prefix: 'Bs ',
         format: '1.2-2'
       },
-      {
+    /*   {
         key: 'stock_by_option',
         type: 'template',
         header: `Cantidad`,
@@ -134,7 +134,7 @@ export class StockComponent implements OnInit {
         filterable: false,
         headerClass: '!bg-transparent',
         cellTemplate: this.quantityTemplate(),
-      },
+      }, */
       {
         key: 'buttons',
         type: 'template',
