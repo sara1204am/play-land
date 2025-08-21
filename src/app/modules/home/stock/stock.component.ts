@@ -103,7 +103,7 @@ export class StockComponent implements OnInit {
         headerClass: '!bg-transparent',
         cellTemplate: this.quantityTotalTemplate(),
       },
-      {
+  /*     {
         key: 'costo_unitario',
         header: 'Costo Unitario',
         type: 'number',
@@ -113,7 +113,7 @@ export class StockComponent implements OnInit {
         globalSearch: false,
         prefix: 'Bs ',
         format: '1.2-2'
-      },
+      }, */
       {
         key: 'precio',
         header: 'Precio Venta',
@@ -297,8 +297,8 @@ export class StockComponent implements OnInit {
     const finalRow = { ...row };
     const stock = finalRow.stock_by_option;
     const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
-
-    finalRow.active = totalStock > 0;
+    const totalStockAlmacen = stock?.reduce((sum: any, item: any) => sum + (item.cantidad_almacen || 0), 0) || 0;
+    finalRow.active = totalStock + totalStockAlmacen > 0;
 
     delete finalRow.imagenes;
     delete finalRow.photo;
@@ -317,8 +317,8 @@ export class StockComponent implements OnInit {
 
     const stock = finalRow.stock_by_option;
     const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
-
-    finalRow.active = totalStock > 0;
+    const totalStockAlmacen = stock?.reduce((sum: any, item: any) => sum + (item.cantidad_almacen || 0), 0) || 0;
+    finalRow.active = totalStock + totalStockAlmacen > 0;
 
     await lastValueFrom(this.service.editProduct(finalRow));
     this.messageService.add({
@@ -334,7 +334,8 @@ export class StockComponent implements OnInit {
     row.stock_by_option.push({
       id: new Date().getTime(),
       color: '',
-      cantidad: 0
+      cantidad: 0,
+      cantidad_almacen: 0
     })
     this.editQuantity = { index: null, option: null, row: null, }
   }
@@ -344,7 +345,9 @@ export class StockComponent implements OnInit {
   }
 
   getTotalCantidad(stock: any[]): number {
-    return stock?.reduce((total, item) => total + (item.cantidad || 0), 0) ?? 0;
+    const tienda = stock?.reduce((total, item) => total + (item.cantidad || 0), 0) ?? 0;
+    const almacen = stock?.reduce((total, item) => total + (item.cantidad_almacen || 0), 0) ?? 0;
+    return tienda + almacen;
   }
 
 }

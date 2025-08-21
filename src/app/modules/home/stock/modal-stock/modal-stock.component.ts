@@ -79,7 +79,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
           coloresArray.push(
             this.fb.group({
               color: [item.color, Validators.required],
-              cantidad: [item.cantidad, [Validators.required, Validators.min(1)]]
+              cantidad: [item.cantidad, [Validators.required, Validators.min(0)]],
+              cantidad_almacen: [item.cantidad_almacen, [Validators.required, Validators.min(0)]]
             })
           );
         });
@@ -147,7 +148,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
   createColorGroup(): FormGroup {
     return this.fb.group({
       color: ['', Validators.required],
-      cantidad: [null, Validators.required]
+      cantidad: [null, Validators.required],
+      cantidad_almacen: [null, Validators.required]
     });
   }
 
@@ -161,7 +163,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       this.fb.group({
         id: new Date().getTime(),
         color: [''],
-        cantidad: [0, [Validators.min(0)]]
+        cantidad: [0, [Validators.min(0)]],
+        cantidad_almacen: [0, [Validators.min(0)]],
       })
     );
   }
