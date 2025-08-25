@@ -163,4 +163,28 @@ export class HomeService {
   }
 
 
+  getProductStore(): Observable<any> {
+    const filter = {
+      where: { active:true },
+      include: {
+        imagenes: true
+      }
+
+    }
+    const obj = encodeURIComponent(JSON.stringify(filter))
+    return this.http.get(`${API_PRODUCT_URL}?filter=${obj}`, {})
+    .pipe(
+      map((articulos:any) => {
+        return articulos.map((articulo:any) => {
+          if (articulo.imagenes && articulo.imagenes.length > 0) {
+            const idImagen = articulo.imagenes[0].nombre;
+            articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+          } else {
+            articulo.img = null;
+          }
+          return articulo;
+        });
+      })
+    );
+  }
 }

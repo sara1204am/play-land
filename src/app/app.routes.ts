@@ -2,6 +2,13 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'store',
+    loadComponent: () =>
+      import('./modules/store/store.component').then(
+        (m) => m.StoreComponent,
+      ),
+  },
+  {
     path: 'login',
     loadChildren: () =>
       import('./modules/login/login.routes').then((m) => m.loginRoutes),
@@ -19,7 +26,7 @@ export const routes: Routes = [
         (m) => m.UnauthorizedComponent,
       ),
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'store', pathMatch: 'full' },
   {
     path: '**',
     pathMatch: 'full',
