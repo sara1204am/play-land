@@ -1,51 +1,19 @@
-<div class="p-6 rounded-lg shadow-md bg-white">
-
-    <!-- Título y tipo de venta -->
-    <div class="flex flex-wrap gap-4">
-
-        <div class="flex items-center">
-            <p-radiobutton name="tipoVenta" value="tienda" [(ngModel)]="tipoVenta" inputId="tienda"  (ngModelChange)="onTipoVentaChange()"  />
-            <label for="ingredient2" class="ml-2">Tienda</label>
-        </div>
-
-        <div class="flex items-center">
-            <p-radiobutton name="tipoVenta" value="almacen" [(ngModel)]="tipoVenta" inputId="almacen" (ngModelChange)="onTipoVentaChange()" />
-            <label for="ingredient3" class="ml-2">Almacen</label>
-        </div>
-
+<div class="p-6 flex flex-col gap-2 rounded-lg shadow-md bg-white">
+    <div class="flex justify-end">
+            <p-datepicker 
+                [(ngModel)]="fecha" 
+                [showClear]="true"
+                [appendTo]="'body'"
+                dateFormat="dd/mm/yy"
+            />
     </div>
     <div>
-        <ng-template #buttonTemplate let-row>
-            <div class="flex flex-col gap-3">
-                <button (click)="addProduct(row)"
+          <button 
+                    (click)="addProduct()"
                     class="bg-primary-500 w-full h-fit text-white px-4 py-1 rounded mr-2 hover:bg-primary-300 transition"
                     type="button">
-                    Agregar Producto
-                </button>
-            </div>
-        </ng-template>
-        <ng-template #quantityTemplate let-row>
-            @for(option of row.stock_by_option; track $index){
-            <div class="space-y-2 p-3 border rounded-md shadow-sm bg-white">
-                <!-- Vista normal -->
-                <div class="flex flex-col space-y-1">
-                    <span class="font-semibold text-gray-700">
-                        Color:
-                        <span class="font-normal text-gray-600">{{ option.color || '(vacío)' }}</span>
-                    </span>
-                    <span class="font-semibold text-gray-700">
-                        Cantidad:
-                        <span class="font-normal text-gray-600">{{ option.cantidad }}</span>
-                    </span>
-                </div>
-            </div>
-            }
-        </ng-template>
-
-        <play-table [uid]="'stok-modal'" [columns]="columns" [catalogs]="catalogs" [config]="config" [data]="data"
-            [saveState]="false" [rows]="2" [rowsPerPageOptions]="[2]">
-        </play-table>
-
+                Agregar Producto
+            </button>
         <br>
         @if(viewProduct) {
         <div class="mt-6" [formGroup]="form">
@@ -55,7 +23,6 @@
                     <thead>
                         <tr class="bg-gray-100 text-gray-700">
                             <th class="w-1/4 p-2">Producto</th>
-                            <th class="w-1/4 p-2">Modelo</th>
                             <th class="w-1/6 p-2">Cantidad</th>
                             <th class="w-1/6 p-2">Precio</th>
                             <th class="w-1/6 p-2">Tipo de Pago</th>
@@ -72,19 +39,6 @@
                                 producto.get('nombre')?.dirty)) {
                                 <div class="text-red-500 text-xs mt-1">
                                     El nombre es obligatorio
-                                </div>
-                                }
-                            </td>
-                            <!-- Modelo -->
-                            <td class="p-2">
-                                <p-dropdown [options]="modelosDisponibles[$index]" formControlName="modelo"
-                                    optionLabel="label" optionValue="value" placeholder="Seleccione un modelo"
-                                    appendTo="body" [showClear]="true" required   (onChange)="onModeloChange($index)">
-                                </p-dropdown>
-                                @if (producto.get('modelo')?.invalid && (producto.get('modelo')?.touched ||
-                                producto.get('modelo')?.dirty)) {
-                                <div class="text-red-500 text-xs mt-1">
-                                    Seleccione un modelo
                                 </div>
                                 }
                             </td>

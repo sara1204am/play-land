@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import { HomeService } from '../../home.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-modal-sales',
@@ -34,7 +34,7 @@ export class ModalSalesComponent implements OnInit {
   tiposPago = [
     { label: 'Efectivo', value: 'efectivo' },
     { label: 'Tarjeta', value: 'tarjeta' },
-    { label: 'Transferencia', value: 'transferencia' }
+    { label: 'QR', value: 'transferencia' }
   ];
 
   public catalogs: Record<string, any[]> = {
@@ -61,6 +61,7 @@ export class ModalSalesComponent implements OnInit {
   form!: FormGroup;
   modelosDisponibles: any[][] = [];
   viewProduct = false;
+  allData :any[] = []
 
   constructor(private fb: FormBuilder) { }
 
@@ -83,6 +84,7 @@ export class ModalSalesComponent implements OnInit {
   async getData() {
     try {
       this.data = await lastValueFrom(this.service.getProductos());
+      this.allData = [...this.data]
     } catch (e) {
       console.error(e);
     }
@@ -96,12 +98,15 @@ export class ModalSalesComponent implements OnInit {
     const index = this.productos.length;
 
     const group = this.fb.group({
+      tipoVenta: [this.tipoVenta || '-', Validators.required],
       nombre: [event?.nombre || '-', Validators.required],
       productoId: [event?.id || null, Validators.required],
       modelo: [null, Validators.required],
+      modeloNombre: [null, Validators.required],
       cantidad: [0, [Validators.required, Validators.min(1)]],
       precio: [null, [Validators.required, Validators.min(0)]],
-      tipoPago: ['efectivo', Validators.required]
+      tipoPago: ['efectivo', Validators.required],
+      nota: [null]
     });
 
     // Validación de cantidad según stock
@@ -132,16 +137,16 @@ export class ModalSalesComponent implements OnInit {
   cargarModelos(producto: any, index: number) {
     const catalog: any = [];
     producto.stock_by_option.forEach((e: any) => {
-      catalog.push({ value: e.id, label: `${e.color} (${e.cantidad})` });
+      const cantidadVisible = this.tipoVenta === 'tienda' ? e.cantidad : e.cantidad_almacen;
+      catalog.push({ value: e.id, label: `${e.color} (${cantidadVisible})` });
     });
-    this.modelosDisponibles[index] = catalog;
+    this.modelosDisponibles[index] = [...catalog, {value:'0001', label: 'No especificado'}];
   }
 
   // Stock disponible restante, excluyendo la fila actual
   getStockDisponible(productoId: string, modeloId: string, filaActual?: number): number {
     const producto:any = this.data.find((p: any) => p.id === productoId);
     if (!producto) return 0;
-
     const stockOriginal = producto.stock_by_option.find((o: any) => o.id === modeloId)?.cantidad || 0;
 
     const cantidadAgregada = this.productos.controls.reduce((acc, control, idx) => {
@@ -170,6 +175,8 @@ export class ModalSalesComponent implements OnInit {
         control.get('cantidad')?.setValue(stockDisponible);
         alert(`No puedes superar el stock disponible (${stockDisponible})`);
       }
+      const modeloLabel = this.modelosDisponibles[index]?.find((m:any) => m.value === modeloId)?.label || '';
+      control.get('modeloNombre')?.setValue(modeloLabel);
     }
   }
 
@@ -181,8 +188,23 @@ export class ModalSalesComponent implements OnInit {
     }, 0);
   }
 
+  onTipoVentaChange(){
+    this.data = this.allData.filter((producto: any) => {
+      return producto.stock_by_option.some((opcion: any) => {
+        const stock = this.tipoVenta === 'tienda' ? opcion.cantidad : opcion.cantidad_almacen;
+        return stock > 0;
+      });
+    });
+    
+  }
+
   save() {
     const formData = this.form.value;
     this.ref.close(formData);
+  }
+
+  removeProduct(index: number) {
+    this.productos.removeAt(index);
+    this.modelosDisponibles.splice(index, 1);
   }
 }

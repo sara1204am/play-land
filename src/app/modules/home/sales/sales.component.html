@@ -2,7 +2,10 @@
     <div class="container mx-auto h-full p-5 ">
 
         <ng-template #actionsTpl>
-            <button class="btn btn-primary" (click)="add()">Agregar Venta</button>
+            <div class="flex gap-3">
+                <button class="btn btn-primary" (click)="addGenerico()">Agregar Venta Generica</button>
+                <button class="btn btn-secondary" (click)="add()">Agregar Venta</button>
+            </div>
         </ng-template>
 
 

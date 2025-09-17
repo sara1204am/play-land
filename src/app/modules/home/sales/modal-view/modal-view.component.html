@@ -1,0 +1,43 @@
+
+  <!-- Información general -->
+  <div class="mb-4 space-y-2">
+    <p><span class="font-semibold">ID:</span> {{ sale.id }}</p>
+    <p><span class="font-semibold">Fecha:</span> {{ sale.fecha | date:'medium' }}</p>
+    <p><span class="font-semibold">Total:</span> Bs {{ sale.total }}</p>
+  </div>
+
+  <!-- Productos -->
+  <div class="mt-4">
+    <h3 class="font-semibold mb-2">Productos:</h3>
+    <div class="overflow-auto rounded border">
+      <table class="min-w-full text-sm table-fixed">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="w-1/6 p-2">Nombre</th>
+            <th class="w-1/6 p-2">Modelo</th>
+            <th class="w-1/6 p-2">Cantidad</th>
+            <th class="w-1/6 p-2">Precio</th>
+            <th class="w-1/6 p-2">Tipo Venta</th>
+            <th class="w-1/3 p-2">Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+            @for(producto of sale.detail; track $index){
+                <tr>
+                    <td class="p-2">{{ producto.nombre }}</td>
+                    <td class="p-2">{{ producto.modeloNombre }}</td>
+                    <td class="p-2">{{ producto.cantidad }}</td>
+                    <td class="p-2">Bs {{ producto.precio }}</td>
+                    <td class="p-2">{{ producto.tipoVenta }}</td>
+                    <td class="p-2">{{ producto.nota || '-' }}</td>
+                </tr>
+            }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Botón cerrar -->
+  <div class="flex justify-end mt-4">
+    <button class="btn btn-sm btn-primary py-2 px-4" (click)="ref.close()">Cerrar</button>
+  </div>
