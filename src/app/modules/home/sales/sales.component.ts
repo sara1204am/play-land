@@ -151,8 +151,8 @@ export class SalesComponent implements OnInit {
     await lastValueFrom(this.service.saveVenta(dataSales));
 
     const idsVentas = resp.productos.map((v: any) => v.productoId);
-    const listArt = await lastValueFrom(this.service.getProductosByFilter(idsVentas));
-    this.reduceStock(listArt, resp);
+ /*    const listArt = await lastValueFrom(this.service.getProductosByFilter(idsVentas));
+    this.reduceStock(listArt, resp); */
     this.getData();
   }
 

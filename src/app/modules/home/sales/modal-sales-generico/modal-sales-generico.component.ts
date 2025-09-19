@@ -1,12 +1,10 @@
-import { Component, ElementRef, inject, OnInit, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { PlayTableComponent } from '../../../table/play-table.component';
-import { lastValueFrom } from 'rxjs';
 import { HomeService } from '../../home.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
@@ -14,7 +12,6 @@ import { DatePickerModule } from 'primeng/datepicker';
   imports: [
     RadioButtonModule,
     FormsModule,
-    PlayTableComponent,
     DropdownModule,
     ReactiveFormsModule,
     InputTextModule,
