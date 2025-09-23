@@ -1,13 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
-import { map, Observable } from 'rxjs';
+import { lastValueFrom, map, Observable } from 'rxjs';
 import { deburr, includes } from 'lodash';
 
 const API_PRODUCT_URL = `${environment.host}/articulo`;
 const API_IMG_URL = `${environment.host}/imagenes`;
 const API_SALES_URL = `${environment.host}/venta`;
+const API_CLOUDINARY_URL = `${environment.host}/upload-cloudinary`;
+
 
 const API_URL = `${environment.host}`;
 
@@ -29,8 +31,12 @@ export class HomeService {
       map(articulos => {
         return articulos.map(articulo => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
-            const idImagen = articulo.imagenes[0].nombre;
-            articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+            if(articulo.imagenes[0].url){
+                articulo.photo = articulo.imagenes[0].url;
+            } else {
+              const idImagen = articulo.imagenes[0].nombre;
+              articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+            }
           } else {
             articulo.photo = null; // o imagen por defecto
           }
@@ -52,8 +58,13 @@ export class HomeService {
       map(articulos => {
         return articulos.map(articulo => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
-            const idImagen = articulo.imagenes[0].nombre;
-            articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+            if(articulo.imagenes[0].url){
+                articulo.photo = articulo.imagenes[0].url;
+            } else {
+              const idImagen = articulo.imagenes[0].nombre;
+              articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+            }
+            
           } else {
             articulo.photo = null; // o imagen por defecto
           }
@@ -98,8 +109,40 @@ export class HomeService {
     return this.http.patch(`${API_PRODUCT_URL}`, { ...data });
   }
 
+  uploadImagen(fileOrBase64: File | string): any {
+    let file: File;
 
-  async uploadImagen(fileOrBase64: File | string) {
+    // Si es base64, convertir a File
+    if (typeof fileOrBase64 === 'string' && fileOrBase64.startsWith('data:image')) {
+      const mimeType = fileOrBase64.match(/data:(.*?);base64/)?.[1] || 'image/png';
+      const base64Data = fileOrBase64.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      file = new File([byteArray], `${Date.now()}.${mimeType.split('/')[1]}`, { type: mimeType });
+    } else {
+      file = fileOrBase64 as File;
+    }
+
+    // Armar FormData
+    const fd = new FormData();
+    fd.append('file', file);
+
+    // Request con progreso
+    const req = new HttpRequest('POST',API_CLOUDINARY_URL, fd, {
+      reportProgress: true,
+    });
+
+    return  lastValueFrom(this.http.request(req));
+  }
+
+/* last  */
+ /*  async uploadImagen(fileOrBase64: File | string) {
     let file: File;
 
     if (typeof fileOrBase64 === 'string' && fileOrBase64.startsWith('data:image')) {
@@ -133,7 +176,7 @@ export class HomeService {
     // Subir
     const resp = await this.uploadFile(file, finalFileName, 'uploads', 'art');
     return resp;
-  }
+  } */
 
   public async uploadFile(
     file: File,
@@ -165,7 +208,7 @@ export class HomeService {
 
   getProductStore(): Observable<any> {
     const filter = {
-      where: { active:true },
+      where: { active:true , type:'peluche'},
       include: {
         imagenes: true
       }

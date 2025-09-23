@@ -214,7 +214,9 @@ export class StockComponent implements OnInit {
     if (data?.imagen) {
       const file = data.imagen;
       const temp = await this.service.uploadImagen(file);
-      const dataImg = { nombre: temp, id_articulo: respProduct.id }
+    
+      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url }
+    /*   const dataImg = { nombre: temp, id_articulo: respProduct.id } */
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
     this.messageService.add({
@@ -257,7 +259,8 @@ export class StockComponent implements OnInit {
 
       const respProduct = await lastValueFrom(this.service.saveProduct(articulo));
       const temp = await this.service.uploadImagen(file);
-      const dataImg = { nombre: temp, id_articulo: respProduct.id }
+
+      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url }
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
 
