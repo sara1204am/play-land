@@ -220,8 +220,12 @@ export class HomeService {
       map((articulos:any) => {
         return articulos.map((articulo:any) => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
-            const idImagen = articulo.imagenes[0].nombre;
-            articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+              if (articulo.imagenes[0].url) {
+                articulo.img = articulo.imagenes[0].url;
+              } else {
+                const idImagen = articulo.imagenes[0].nombre;
+                articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+              }
           } else {
             articulo.img = null;
           }
