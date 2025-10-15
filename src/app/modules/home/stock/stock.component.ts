@@ -94,6 +94,15 @@ export class StockComponent implements OnInit {
         globalSearch: true
       },
       {
+        key: 'type',
+        header: 'Tipo Producto',
+        type: 'text',
+        hidden: false,
+        sortable: true,
+        filterable: true,
+        globalSearch: true
+      },
+      {
         key: 'cantidad',
         type: 'template',
         header: `Cantidad Total`,
