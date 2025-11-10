@@ -4,11 +4,12 @@ import { lastValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { SearchPipe } from './search.pipe';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-store',
   standalone: true,
-  imports: [FormsModule, DropdownModule, SearchPipe],
+  imports: [FormsModule, DropdownModule, SearchPipe, ProgressSpinnerModule],
   templateUrl: './store.component.html',
   styleUrl: './store.component.css'
 })
@@ -24,11 +25,14 @@ export class StoreComponent implements OnInit {
   searchTerm: string = '';
 
   opcionesOrden = [
-    { label: 'Descuento: Mayor a Menor', value: 'desc' },
-    { label: 'Descuento: Menor a Mayor', value: 'asc' },
+    { label: 'Precio: Mayor a Menor', value: 'desc' },
+    { label: 'Precio: Menor a Mayor', value: 'asc' },
     { label: 'Nombre: A-Z', value: 'nombreAsc' },
     { label: 'Nombre: Z-A', value: 'nombreDesc' }
   ];
+  selectCategory  = 'juguete';
+
+  loading = false;
 
   calcularPrecioFinal(precio: number, descuento: number) {
     return precio - (precio * descuento) / 100;
@@ -46,10 +50,14 @@ export class StoreComponent implements OnInit {
     this.getData()
   }
   async getData() {
+    this.loading = true;
     try {
-      this.list = await lastValueFrom(this.service.getProductStore())
+      this.list = await lastValueFrom(this.service.getProductStore(this.selectCategory))
+
+      this.loading = false;
     } catch (e) {
       console.log(e)
+      this.loading = false;
     }
 
   }
@@ -58,10 +66,10 @@ export class StoreComponent implements OnInit {
 
     switch (this.ordenSeleccionado.value) {
       case 'desc':
-        this.list.sort((a: any, b: any) => b.descuento - a.descuento);
+        this.list.sort((a: any, b: any) => b.precio - a.precio);
         break;
       case 'asc':
-        this.list.sort((a: any, b: any) => a.descuento - b.descuento);
+        this.list.sort((a: any, b: any) => a.precio - b.precio);
         break;
       case 'nombreAsc':
         this.list.sort((a: any, b: any) => (a.nombre || '').localeCompare(b.nombre || ''));

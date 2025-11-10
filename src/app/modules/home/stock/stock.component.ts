@@ -58,6 +58,7 @@ export class StockComponent implements OnInit {
       { value: '2', label: 'Peluche' },
       { value: '3', label: 'Bebes' },
       { value: '4', label: 'Otros' },
+      { value: '5', label: 'Amigurumis' },
     ]
   };
   view = false;

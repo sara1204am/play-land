@@ -1,86 +1,105 @@
 <!-- peluches.component.html -->
-<div class="h-full  flex flex-col items-center  overflow-y-auto  bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
+<div
+    class="h-full flex flex-col items-center overflow-y-auto  bg-[url('/assets/imagenes/marco4.png')] bg-[length:100%_auto]  bg-repeat-y">
     <!-- Banner -->
     <div
-        class="flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/2-1920x800.jpg')] bg-cover bg-center flex items-center justify-start pt-4">
-        <div class="flex justify-center w-full">
-            <img src="/assets/imagenes/logo-transparent.png" class="h-55 w-auto" alt="Play Land Logo" />
+  class="flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/toys-smal.jpg')] bg-cover bg-center items-center justify-start pt-4 relative">
+
+  <!-- Contenedor del texto: oculto en móviles -->
+<div class="hidden md:flex w-full justify-center items-center absolute pt-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+  <div class="max-w-3xl w-full p-8 md:p-12 backdrop-blur-xs rounded-3xl bg-white/20 shadow-lg">
+   <h1 class="text-2xl md:text-3xl lg:text-6xl font-extrabold text-center text-red-600"
+    style="
+        font-family: 'Dancing Script', cursive;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    ">
+  Juguetes y peluches super cute para esta Navidad
+</h1>
+
+    <p class="mt-4 text-lg md:text-3xl text-center text-white/90 font-semibold"
+   style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">
+  Calidad, diversión y sonrisas para todos
+</p>
+
+  </div>
+</div>
+
+
+</div>
+
+
+    <!-- Menú de categorías -->
+    <nav class="w-full bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center overflow-x-auto space-x-6 py-3">
+                <li>
+                    <a (click)="selectCategory='juguete'; getData()"
+                        [class.selected]="selectCategory==='juguete'"
+                        class="cursor-pointer font-semibold transition-colors duration-200">
+                        Juguetes
+                </a>
+                </li>
+                <li>
+                    <a (click)="selectCategory='peluche'; getData()"
+                        [class.selected]="selectCategory==='peluche'"
+                        class="cursor-pointer font-semibold transition-colors duration-200">
+                        Peluches
+                </a>
+                </li>
+                <li>
+                    <a (click)="selectCategory='amigurumi'; getData()"
+                        [class.selected]="selectCategory==='amigurumi'"
+                        class="cursor-pointer font-semibold transition-colors duration-200">
+                        Amigurumis
+                </a>
+                </li>
+                <li>
+                    <a (click)="selectCategory='bebes'; getData()"
+                        [class.selected]="selectCategory==='bebes'"
+                        class="cursor-pointer font-semibold transition-colors duration-200">
+                        Bebes
+                </a>
+                </li>
+                <li>
+                    <a (click)="selectCategory='otro'; getData()"
+                       [class.selected]="selectCategory==='otro'"
+                        class="cursor-pointer font-semibold transition-colors duration-200">
+                        Varios
+                </a>
+                </li>
+                <!-- más categorías si quieres -->
+            </ul>
         </div>
-        <div class="w-full flex flex-col gap-4 p-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-sky-800 drop-shadow-md">
-                ¡Colección de Peluches!
-            </h1>
-            <p class="text-lg md:text-xl text-gray-600 mt-2">
-                Tiernos, suaves y con descuentos increíbles
-            </p>
-            <h2
-                class="pt-8 text-6xl md:text-8xl font-extrabold text-white drop-shadow-2xl tracking-wide text-center fade-effect">
-                ¡Descubre nuestras ofertas!
-            </h2>
-
-        </div>
-
-    </div>
-    <!-- Mensaje informativo -->
-<!--     <div
-        class="container mx-auto my-4 p-6 bg-[url('/assets/imagenes/sell-banner-578x450.jpg')] bg-cover bg-start border border-teal-200 rounded-2xl shadow-md text-gray-800 text-center space-y-2"> -->
-        <!--   <p class="text-lg font-semibold text-teal-700">¡Lista de Peluches con Descuento!</p>
-  <p class="text-sm md:text-base">
-    Para confirmar su pedido puede llamar al <span class="font-bold">70315404</span> o pasar por nuestra tienda en la calle 
-    <span class="font-bold">Aniceto Arce 489</span>.
-  </p>
-    <p class="text-sm md:text-base">
-    Atención de <span class="font-bold">lunes a viernes de 09:00 a 12:00 y de 14:00 a 20:00</span>, y <span class="font-bold">sábado de 14:00 a 20:00</span>. Se realizan envíos a nivel nacional e interprovincial.
-    </p>
-
-  <p class="text-sm md:text-base">
-    Por su compra, tiene derecho a una rifa que se sorteará el <span class="font-bold">20 de septiembre a las 3:30 PM</span>.
-  </p>
-  <h1 class=" text-teal-800 font-bold">
-    Todos los descuentos son válidos hasta el <span>5 de septiembre</span>.
-  </h1> -->
-<!--         <h1 class="font-semibold text-teal-700">¡Gran Sorteo de Peluches!</h1>
-        <p class="text-sm md:text-base">
-            Para confirmar su pedido puede llamar al <span class="font-bold">70315404</span> o pasar por nuestra tienda
-            en la calle
-            <span class="font-bold">Aniceto Arce 489</span>.
-        </p>
-        <p class="text-sm md:text-base">
-            Atención de <span class="font-bold">lunes a viernes de 09:00 a 12:00 y de 14:00 a 20:00</span>, y <span
-                class="font-bold">sábado de 14:00 a 20:00</span>. Se realizan envíos a nivel nacional e interprovincial.
-        </p>
-        <p class="text-sm md:text-base">
-            Por cualquier compra, tiene derecho a participar en la rifa que se sorteará el <span class="font-bold">20 de
-                septiembre a las 3:30 PM</span>.
-        </p>
-        <h1 class="text-teal-800 font-bold">
-            ¡No te lo pierdas, tu compra puede hacerte ganar un peluche!
-        </h1> -->
-
-<!--     </div> -->
+    </nav>
 
 
     <!-- Filtro global + Ordenamiento -->
     <div class="container flex flex-col sm:flex-row justify-between items-center w-full pt-8 py-4 gap-4">
 
         <!-- Search global -->
-        <input pInputText type="text" placeholder="Buscar peluche..." [(ngModel)]="searchTerm"
+        <input pInputText type="text" placeholder="Buscar..." [(ngModel)]="searchTerm"
             class="border bg-white rounded-lg px-3 py-2 text-gray-700 w-full sm:w-64 text-lg" />
 
         <!-- Ordenamiento -->
         <div>
             <span class="material-icons text-gray-300 mr-2 text-2xl hidden sm:inline">sort</span>
-            <p-dropdown [options]="opcionesOrden" [(ngModel)]="ordenSeleccionado" placeholder="Ordenar peluches"
+            <p-dropdown [options]="opcionesOrden" [(ngModel)]="ordenSeleccionado" placeholder="Ordenar"
                 optionLabel="label" (onChange)="ordenarPeluches()" class="w-full sm:w-64 text-lg" [showClear]="false">
             </p-dropdown>
         </div>
 
     </div>
 
+    <div class="relative">
+        @if(loading){
+        <div class="h-64">
+            <p-progressSpinner styleClass="absolute inset-0 m-auto z-50"></p-progressSpinner>
+        </div>
 
-    <div class="container mx-auto py-10 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        @for(peluche of list | search:searchTerm; track $index){
-    <!--     <div
+        }@else{
+        <div class="container mx-auto py-10 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            @for(peluche of list | search:searchTerm; track $index){
+            <!--     <div
             class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
             <div class="relative group cursor-pointer" (click)="abrirModal(peluche)">
                 <div class="w-full h-56 overflow-hidden rounded-xl">
@@ -100,28 +119,33 @@
                 Bs {{calcularPrecioFinal(peluche.precio, peluche.descuento)}}
             </p>
         </div> -->
-        <div
-            class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
-            <div class="relative group cursor-pointer" (click)="abrirModal(peluche)">
-                <div class="w-full h-56 overflow-hidden rounded-xl">
-                <img [src]="peluche.img" [alt]="peluche.nombre"
-                    class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div
+              class="backdrop-blur-xs bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
+                <div class="relative group cursor-pointer" (click)="abrirModal(peluche)">
+                    <div class="w-full h-56 overflow-hidden rounded-xl">
+                        <img [src]="peluche.img" [alt]="peluche.nombre"
+                            class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                    </div>
                 </div>
+
+                <h2 class="mt-4 text-xl font-bold text-gray-800 text-center">
+                    {{peluche.nombre}}
+                </h2>
+
+                <p class="text-2xl font-extrabold text-teal-600 mt-2">
+                    Bs {{peluche.precio}}
+                </p>
+
+                <span class="mt-1 text-sm text-gray-500">¡Llévalo ahora!</span>
             </div>
 
-            <h2 class="mt-4 text-xl font-bold text-gray-800 text-center">
-                {{peluche.nombre}}
-            </h2>
-
-            <p class="text-2xl font-extrabold text-teal-600 mt-2">
-                Bs {{peluche.precio}}
-            </p>
-
-            <span class="mt-1 text-sm text-gray-500">¡Llévalo ahora!</span>
-            </div>
-
+            }
+        </div>
         }
+
+
     </div>
+
     @if((list | search:searchTerm).length === 0){
     <div class="w-full text-center py-10 text-gray-500 text-lg">
         No se encontraron peluches que coincidan con tu búsqueda.
@@ -137,9 +161,12 @@
             </button>
             <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="rounded-xl w-full object-cover mb-4" />
             <h2 class="text-2xl font-bold text-gray-800">{{seleccionado.nombre}}</h2>
-            <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
+            <!--       <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
             <p class="text-3xl font-extrabold text-pink-600">
                 Bs {{calcularPrecioFinal(seleccionado.precio, seleccionado.descuento)}}
+            </p> -->
+            <p class="text-3xl font-extrabold text-gray-500">
+                Bs {{seleccionado.precio}}
             </p>
         </div>
     </div>

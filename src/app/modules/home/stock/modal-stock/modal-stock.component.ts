@@ -41,10 +41,11 @@ export class ModalStockComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
 
   public tipoOptions = [
+    { label: 'Amigurumi', value: 'amigurumi' },
     { label: 'Juguete', value: 'juguete' },
     { label: 'Peluche', value: 'peluche' },
     { label: 'Bebés', value: 'bebes' },
-    { label: 'Otro', value: 'otro' }
+    { label: 'Otro', value: 'otro' },
   ];
 
 

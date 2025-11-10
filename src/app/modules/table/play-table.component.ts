@@ -74,8 +74,8 @@ export class PlayTableComponent implements AfterViewInit {
   defaultImg = input<string>('/assets/img/no-image.jpg');
   selectItem = output<unknown>();
   uid = input.required<string>();
-  rows = input<number>(10);
-  rowsPerPageOptions = input<any>([10, 25, 50]);
+  rows = input<number>(500);
+  rowsPerPageOptions = input<any>([500, 25, 50]);
   actionsTemplate = input<TemplateRef<unknown> | null>();
   saveState = input<boolean>(false);
   config = input<{

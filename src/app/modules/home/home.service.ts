@@ -48,7 +48,9 @@ export class HomeService {
 
   getProductosAll(): Observable<any> {
     const filter = {
-      where: { active: true },
+      where: { active: true , type: {
+/*     not: 'peluche' */
+  }},
       include: {
         imagenes: true
       }
@@ -206,9 +208,9 @@ export class HomeService {
   }
 
 
-  getProductStore(): Observable<any> {
+  getProductStore(type: string): Observable<any> {
     const filter = {
-      where: { active:true , type:'peluche'},
+      where: { active:true , type },
       include: {
         imagenes: true
       }
