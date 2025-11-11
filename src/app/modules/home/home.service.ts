@@ -32,7 +32,7 @@ export class HomeService {
         return articulos.map(articulo => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
             if(articulo.imagenes[0].url){
-                articulo.photo = articulo.imagenes[0].url;
+                articulo.photo = articulo.imagenes[0].url_2;
             } else {
               const idImagen = articulo.imagenes[0].nombre;
               articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
@@ -61,7 +61,7 @@ export class HomeService {
         return articulos.map(articulo => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
             if(articulo.imagenes[0].url){
-                articulo.photo = articulo.imagenes[0].url;
+                articulo.photo = articulo.imagenes[0].url_2;
             } else {
               const idImagen = articulo.imagenes[0].nombre;
               articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
@@ -223,7 +223,7 @@ export class HomeService {
         return articulos.map((articulo:any) => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
               if (articulo.imagenes[0].url) {
-                articulo.img = articulo.imagenes[0].url;
+                articulo.img = articulo.imagenes[0].url_2;
               } else {
                 const idImagen = articulo.imagenes[0].nombre;
                 articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
@@ -235,5 +235,9 @@ export class HomeService {
         });
       })
     );
+  }
+
+  getAllCloudinary(): Observable<any> {
+    return this.http.get(`${API_CLOUDINARY_URL}/all`, {});
   }
 }
