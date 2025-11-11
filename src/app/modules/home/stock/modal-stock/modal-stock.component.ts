@@ -7,7 +7,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
 import { TagModule } from 'primeng/tag';
 import { SumQuantityPipe } from '../sum-quantity.pipe';
-
+import { ChipsModule } from 'primeng/chips'; 
 @Component({
   selector: 'app-modal-stock',
   standalone: true,
@@ -19,7 +19,8 @@ import { SumQuantityPipe } from '../sum-quantity.pipe';
     FormsModule,
     DropdownModule,
     TagModule,
-    SumQuantityPipe
+    SumQuantityPipe,
+    ChipsModule 
   ],
   templateUrl: './modal-stock.component.html',
   styleUrl: './modal-stock.component.css'
@@ -56,6 +57,9 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       nombre: ['', Validators.required],
       costo_unitario: [null],
       precio: [null],
+      precio_maximo: [null],
+      descripcion: [''],
+      chips:[null],
       lote: [''],
       cantidad: [null],
       colores: this.fb.array([], minLengthArray(1))
@@ -70,6 +74,9 @@ export class ModalStockComponent implements OnInit, OnDestroy {
         nombre: this.initial.nombre || '',
         costo_unitario: this.initial.costo_unitario ?? null,
         precio: this.initial.precio ?? null,
+        precio_maximo: this.initial.precio_maximo ?? null,
+        descripcion: this.initial.descripcion || '',
+        chips: this.initial.chips ?? null,
         lote: this.initial.id_lote || ''
       });
 

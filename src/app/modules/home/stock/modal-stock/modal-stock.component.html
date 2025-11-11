@@ -53,7 +53,6 @@
               Subir imagen
             </label>
           </div>
-
           <!-- Subir imagen -->
           @if(uploadMethod === 'file'){
           <label>Subir Imagen:</label>
@@ -80,6 +79,18 @@
           </div>
           }
 
+          <label>Descripción:</label>
+          <textarea 
+          formControlName="descripcion"
+          rows="7"
+          pInputText class="input w-full"
+          >
+
+          </textarea>
+
+          <label>Precio Redes:</label>
+          <input type="number" pInputText class="input w-full" formControlName="precio_maximo" />
+
         </div>
 
         <!-- Columna 3 -->
@@ -89,6 +100,11 @@
           <br/>
           <label>Cantidad Actual</label>
           <p-tag severity="success" [value]="colores.controls | sumQuantity " />
+          <p-chips
+              formControlName="chips"
+              placeholder="Escribe y presiona Enter"
+              class="custom-chips"
+            />
         </div>
 
       </div>

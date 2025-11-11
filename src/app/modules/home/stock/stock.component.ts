@@ -212,7 +212,9 @@ export class StockComponent implements OnInit {
       active: true,
       stock_by_option: data.colores,
       type: data.tipo,
-      id_lote: data.lote
+      id_lote: data.lote,
+      precio_maximo: data. precio_maximo,
+      chips:  data.chips,
     };
     let respProduct;
     if (data.id) {
@@ -264,7 +266,9 @@ export class StockComponent implements OnInit {
         active: true,
         stock_by_option: data.colores,
         type: data.tipo,
-        id_lote: data.lote
+        id_lote: data.lote,
+        precio_maximo: data. precio_maximo,
+        chips:  data.chips,
       };
 
       const respProduct = await lastValueFrom(this.service.saveProduct(articulo));
