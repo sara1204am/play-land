@@ -3,88 +3,62 @@
     class="h-full flex flex-col items-center overflow-y-auto  bg-[url('/assets/imagenes/marco4.png')] bg-[length:100%_auto]  bg-repeat-y">
     <!-- Banner -->
     <div
-  class="flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/toys-smal.jpg')] bg-cover bg-center items-center justify-start pt-4 relative">
+        class="flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/toys-smal.jpg')] bg-cover bg-center items-center justify-start pt-4 relative">
 
-  <!-- Contenedor del texto: oculto en móviles -->
-<div class="hidden md:flex w-full justify-center items-center absolute pt-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-  <div class="max-w-3xl w-full p-8 md:p-12 backdrop-blur-xs rounded-3xl bg-white/20 shadow-lg">
-   <h1 class="text-2xl md:text-3xl lg:text-6xl font-extrabold text-center text-red-600"
-    style="
+        <!-- Contenedor del texto: oculto en móviles -->
+        <div
+            class="hidden md:flex w-full justify-center items-center absolute pt-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div class="max-w-3xl w-full p-8 md:p-12 backdrop-blur-xs rounded-3xl bg-white/20 shadow-lg">
+                <h1 class="text-2xl md:text-3xl lg:text-6xl font-extrabold text-center text-red-600" style="
         font-family: 'Dancing Script', cursive;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     ">
-  Juguetes y peluches super cute para esta Navidad
-</h1>
+                    Juguetes y peluches super cute para esta Navidad
+                </h1>
 
-    <p class="mt-4 text-lg md:text-3xl text-center text-white/90 font-semibold"
-   style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">
-  Calidad, diversión y sonrisas para todos
-</p>
+                <p class="mt-4 text-lg md:text-3xl text-center text-white/90 font-semibold"
+                    style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">
+                    Calidad, diversión y sonrisas para todos
+                </p>
 
-  </div>
-</div>
+            </div>
+        </div>
 
 
-</div>
+    </div>
 
 
     <!-- Menú de categorías -->
     <nav class="w-full bg-white shadow-md">
         <div class="container mx-auto px-4">
-            <ul class="flex justify-center overflow-x-auto space-x-6 py-3">
-                <li>
-                    <a (click)="selectCategory='juguete'; getData()"
-                        [class.selected]="selectCategory==='juguete'"
-                        class="cursor-pointer font-semibold transition-colors duration-200">
-                        Juguetes
-                </a>
-                </li>
-                <li>
-                    <a (click)="selectCategory='peluche'; getData()"
-                        [class.selected]="selectCategory==='peluche'"
-                        class="cursor-pointer font-semibold transition-colors duration-200">
-                        Peluches
-                </a>
-                </li>
-                <li>
-                    <a (click)="selectCategory='amigurumi'; getData()"
-                        [class.selected]="selectCategory==='amigurumi'"
-                        class="cursor-pointer font-semibold transition-colors duration-200">
-                        Amigurumis
-                </a>
-                </li>
-                <li>
-                    <a (click)="selectCategory='bebes'; getData()"
-                        [class.selected]="selectCategory==='bebes'"
-                        class="cursor-pointer font-semibold transition-colors duration-200">
-                        Bebes
-                </a>
-                </li>
-                <li>
-                    <a (click)="selectCategory='otro'; getData()"
-                       [class.selected]="selectCategory==='otro'"
-                        class="cursor-pointer font-semibold transition-colors duration-200">
-                        Varios
-                </a>
-                </li>
-                <!-- más categorías si quieres -->
+            <ul class="flex flex-col md:flex-row  justify-center overflow-x-auto space-x-6 py-3">
+                @for( c of categories; track $index){ 
+                    <li>
+                        <a (click)="selectCategory=c.key; getData()" [class.selected]="selectCategory===c.key"
+                            class="cursor-pointer font-semibold transition-colors duration-200">
+                                {{ c.label }}
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </nav>
 
 
     <!-- Filtro global + Ordenamiento -->
-    <div class="container flex flex-col sm:flex-row justify-between items-center w-full pt-8 py-4 gap-4">
+    <div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md
+         container flex flex-col sm:flex-row justify-between items-center
+         w-full pt-4 pb-4 gap-4 shadow-sm p-3">
 
         <!-- Search global -->
         <input pInputText type="text" placeholder="Buscar..." [(ngModel)]="searchTerm"
-            class="border bg-white rounded-lg px-3 py-2 text-gray-700 w-full sm:w-64 text-lg" />
+            class="custom-search border  border-gray-300 bg-white rounded-lg px-3 py-2 text-gray-700 w-full sm:w-64 text-lg"  />
 
         <!-- Ordenamiento -->
         <div>
             <span class="material-icons text-gray-300 mr-2 text-2xl hidden sm:inline">sort</span>
             <p-dropdown [options]="opcionesOrden" [(ngModel)]="ordenSeleccionado" placeholder="Ordenar"
-                optionLabel="label" (onChange)="ordenarPeluches()" class="w-full sm:w-64 text-lg" [showClear]="false">
+                optionLabel="label" (onChange)="ordenarPeluches()" class="w-full sm:w-64 text-lg custom-search" [showClear]="false">
             </p-dropdown>
         </div>
 
@@ -120,7 +94,7 @@
             </p>
         </div> -->
             <div
-              class="backdrop-blur-xs bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
+                class="backdrop-blur-xs bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
                 <div class="relative group cursor-pointer" (click)="abrirModal(peluche)">
                     <div class="w-full h-56 overflow-hidden rounded-xl">
                         <img [src]="peluche.img" [alt]="peluche.nombre"

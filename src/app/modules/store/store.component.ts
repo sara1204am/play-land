@@ -34,6 +34,15 @@ export class StoreComponent implements OnInit {
 
   loading = false;
 
+  categories = [
+  { key: 'juguete', label: 'Juguetes', icon: 'toys' },
+  { key: 'peluche', label: 'Peluches', icon: 'pets' },
+  { key: 'amigurumi', label: 'Amigurumis', icon: 'favorite' },
+  { key: 'bebes', label: 'Bebes', icon: 'child_care' },
+  { key: 'otro', label: 'Varios',   icon: 'category' },
+];
+
+
   calcularPrecioFinal(precio: number, descuento: number) {
     return precio - (precio * descuento) / 100;
   }
