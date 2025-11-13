@@ -62,7 +62,6 @@ export class StoreComponent implements OnInit {
     this.loading = true;
     try {
       this.list = await lastValueFrom(this.service.getProductStore(this.selectCategory))
-
       this.loading = false;
     } catch (e) {
       console.log(e)
