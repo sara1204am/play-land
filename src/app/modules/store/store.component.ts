@@ -20,6 +20,7 @@ export class StoreComponent implements OnInit {
   list: any = [];
 
   seleccionado: any = null;
+  viewMap: boolean =  false;
   ordenSeleccionado!: any;
 
   searchTerm: string = '';
@@ -71,7 +72,6 @@ export class StoreComponent implements OnInit {
   }
 
   ordenarPeluches() {
-
     switch (this.ordenSeleccionado.value) {
       case 'desc':
         this.list.sort((a: any, b: any) => b.precio - a.precio);
@@ -85,6 +85,7 @@ export class StoreComponent implements OnInit {
       case 'nombreDesc':
         this.list.sort((a: any, b: any) => (b.nombre || '').localeCompare(a.nombre || ''));
         break;
+
     }
 
   }

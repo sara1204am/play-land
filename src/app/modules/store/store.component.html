@@ -30,6 +30,16 @@
 
     <!-- Menú de categorías -->
     <nav class="w-full bg-white shadow-md">
+        <div class="container">
+            <ul>
+                <li>
+                    <a  (click)="viewMap= true"
+                         class="cursor-pointer font-semibold transition-colors duration-200">
+                                    Ubicacion
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="container mx-auto px-4">
             <ul class="flex flex-col md:flex-row  justify-center overflow-x-auto space-x-6 py-3">
                 @for( c of categories; track $index){ 
@@ -72,8 +82,8 @@
 
         }@else{
         <div class="container mx-auto py-10 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            @for(product of list | search:searchTerm; track $index){
-            <div
+            @for(product of list | search:searchTerm; track product.id){
+           <div
                 class="backdrop-blur-xs bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
                 <div class="relative group cursor-pointer" (click)="abrirModal(product)">
                     <div class="w-full h-56 overflow-hidden rounded-xl">
@@ -108,11 +118,12 @@
 
     <!-- Modal -->
     @if(seleccionado){
-    <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-        <div class="bg-white rounded-2xl p-6 relative max-w-lg w-full">
-            <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-900 text-xl" (click)="cerrarModal()">
-                ✖
-            </button>
+    <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 ">
+        <div class="bg-white rounded-2xl p-6 relative max-w-lg w-full overflow-y-auto max-h-4/5 ">
+                <button class="sticky z-10 top-0 ml-auto block text-gray-500 hover:text-gray-900 text-xl w-12 h-12 rounded-3xl backdrop-blur-xs bg-white/60 p-2" (click)="cerrarModal()">
+                    ✖
+                </button>
+            <br>
             <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="rounded-xl w-full object-cover mb-4" />
             <h2 class="text-2xl font-bold text-gray-800">{{seleccionado.nombre}}</h2>
             <p class="mt-1 text-sm text-gray-500 py-3"> {{ seleccionado.descripcion }} </p>
@@ -127,6 +138,21 @@
     </div>
     }
     <div class="pb-16"></div>
+
+      <!-- Modal -->
+    @if(viewMap){
+    <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+        <div class="bg-white rounded-2xl p-6 relative w-[670px]">
+            <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-900 text-xl" (click)="viewMap= false">
+                ✖
+            </button>
+            <div class="flex flex-col items-center justify-center">
+                <img class="w-42" src="/assets/imagenes/logo.png" alt="logo">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1885.7417374913464!2d-65.25761725342278!3d-19.042469238114112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93fbcf336120b841%3A0xe75a99481f9ac3d1!2sAniceto%20Arce%20489%2C%20Sucre!5e0!3m2!1ses-419!2sbo!4v1699246501797!5m2!1ses-419!2sbo" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+    }
 
     <footer
         class="fixed bottom-0 left-0 w-full h-12 px-4 flex justify-center items-center bg-sky-800 text-white border-t border-sky-700">
