@@ -43,6 +43,8 @@ export class StoreComponent implements OnInit {
   { key: 'otro', label: 'Varios',   icon: 'category' },
 ];
 
+viewPromotion =  true;
+
 
   calcularPrecioFinal(precio: number, descuento: number) {
     return precio - (precio * descuento) / 100;
