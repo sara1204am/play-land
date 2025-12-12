@@ -222,12 +222,13 @@ export class HomeService {
       map((articulos:any) => {
         return articulos.map((articulo:any) => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
-              if (articulo.imagenes[0].url) {
+             /*  if (articulo.imagenes[0].url) {
                 articulo.img = articulo.imagenes[0].url_2;
               } else {
                 const idImagen = articulo.imagenes[0].nombre;
                 articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
-              }
+              } */
+               articulo.img = `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`;
           } else {
             articulo.img = null;
           }
@@ -239,5 +240,9 @@ export class HomeService {
 
   getAllCloudinary(): Observable<any> {
     return this.http.get(`${API_CLOUDINARY_URL}/all`, {});
+  }
+
+  backup(): Observable<any> {
+    return this.http.get(`${API_CLOUDINARY_URL}/backup`, {});
   }
 }
