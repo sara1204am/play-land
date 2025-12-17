@@ -30,6 +30,11 @@
 
     <!-- Menú de categorías -->
     <nav class="w-full bg-white shadow-md">
+        <div class="container flex justify-center">
+            <p class="font-semibold text-red-600">
+                ⚠️ Únicos contactos válidos: 70315404 o 60387434. Evita estafas.
+            </p>
+        </div>
         <div class="container">
             <ul>
                 <li>
@@ -37,6 +42,7 @@
                         Ubicacion
                     </a>
                 </li>
+
             </ul>
         </div>
         <div class="container mx-auto px-4">
@@ -95,21 +101,16 @@
                     </div>
 
                     <div class="w-full h-56 overflow-hidden rounded-xl">
-                         @defer (on viewport) {
-                            @if(product.img){
-                                    <img 
-                                    [ngSrc]="product.img" 
-                                    [alt]="product.nombre"
-                                    loading="lazy"
-                                    width="300"
-                                    height="300"
-                                    class="w-full h-full object-cover transition-transform group-hover:scale-105" />
-                                }
+                        @defer (on viewport) {
+                        @if(product.img){
+                        <img [ngSrc]="product.img" [alt]="product.nombre" loading="lazy" width="300" height="300"
+                            class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                        }
 
                         }
 
                         @placeholder {
-                            <p>Cargando...</p>
+                        <p>Cargando...</p>
                         }
 
                     </div>
