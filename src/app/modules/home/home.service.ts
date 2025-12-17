@@ -238,6 +238,41 @@ export class HomeService {
     );
   }
 
+    getProductStoreBySearch(search: string): Observable<any> {
+    const filter = {
+      where: {
+        active: true,
+        nombre: {
+          contains: search,
+        }
+      },
+      include: {
+        imagenes: true
+      }
+
+    }
+    const obj = encodeURIComponent(JSON.stringify(filter))
+    return this.http.get(`${API_PRODUCT_URL}?filter=${obj}`, {})
+      .pipe(
+        map((articulos: any) => {
+          return articulos.map((articulo: any) => {
+            if (articulo.imagenes && articulo.imagenes.length > 0) {
+              /*  if (articulo.imagenes[0].url) {
+                 articulo.img = articulo.imagenes[0].url_2;
+               } else {
+                 const idImagen = articulo.imagenes[0].nombre;
+                 articulo.img = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
+               } */
+                    articulo.img = `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`;
+            } else {
+              articulo.img = null;
+            }
+            return articulo;
+          });
+        })
+      );
+  }
+
   getAllCloudinary(): Observable<any> {
     return this.http.get(`${API_CLOUDINARY_URL}/all`, {});
   }

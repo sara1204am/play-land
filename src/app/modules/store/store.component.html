@@ -60,7 +60,7 @@
          w-full pt-4 pb-4 gap-4 shadow-sm p-3">
 
         <!-- Search global -->
-        <input pInputText type="text" placeholder="Buscar..." [(ngModel)]="searchTerm"
+        <input pInputText type="text" placeholder="Buscar..." [(ngModel)]="searchTerm" (input)="onSearchChange()"
             class="custom-search border  border-gray-300 bg-white rounded-lg px-3 py-2 text-gray-700 w-full sm:w-64 text-lg" />
 
         <!-- Ordenamiento -->
@@ -82,19 +82,42 @@
 
         }@else{
         <div class="container mx-auto py-10 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            @for(product of list | search:searchTerm; track product.id){
+            @for(product of list; track product.id){
             <div
                 class="backdrop-blur-xs bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl transition p-4 flex flex-col items-center relative overflow-hidden">
                 <div class="relative group cursor-pointer" (click)="abrirModal(product)">
-                    <div class="w-full h-56 overflow-hidden rounded-xl">
-                        <img [src]="product.img" [alt]="product.nombre"
-                            class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                    <br><br>
+                    <div class="flex justify-center w-full pb-2">
+                        <div class="inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full border shadow-sm"
+                            [ngClass]="categoryStyles[product.type] || categoryStyles.otro">
+                            {{ categoriesObj[product.type] || 'Varios' }}
+                        </div>
                     </div>
 
-                      <div
+                    <div class="w-full h-56 overflow-hidden rounded-xl">
+                         @defer (on viewport) {
+                            @if(product.img){
+                                    <img 
+                                    [ngSrc]="product.img" 
+                                    [alt]="product.nombre"
+                                    loading="lazy"
+                                    width="300"
+                                    height="300"
+                                    class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                }
+
+                        }
+
+                        @placeholder {
+                            <p>Cargando...</p>
+                        }
+
+                    </div>
+
+                    <div
                         class="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
-                   <!--      -{{product.descuento}}% -->
-                           -15% 
+                        <!--      -{{product.descuento}}% -->
+                        -15%
                     </div>
                 </div>
 
@@ -102,10 +125,10 @@
                     {{product.nombre}}
                 </h2>
 
-               <!--  <p class="text-2xl font-extrabold text-teal-600 mt-2">
+                <!--  <p class="text-2xl font-extrabold text-teal-600 mt-2">
                     Bs {{product.precio}}
                 </p> -->
-                   <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
+                <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
                 <p class="text-2xl font-extrabold text-pink-600">
                     Bs {{calcularPrecioFinal(product.precio, 15)}}
                 </p>
@@ -139,11 +162,11 @@
             <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="rounded-xl w-full object-cover mb-4" />
             <h2 class="text-2xl font-bold text-gray-800">{{seleccionado.nombre}}</h2>
             <p class="mt-1 text-sm text-gray-500 py-3"> {{ seleccionado.descripcion }} </p>
-                     <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
+            <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
             <p class="text-3xl font-extrabold text-pink-600">
                 Bs {{calcularPrecioFinal(seleccionado.precio, 15)}}
             </p>
-          <!--   <p class="text-3xl font-extrabold text-gray-500">
+            <!--   <p class="text-3xl font-extrabold text-gray-500">
                 Bs {{seleccionado.precio}}
             </p> -->
         </div>
@@ -178,8 +201,7 @@
             <!-- Botón cerrar -->
             <button class="absolute top-0 left-1/2 -translate-x-1/2 
                    text-white hover:text-gray-300 text-3xl z-50 bg-[#00000055]
-                   px-4 py-2 rounded-xl backdrop-blur-md"
-                (click)="viewPromotion = false">
+                   px-4 py-2 rounded-xl backdrop-blur-md" (click)="viewPromotion = false">
                 ✖ Cerrar
             </button>
 
