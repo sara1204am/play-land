@@ -59,7 +59,7 @@ export class StoreComponent implements OnInit {
     otro: 'bg-gray-100 text-gray-700 border-gray-300'
   };
 
-  viewPromotion = true;
+  viewPromotion = false;
 
   private debounceTimer: any;
 

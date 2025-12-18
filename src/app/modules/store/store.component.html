@@ -115,24 +115,24 @@
 
                     </div>
 
-                    <div
+                <!--     <div
                         class="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
-                        <!--      -{{product.descuento}}% -->
+                        -{{product.descuento}}% 
                         -15%
-                    </div>
+                    </div> -->
                 </div>
 
                 <h2 class="mt-4 text-xl font-bold text-gray-800 text-center">
                     {{product.nombre}}
                 </h2>
 
-                <!--  <p class="text-2xl font-extrabold text-teal-600 mt-2">
+                 <p class="text-2xl font-extrabold text-teal-600 mt-2">
                     Bs {{product.precio}}
-                </p> -->
-                <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
+                </p>
+            <!--     <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
                 <p class="text-2xl font-extrabold text-pink-600">
                     Bs {{calcularPrecioFinal(product.precio, 15)}}
-                </p>
+                </p> -->
                 <p class="mt-1 text-sm text-gray-500 truncate w-80"> {{ product.descripcion }} </p>
                 <span class="mt-1 text-sm text-gray-500">¡Llévalo ahora!</span>
             </div>
@@ -163,13 +163,13 @@
             <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="rounded-xl w-full object-cover mb-4" />
             <h2 class="text-2xl font-bold text-gray-800">{{seleccionado.nombre}}</h2>
             <p class="mt-1 text-sm text-gray-500 py-3"> {{ seleccionado.descripcion }} </p>
-            <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
+         <!--    <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
             <p class="text-3xl font-extrabold text-pink-600">
                 Bs {{calcularPrecioFinal(seleccionado.precio, 15)}}
-            </p>
-            <!--   <p class="text-3xl font-extrabold text-gray-500">
-                Bs {{seleccionado.precio}}
             </p> -->
+              <p class="text-3xl font-extrabold text-gray-500">
+                Bs {{seleccionado.precio}}
+            </p>
         </div>
     </div>
     }
