@@ -49,7 +49,9 @@ export class StockComponent implements OnInit {
   public config = {
     globalSearch: true,
     resetButton: true,
-    configColumns: true
+    configColumns: true,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [5, 10, 20, 50],
   };
 
   public catalogs: Record<string, any[]> = {

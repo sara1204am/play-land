@@ -38,6 +38,7 @@ export class StoreComponent implements OnInit {
 
   categories = [
     { key: 'juguete', label: 'Juguetes', icon: 'toys' },
+    { key: 'vehiculos', label: 'Vehículos Infantiles', icon: 'directions_car' },
     { key: 'peluche', label: 'Peluches', icon: 'pets' },
     { key: 'amigurumi', label: 'Amigurumis', icon: 'favorite' },
     { key: 'bebes', label: 'Bebes', icon: 'child_care' },

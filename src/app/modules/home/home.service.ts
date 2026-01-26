@@ -48,9 +48,7 @@ export class HomeService {
 
   getProductosAll(): Observable<any> {
     const filter = {
-      where: { active: true , type: {
-/*     not: 'peluche' */
-  }},
+      where: { active: true },
       include: {
         imagenes: true
       }
@@ -60,13 +58,13 @@ export class HomeService {
       map(articulos => {
         return articulos.map(articulo => {
           if (articulo.imagenes && articulo.imagenes.length > 0) {
-            if(articulo.imagenes[0].url){
+          /*   if(articulo.imagenes[0].url){
                 articulo.photo = articulo.imagenes[0].url_2;
             } else {
               const idImagen = articulo.imagenes[0].nombre;
               articulo.photo = `${API_URL}/uploads/art/download/${idImagen}?access_token=${this.getTokenId()}`;
-            }
-            
+            } */
+             articulo.photo = `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`;
           } else {
             articulo.photo = null; // o imagen por defecto
           }

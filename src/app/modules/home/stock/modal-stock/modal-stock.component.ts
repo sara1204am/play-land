@@ -44,6 +44,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
   public tipoOptions = [
     { label: 'Amigurumi', value: 'amigurumi' },
     { label: 'Juguete', value: 'juguete' },
+    { label: 'Vehículos Infantiles', value: 'vehiculos' },
     { label: 'Peluche', value: 'peluche' },
     { label: 'Bebés', value: 'bebes' },
     { label: 'Otro', value: 'otro' },
@@ -88,7 +89,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
             this.fb.group({
               color: [item.color, Validators.required],
               cantidad: [item.cantidad, [Validators.required, Validators.min(0)]],
-              cantidad_almacen: [item.cantidad_almacen, [Validators.required, Validators.min(0)]]
+              cantidad_almacen: [item.cantidad_almacen, [Validators.required, Validators.min(0)]],
+              cantidad_feria: [item.cantidad_feria, []]
             })
           );
         });
@@ -157,7 +159,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     return this.fb.group({
       color: ['', Validators.required],
       cantidad: [null, Validators.required],
-      cantidad_almacen: [null, Validators.required]
+      cantidad_almacen: [null, Validators.required],
+      cantidad_feria: [null]
     });
   }
 
@@ -173,6 +176,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
         color: [''],
         cantidad: [0, [Validators.min(0)]],
         cantidad_almacen: [0, [Validators.min(0)]],
+        cantidad_feria: [0, [Validators.min(0)]],
       })
     );
   }
