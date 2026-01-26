@@ -219,6 +219,7 @@ export class StockComponent implements OnInit {
       nombre_corto: data.nombre_corto ?? data.nombre,
       descripcion: data.descripcion ?? '',
       costo_unitario: data.costo_unitario,
+      descuento: data.descuento,
       precio: data.precio ?? 0,
       active: true,
       stock_by_option: data.colores,

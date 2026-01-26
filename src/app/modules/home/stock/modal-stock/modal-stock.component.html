@@ -35,6 +35,10 @@
           <label>Precio de Venta:</label>
           <input type="number" pInputText class="input w-full" formControlName="precio" />
 
+          <label>Descuento:</label>
+          <input type="number" pInputText class="input w-full" formControlName="descuento" />
+          <label> Precio con descuento = {{ productForm.value.precio - (productForm.value.precio * ( productForm.value.descuento /100))}} </label>
+
           <label>Lote:</label>
           <input type="text" pInputText class="input w-full" formControlName="lote" />
         </div>
