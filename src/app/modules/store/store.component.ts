@@ -32,7 +32,7 @@ export class StoreComponent implements OnInit {
     { label: 'Nombre: A-Z', value: 'nombreAsc' },
     { label: 'Nombre: Z-A', value: 'nombreDesc' }
   ];
-  selectCategory = 'juguete';
+  selectCategory = 'peluche';
 
   loading = false;
 

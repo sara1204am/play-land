@@ -3,48 +3,63 @@
     class="h-full flex flex-col items-center overflow-y-auto  bg-[url('/assets/imagenes/marco4.png')] bg-[length:100%_auto]  bg-repeat-y">
     <!-- Banner -->
     <div
-        class="flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/toys-smal.jpg')] bg-cover bg-center items-center justify-start pt-4 relative">
+        class="valentine-banner flex flex-col w-full min-h-screen bg-[url('/assets/imagenes/valentin2.png')] bg-cover bg-center items-center justify-start pt-4 relative">
+        <div class="absolute top-1/10 sm:top-1/7 left-1/8 z-20 ">
+            <h1 class="text-4xl sm:text-[4rem] font-extrabold
+           text-white leading-tight
+           drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]">
+                Regala amor,
+                <span class="text-pink-200 block max-w-md">ahorra más</span>
+            </h1>
 
-        <!-- Contenedor del texto: oculto en móviles -->
-        <div
-            class="hidden md:flex w-full justify-center items-center absolute pt-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div class="max-w-3xl w-full p-8 md:p-12 backdrop-blur-xs rounded-3xl bg-white/20 shadow-lg">
-                <h1 class="text-2xl md:text-3xl lg:text-6xl font-extrabold text-center text-red-600" style="
-        font-family: 'Dancing Script', cursive;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    ">
-                    Juguetes y peluches super cute para esta Navidad
-                </h1>
-
-                <p class="mt-4 text-lg md:text-3xl text-center text-white/90 font-semibold"
-                    style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);">
-                    Calidad, diversión y sonrisas para todos
-                </p>
-
-            </div>
+            <p class="max-w-sm mt-3 text-lg sm:text-[2rem] font-semibold
+           text-white/90
+           drop-shadow-[0_2px_15px_rgba(0,0,0,0.35)]">
+                Este San Valentín,
+                <span class="text-pink-300 font-bold">
+                    enamora con descuentos irresistibles !!!
+                </span>
+            </p>
         </div>
-
 
     </div>
 
 
     <!-- Menú de categorías -->
-    <nav class="w-full flex flex-col items-center justify-center bg-white shadow-md">
-        <div class="container flex justify-center">
-            <p class="font-semibold text-red-600">
-                ⚠️ Únicos contactos válidos: 70315404 o 60387434. Evita estafas.
-            </p>
-        </div>
-        <div class="container">
-            <ul>
-                <li>
-                    <a (click)="viewMap= true" class="cursor-pointer font-semibold transition-colors duration-200">
-                        Ubicacion - Pasaje San Rafael
-                    </a>
-                </li>
+    <nav class="w-full flex flex-col gap-3 items-center justify-center bg-white shadow-md">
+        <div class="flex justify-center gap-2 sm:w-2/4 flex-col sm:flex-row">
 
-            </ul>
+            <div class="flex justify-center">
+                <img class="w-50" src="/assets/imagenes/pet.png">
+            </div>
+            <div class="flex flex-col gap-3">
+                <div (click)="viewMap = true" class="flex items-center gap-2 px-4 py-2 rounded-lg
+           bg-gray-100 hover:bg-gray-200
+           text-gray-800 font-semibold text-sm
+           cursor-pointer transition-all duration-200
+           shadow-sm hover:shadow-md text-center">
+
+                    <span class="text-red-500 text-lg">📍</span>
+                    <span>
+                        Pasaje San Rafael N°2,
+                        <span class="text-gray-600">a una cuadra del Mercado Negro</span>
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 px-4 py-2 rounded-full
+              bg-red-100 text-red-700 font-semibold text-sm
+              shadow-md border border-red-200 text-center">
+                    <span class="text-lg">⚠️</span>
+                    <p>
+                        Únicos contactos válidos:
+                        <span class="font-bold">70315404</span> o
+                        <span class="font-bold">60387434</span>.
+                        Evita estafas.
+                    </p>
+                </div>
+
+            </div>
         </div>
+
         <div class="container mx-auto px-4">
             <ul class="flex flex-col md:flex-row  justify-center overflow-x-auto space-x-6 py-3">
                 @for( c of categories; track $index){
@@ -115,7 +130,7 @@
 
                     </div>
 
-                <!--     <div
+                    <!--     <div
                         class="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
                         -{{product.descuento}}% 
                         -15%
@@ -126,10 +141,10 @@
                     {{product.nombre}}
                 </h2>
 
-                 <p class="text-2xl font-extrabold text-teal-600 mt-2">
+                <p class="text-2xl font-extrabold text-teal-600 mt-2">
                     Bs {{product.precio}}
                 </p>
-            <!--     <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
+                <!--     <p class="text-gray-500 line-through">Bs {{product.precio}}</p>
                 <p class="text-2xl font-extrabold text-pink-600">
                     Bs {{calcularPrecioFinal(product.precio, 15)}}
                 </p> -->
@@ -163,11 +178,11 @@
             <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="rounded-xl w-full object-cover mb-4" />
             <h2 class="text-2xl font-bold text-gray-800">{{seleccionado.nombre}}</h2>
             <p class="mt-1 text-sm text-gray-500 py-3"> {{ seleccionado.descripcion }} </p>
-         <!--    <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
+            <!--    <p class="text-gray-500 line-through">Bs {{seleccionado.precio}}</p>
             <p class="text-3xl font-extrabold text-pink-600">
                 Bs {{calcularPrecioFinal(seleccionado.precio, 15)}}
             </p> -->
-              <p class="text-3xl font-extrabold text-gray-500">
+            <p class="text-3xl font-extrabold text-gray-500">
                 Bs {{seleccionado.precio}}
             </p>
         </div>
@@ -184,7 +199,10 @@
             </button>
             <div class="flex flex-col items-center justify-center">
                 <img class="w-42" src="/assets/imagenes/logo.png" alt="logo">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d891.3113844239632!2d-65.25758475065233!3d-19.04176777877487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d-19.020444599999998!2d-65.2749437!4m5!1s0x93fbcf5e5d7cb2ff%3A0x6e92dff3389b52fd!2sJunin%202%2C%20Sucre!3m2!1d-19.0417678!2d-65.2563937!5e1!3m2!1ses!2sbo!4v1768446772169!5m2!1ses!2sbo" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d891.3113844239632!2d-65.25758475065233!3d-19.04176777877487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d-19.020444599999998!2d-65.2749437!4m5!1s0x93fbcf5e5d7cb2ff%3A0x6e92dff3389b52fd!2sJunin%202%2C%20Sucre!3m2!1d-19.0417678!2d-65.2563937!5e1!3m2!1ses!2sbo!4v1768446772169!5m2!1ses!2sbo"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </div>
@@ -223,3 +241,24 @@
 
 
 </div>
+
+<!-- Botón flotante WhatsApp -->
+@if(seleccionado===null){
+<a href="https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20informaci%C3%B3n%20por%20favor"
+    target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" class="fixed bottom-7 right-0 sm:right-16 z-[9999]
+         flex items-center gap-2
+        sm:bg-white text-white font-bold
+         px-4 py-3 rounded-full shadow-xl
+         hover:scale-105 active:scale-95
+         transition-transform duration-200
+        sm:border-4  sm:border-[#25D366]
+         ">
+    <span class="w-10 h-10 grid place-items-center rounded-full bg-white/20 text-xl">
+        <img class="rounded-full" src="./assets/imagenes/whatsapp.png" alt="WhatsApp">
+    </span>
+
+    <span class="hidden sm:inline text-[#25D366] font-extrabold
+             drop-shadow-[0_0_6px_#25D366]
+             drop-shadow-[0_0_12px_#25D366]">Enviar Mensaje</span>
+</a>
+}
