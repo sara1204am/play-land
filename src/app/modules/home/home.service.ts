@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
-import { lastValueFrom, map, Observable } from 'rxjs';
+import { lastValueFrom, map, Observable, of } from 'rxjs';
 import { deburr, includes } from 'lodash';
 
 const API_PRODUCT_URL = `${environment.host}/articulo`;
@@ -270,6 +270,27 @@ export class HomeService {
         })
       );
   }
+
+  getProductStoreBySearchWithTag(search: string): Observable<any[]> {
+  const q = (search ?? '').trim();
+
+  if (!q) return of([]);
+
+  const params = new HttpParams().set('q', q);
+
+  return this.http
+    .get<any[]>(`${API_PRODUCT_URL}/search`, { params })
+    .pipe(
+      map((articulos) =>
+        (articulos ?? []).map((articulo) => ({
+          ...articulo,
+          img: articulo.imagenes?.length
+            ? `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`
+            : null,
+        })),
+      ),
+    );
+}
 
   getAllCloudinary(): Observable<any> {
     return this.http.get(`${API_CLOUDINARY_URL}/all`, {});

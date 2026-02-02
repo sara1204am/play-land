@@ -129,7 +129,7 @@ export class StoreComponent implements OnInit {
   async onSearch() {
     this.loading = true;
     try {
-      this.list = await lastValueFrom(this.service.getProductStoreBySearch(this.searchTerm))
+      this.list = await lastValueFrom(this.service.getProductStoreBySearchWithTag(this.searchTerm))
       this.loading = false;
     } catch (e) {
       console.log(e)
