@@ -27,6 +27,8 @@ export class StoreComponent implements OnInit {
   searchTerm: string = '';
 
   opcionesOrden = [
+    { label: 'Descuento: Mayor a Menor', value: 'descPromo' },
+    { label: 'Descuento: Menor a Mayor', value: 'ascPromo' },
     { label: 'Precio: Mayor a Menor', value: 'desc' },
     { label: 'Precio: Menor a Mayor', value: 'asc' },
     { label: 'Nombre: A-Z', value: 'nombreAsc' },
@@ -64,6 +66,8 @@ export class StoreComponent implements OnInit {
 
   private debounceTimer: any;
 
+  isModePromotion = true;
+
   calcularPrecioFinal(precio: number, descuento: number) {
     return precio - (precio * descuento) / 100;
   }
@@ -94,6 +98,12 @@ export class StoreComponent implements OnInit {
 
   ordenarPeluches() {
     switch (this.ordenSeleccionado.value) {
+      case 'descPromo':
+        this.list.sort((a: any, b: any) => b.descuento - a.descuento);
+        break;
+      case 'ascPromo':
+        this.list.sort((a: any, b: any) => a.descuento - b.descuento);
+        break;
       case 'desc':
         this.list.sort((a: any, b: any) => b.precio - a.precio);
         break;

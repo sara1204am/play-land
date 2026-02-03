@@ -95,6 +95,14 @@
           <label>Precio Redes:</label>
           <input type="number" pInputText class="input w-full" formControlName="precio_maximo" />
 
+          <label class="flex items-center gap-2">
+            <p-checkbox
+              formControlName="active"
+              [binary]="true">
+            </p-checkbox>
+            <span>Está activo</span>
+          </label>
+
         </div>
 
         <!-- Columna 3 -->

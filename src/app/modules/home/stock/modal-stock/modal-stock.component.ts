@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TagModule } from 'primeng/tag';
 import { SumQuantityPipe } from '../sum-quantity.pipe';
 import { ChipsModule } from 'primeng/chips'; 
+import { CheckboxModule } from 'primeng/checkbox';
 @Component({
   selector: 'app-modal-stock',
   standalone: true,
@@ -20,7 +21,8 @@ import { ChipsModule } from 'primeng/chips';
     DropdownModule,
     TagModule,
     SumQuantityPipe,
-    ChipsModule 
+    ChipsModule,
+    CheckboxModule 
   ],
   templateUrl: './modal-stock.component.html',
   styleUrl: './modal-stock.component.css'
@@ -64,6 +66,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       chips:[null],
       lote: [''],
       cantidad: [null],
+      active:[true],
       colores: this.fb.array([], minLengthArray(1))
     });
 
@@ -79,6 +82,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
         descuento: this.initial.descuento ?? null,
         precio_maximo: this.initial.precio_maximo ?? null,
         descripcion: this.initial.descripcion || '',
+        active: this.initial.active,
         chips: this.initial.chips ?? null,
         lote: this.initial.id_lote || ''
       });

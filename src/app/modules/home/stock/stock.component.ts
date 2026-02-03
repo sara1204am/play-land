@@ -32,6 +32,9 @@ export class StockComponent implements OnInit {
   public quantityTotalTemplate: Signal<TemplateRef<ElementRef>> =
     viewChild.required<TemplateRef<ElementRef>>('quantityTotalTemplate');
 
+  public statusTemplate: Signal<TemplateRef<ElementRef>> =
+    viewChild.required<TemplateRef<ElementRef>>('statusTemplate');
+
   public buttonTemplate: Signal<TemplateRef<ElementRef>> =
     viewChild.required<TemplateRef<ElementRef>>('buttonTemplate');
 
@@ -146,16 +149,16 @@ export class StockComponent implements OnInit {
         prefix: 'Bs ',
         format: '1.2-2'
       },
-    /*   {
-        key: 'stock_by_option',
+      {
+        key: 'active',
         type: 'template',
-        header: `Cantidad`,
+        header: `Esta Activo`,
         hidden: false,
-        sortable: false,
+        sortable: true,
         filterable: false,
         headerClass: '!bg-transparent',
-        cellTemplate: this.quantityTemplate(),
-      }, */
+        cellTemplate: this.statusTemplate(),
+      },
       {
         key: 'buttons',
         type: 'template',
@@ -221,11 +224,11 @@ export class StockComponent implements OnInit {
       costo_unitario: data.costo_unitario,
       descuento: data.descuento,
       precio: data.precio ?? 0,
-      active: true,
       stock_by_option: data.colores,
       type: data.tipo,
       id_lote: data.lote,
       precio_maximo: data. precio_maximo,
+      active: data.active,
       chips:  data.chips,
     };
     let respProduct;

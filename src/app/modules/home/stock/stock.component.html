@@ -21,6 +21,12 @@
             </div>
 
         </ng-template>
+        <ng-template #statusTemplate  let-row>
+            <div class="p-1 text-center rounded" [ngClass]="{'bg-red-200': !row.active, 'bg-primary-100': row.active}">
+                {{ row.active ? 'Activo': 'Inactivo' }}
+            </div>
+
+        </ng-template>
         
         <ng-template #quantityTemplate let-row> 
             @if(viewQuantity){
