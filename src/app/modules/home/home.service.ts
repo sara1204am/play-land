@@ -9,7 +9,7 @@ const API_PRODUCT_URL = `${environment.host}/articulo`;
 const API_IMG_URL = `${environment.host}/imagenes`;
 const API_SALES_URL = `${environment.host}/venta`;
 const API_CLOUDINARY_URL = `${environment.host}/upload-cloudinary`;
-
+const API_S3_URL = `${environment.host}/upload-s3`;
 
 const API_URL = `${environment.host}`;
 
@@ -134,7 +134,7 @@ export class HomeService {
     fd.append('file', file);
 
     // Request con progreso
-    const req = new HttpRequest('POST',API_CLOUDINARY_URL, fd, {
+    const req = new HttpRequest('POST',API_S3_URL, fd, {
       reportProgress: true,
     });
 
@@ -293,10 +293,10 @@ export class HomeService {
 }
 
   getAllCloudinary(): Observable<any> {
-    return this.http.get(`${API_CLOUDINARY_URL}/all`, {});
+    return this.http.get(`${API_S3_URL}/all`, {});
   }
 
   backup(): Observable<any> {
-    return this.http.get(`${API_CLOUDINARY_URL}/backup`, {});
+    return this.http.get(`${API_S3_URL}/backup`, {});
   }
 }

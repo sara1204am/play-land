@@ -242,7 +242,7 @@ export class StockComponent implements OnInit {
       const file = data.imagen;
       const temp = await this.service.uploadImagen(file);
     
-      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url }
+      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url.split('/').pop() }
     /*   const dataImg = { nombre: temp, id_articulo: respProduct.id } */
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
@@ -289,7 +289,7 @@ export class StockComponent implements OnInit {
       const respProduct = await lastValueFrom(this.service.saveProduct(articulo));
       const temp = await this.service.uploadImagen(file);
 
-      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url }
+      const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url.split('/').pop() }
       const respImagen = await lastValueFrom(this.service.saveImagen(dataImg));
     }
 
