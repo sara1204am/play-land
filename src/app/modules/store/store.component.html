@@ -1,10 +1,8 @@
 <!-- store.component.html -->
 <div class="store-wrapper">
 
-  <!-- ═══════════════════════════════════════════
-       HERO BANNER
-  ════════════════════════════════════════════ -->
-  <section class="hero-banner">
+  <!-- HERO BANNER -->
+  <section class="hero-banner max-sm:min-h-0 max-sm:px-4 max-sm:pb-[90px]">
     <!-- Burbujas decorativas -->
     <div class="bubble bubble-1">🎈</div>
     <div class="bubble bubble-2">⭐</div>
@@ -13,33 +11,30 @@
     <div class="bubble bubble-5">✨</div>
 
     <!-- Layout dos columnas -->
-    <div class="hero-inner">
+    <div class="hero-inner max-sm:flex-col max-sm:gap-5 max-sm:text-center">
 
-      <!-- Columna izquierda: Logo grande -->
-      <div class="hero-logo-col">
-        <img
-          src="/assets/imagenes/logo-transparent.png"
-          alt="Play Land Logo"
-          class="hero-logo-img"
-        />
+      <!-- Columna Logo -->
+      <div class="hero-logo-col shrink-0 flex items-center justify-center">
+        <img src="/assets/imagenes/logo-transparent.png" alt="Play Land Logo"
+          class="hero-logo-img max-sm:w-[clamp(140px,55vw,200px)]" />
       </div>
 
-      <!-- Columna derecha: Texto -->
-      <div class="hero-content">
+      <!-- Columna Texto -->
+      <div class="hero-content relative z-[2] text-left max-w-[500px] flex-1 max-sm:text-center max-sm:max-w-full">
         <div class="hero-tag">🎁 ¡Bienvenidos!</div>
-        <h1 class="hero-title">
-          <span class="hero-title-main">Play Land</span>
-          <span class="hero-title-sub">Juguetería Mágica ✨</span>
+        <h1 class="hero-title flex flex-col gap-[2px]">
+          <span class="hero-title-main max-sm:text-[2.6rem]">Play Land</span>
+          <span class="hero-title-sub max-sm:text-base">Juguetería Mágica ✨</span>
         </h1>
-        <p class="hero-desc">
+        <p class="hero-desc mt-4 text-[rgba(255,255,255,.92)] leading-[1.7] max-sm:text-[.9rem]">
           El mundo de los sueños infantiles está aquí.<br>
           <span class="hero-highlight">¡Descuentos irresistibles en todos nuestros juguetes!</span>
         </p>
-        <div class="hero-badges">
-          <span class="badge badge-purple">🧸 Peluches</span>
-          <span class="badge badge-blue">🚗 Vehículos</span>
-          <span class="badge badge-pink">🎀 Amigurumis</span>
-          <span class="badge badge-green">🍼 Bebés</span>
+        <div class="hero-badges flex flex-wrap justify-start gap-2 mt-6 max-sm:justify-center">
+          <span class="badge badge-purple max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🧸 Peluches</span>
+          <span class="badge badge-blue max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🚗 Vehículos</span>
+          <span class="badge badge-pink max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🎀 Amigurumis</span>
+          <span class="badge badge-green max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🍼 Bebés</span>
         </div>
       </div>
 
@@ -47,19 +42,17 @@
 
     <div class="hero-wave">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff" />
       </svg>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       RIBBON INFO (ubicación + contacto)
-  ════════════════════════════════════════════ -->
-  <div class="info-ribbon">
-    <div class="info-ribbon-inner">
+  <!-- RIBBON INFO -->
+  <div class="info-ribbon py-[14px] px-5">
+    <div class="info-ribbon-inner max-w-[1100px] mx-auto flex flex-wrap gap-3 items-stretch justify-center">
 
-      <!-- Ubicación -->
-      <div class="ribbon-card ribbon-card-blue" (click)="viewMap = true" role="button" tabindex="0">
+      <div class="ribbon-card ribbon-card-blue !bg-blue-900/60 min-w-[260px] max-w-[420px] flex-1" (click)="viewMap = true"
+        role="button" tabindex="0">
         <span class="ribbon-emoji">📍</span>
         <div class="ribbon-card-body">
           <span class="ribbon-card-label">¡Visítanos!</span>
@@ -68,8 +61,7 @@
         <span class="ribbon-card-cta">Ver mapa →</span>
       </div>
 
-      <!-- Contacto -->
-      <div class="ribbon-card ribbon-card-yellow">
+      <div class="ribbon-card ribbon-card-yellow !bg-orange-700/60 min-w-[260px] max-w-[420px] flex-1">
         <span class="ribbon-emoji">📞</span>
         <div class="ribbon-card-body">
           <span class="ribbon-card-label">Contáctanos</span>
@@ -85,272 +77,219 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       NAV DE CATEGORÍAS
-  ════════════════════════════════════════════ -->
-  <nav class="category-nav" aria-label="Categorías de productos">
-    <ul class="category-list">
+  <!-- NAV DE CATEGORÍAS -->
+  <nav class="category-nav py-[6px] px-5 pb-3 border-b-2 border-[#BBDEFB]" aria-label="Categorías de productos">
+    <ul class="category-list flex flex-wrap justify-center gap-2 max-w-[1100px] mx-auto list-none p-0 m-0">
       @for (c of categories; track $index) {
-        <li>
-          <a
-            (click)="selectCategory = c.key; getData()"
-            [class.active]="selectCategory === c.key"
-            class="category-link"
-            role="button"
-            tabindex="0">
-            <span class="cat-icon">
-              @if (c.key === 'juguete') { 🎮 }
-              @if (c.key === 'vehiculos') { 🚗 }
-              @if (c.key === 'peluche') { 🧸 }
-              @if (c.key === 'amigurumi') { 🎀 }
-              @if (c.key === 'bebes') { 🍼 }
-              @if (c.key === 'otro') { 🎁 }
-            </span>
-            <span class="cat-label">{{ c.label }}</span>
-          </a>
-        </li>
+      <li class="flex">
+        <a (click)="selectCategory = c.key; getData()" [class.active]="selectCategory === c.key"
+          class="category-link max-sm:px-3 max-sm:py-2 max-sm:text-[.82rem]" role="button" tabindex="0">
+          <span class="cat-icon text-[1.1rem]">
+            @if (c.key === 'juguete') { 🎮 }
+            @if (c.key === 'vehiculos') { 🚗 }
+            @if (c.key === 'peluche') { 🧸 }
+            @if (c.key === 'amigurumi') { 🎀 }
+            @if (c.key === 'bebes') { 🍼 }
+            @if (c.key === 'otro') { 🎁 }
+          </span>
+          <span class="cat-label max-sm:hidden lg:inline">{{ c.label }}</span>
+        </a>
+      </li>
       }
     </ul>
   </nav>
 
-  <!-- ═══════════════════════════════════════════
-       BARRA BÚSQUEDA + ORDENAMIENTO (sticky)
-  ════════════════════════════════════════════ -->
-  <div class="search-bar-sticky">
-    <div class="search-bar-inner">
+  <!-- SEARCH BAR STICKY -->
+  <div class="search-bar-sticky sticky top-0 z-40 py-3 px-5 border-b-[1.5px] border-[#BBDEFB]">
+    <div
+      class="search-bar-inner max-w-[960px] mx-auto flex flex-wrap gap-3 items-center justify-center max-sm:flex-col max-sm:items-stretch">
 
-      <!-- Buscador -->
-      <div class="search-field">
+      <div class="search-field flex-1 min-w-[220px] max-w-[380px] max-sm:w-full max-sm:max-w-full">
         <span class="search-icon">🔍</span>
-        <input
-          id="store-search-input"
-          pInputText
-          type="text"
-          placeholder="Buscar juguetes..."
-          [(ngModel)]="searchTerm"
-          (input)="onSearchChange()"
-          class="search-input"
-          autocomplete="off"
-        />
+        <input id="store-search-input" pInputText type="text" placeholder="Buscar juguetes..." [(ngModel)]="searchTerm"
+          (input)="onSearchChange()" class="search-input" autocomplete="off" />
       </div>
 
-      <!-- Ordenar -->
-      <div class="sort-field">
-        <span class="sort-label">🔀</span>
-        <p-dropdown
-  id="store-sort-dropdown"
-  [options]="opcionesOrden"
-  [(ngModel)]="ordenSeleccionado"
-  placeholder="Ordenar por..."
-  optionLabel="label"
-  (onChange)="ordenarPeluches()"
-  [showClear]="false"
-  class="sort-dropdown"
-  appendTo="body"> </p-dropdown>
+      <div class="sort-field flex items-center gap-2 max-sm:w-full max-sm:justify-start">
+        <span class="sort-label text-[1.1rem]">🔀</span>
+        <p-dropdown id="store-sort-dropdown" [options]="opcionesOrden" [(ngModel)]="ordenSeleccionado"
+          placeholder="Ordenar por..." optionLabel="label" (onChange)="ordenarPeluches()" [showClear]="false"
+          class="sort-dropdown flex-1" appendTo="body">
+        </p-dropdown>
       </div>
 
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       GRILLA DE PRODUCTOS
-  ════════════════════════════════════════════ -->
-  <main class="products-section">
+  <!-- GRILLA DE PRODUCTOS -->
+  <main class="products-section flex-1 max-w-[1400px] mx-auto py-8 px-4 pb-10">
 
     @if (loading) {
-      <div class="loading-container">
-        <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-        <p class="loading-text">Cargando productos mágicos...</p>
-      </div>
+    <div class="loading-container flex flex-col items-center justify-center py-20 px-5 gap-5">
+      <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+      <p class="loading-text">Cargando productos mágicos...</p>
+    </div>
     } @else {
 
-      @if ((list | search:searchTerm).length === 0) {
-        <div class="empty-state">
-          <span class="empty-icon">🔍</span>
-          <h3>¡Ups! No encontramos nada</h3>
-          <p>No hay productos que coincidan con "<strong>{{ searchTerm }}</strong>"</p>
-        </div>
-      } @else {
-        <div class="products-grid">
-          @for (product of list; track product.id) {
-            <article class="product-card" (click)="abrirModal(product)">
+    @if ((list | search:searchTerm).length === 0) {
+    <div class="empty-state text-center py-20 px-5">
+      <span class="empty-icon text-[4rem] block mb-4">🔍</span>
+      <h3 class="text-2xl font-extrabold mb-2">¡Ups! No encontramos nada</h3>
+      <p class="text-base">No hay productos que coincidan con "<strong>{{ searchTerm }}</strong>"</p>
+    </div>
+    } @else {
+    <div class="products-grid grid grid-cols-2 lg:grid-cols-5 gap-[14px] sm:gap-6">
+      @for (product of list; track product.id) {
+      <article class="product-card group flex flex-col" (click)="abrirModal(product)">
 
-              <!-- Badge categoría + descuento -->
-              <div class="card-badges">
-                <span class="badge-category" [ngClass]="categoryStyles[product.type] || categoryStyles.otro">
-                  {{ categoriesObj[product.type] || 'Varios' }}
-                </span>
-                @if (isModePromotion && product.descuento) {
-                  <span class="badge-discount">-{{ product.descuento }}%</span>
-                }
-              </div>
-
-              <!-- Imagen -->
-              <div class="card-image-wrapper">
-                @defer (on viewport) {
-                  @if (product.img) {
-                    <img
-                      [ngSrc]="product.img"
-                      [alt]="product.nombre"
-                      loading="lazy"
-                      width="300"
-                      height="300"
-                      class="card-image"
-                    />
-                  }
-                }
-                @placeholder {
-                  <div class="card-image-placeholder">🧸</div>
-                }
-              </div>
-
-              <!-- Info del producto -->
-              <div class="card-body">
-                <h2 class="card-name">{{ product.nombre }}</h2>
-                <p class="card-desc">{{ product.descripcion }}</p>
-
-                <div class="card-price-row">
-                  @if (isModePromotion && product.descuento) {
-                    <span class="price-original">Bs {{ product.precio }}</span>
-                    <span class="price-final price-promo">
-                      Bs {{ calcularPrecioFinal(product.precio, product.descuento) }}
-                    </span>
-                  } @else {
-                    <span class="price-final">Bs {{ product.precio }}</span>
-                  }
-                </div>
-
-                <div class="card-cta">
-                  <span class="cta-text">Ver detalle</span>
-                  <span class="cta-arrow">→</span>
-                </div>
-              </div>
-
-            </article>
+        <div class="card-badges absolute top-3 left-3 flex flex-wrap gap-1.5 z-[2]">
+          <span class="badge-category" [ngClass]="categoryStyles[product.type] || categoryStyles.otro">
+            {{ categoriesObj[product.type] || 'Varios' }}
+          </span>
+          @if (isModePromotion && product.descuento) {
+          <span class="badge-discount">-{{ product.descuento }}%</span>
           }
         </div>
+
+        <div class="card-image-wrapper w-full h-40 sm:h-[220px] overflow-hidden flex items-center justify-center">
+          @defer (on viewport) {
+          @if (product.img) {
+          <img [ngSrc]="product.img" [alt]="product.nombre" loading="lazy" width="300" height="300"
+            class="card-image w-full h-full object-cover transition-transform duration-400" />
+          }
+          }
+          @placeholder {
+          <div class="card-image-placeholder">🧸</div>
+          }
+        </div>
+
+        <div class="card-body p-4 sm:p-[16px_18px_20px] flex flex-col gap-1.5 flex-1">
+          <h2 class="card-name text-[0.9rem] sm:text-[1.05rem] font-extrabold m-0 leading-[1.3]">{{ product.nombre }}
+          </h2>
+          <p class="card-desc text-[0.82rem] m-0 line-clamp-2">{{ product.descripcion }}</p>
+
+          <div class="card-price-row flex items-center gap-2.5 mt-1 flex-wrap">
+            @if (isModePromotion && product.descuento) {
+            <span class="price-original">Bs {{ product.precio }}</span>
+            <span class="price-final price-promo text-[1.15rem] sm:text-[1.4rem]">
+              Bs {{ calcularPrecioFinal(product.precio, product.descuento) }}
+            </span>
+            } @else {
+            <span class="price-final text-[1.15rem] sm:text-[1.4rem]">Bs {{ product.precio }}</span>
+            }
+          </div>
+
+          <div
+            class="card-cta max-sm:hidden flex items-center justify-between mt-2.5 p-[10px_14px] rounded-xl text-[0.85rem] font-bold transition-all duration-300 !group-hover:bg-blue-600 !group-hover:text-white group-hover:shadow-lg">
+            <span class="cta-text">Ver detalle</span>
+            <span class="cta-arrow text-[1.2rem] transition-transform duration-300 !group-hover:translate-x-1">→</span>
+          </div>
+        </div>
+
+      </article>
       }
+    </div>
+    }
 
     }
   </main>
 
-  <!-- ═══════════════════════════════════════════
-       MODAL — Detalle de producto
-  ════════════════════════════════════════════ -->
+  <!-- MODAL DETALLE -->
   @if (seleccionado) {
-    <div class="modal-overlay" (click)="cerrarModal()">
-      <div class="modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
-        <button class="modal-close" (click)="cerrarModal()" aria-label="Cerrar">✕</button>
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-box !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <button class="modal-close" (click)="cerrarModal()" aria-label="Cerrar">✕</button>
 
-        <div class="modal-image-wrap">
-          <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="modal-image" />
+      <div class="modal-image-wrap h-[200px] sm:h-[260px] bg-gradient-to-br from-blue-50 to-pink-50">
+        <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="modal-image" />
+        @if (isModePromotion && seleccionado.descuento) {
+        <span class="modal-discount-badge">-{{ seleccionado.descuento }}%</span>
+        }
+      </div>
+
+      <div class="modal-body p-5 sm:p-[20px_24px_28px] flex flex-col gap-2">
+        <span class="modal-category" [ngClass]="categoryStyles[seleccionado.type] || categoryStyles.otro">
+          {{ categoriesObj[seleccionado.type] || 'Varios' }}
+        </span>
+        <h2 class="modal-title text-[1.2rem] sm:text-[1.5rem] font-black m-1 sm:m-[4px_0_0]">{{ seleccionado.nombre }}
+        </h2>
+        <p class="modal-desc">{{ seleccionado.descripcion }}</p>
+
+        <div class="modal-price-block !bg-blue-50 !bg-opacity-90 border-blue-100">
           @if (isModePromotion && seleccionado.descuento) {
-            <span class="modal-discount-badge">-{{ seleccionado.descuento }}%</span>
+          <span class="modal-price-old">Bs {{ seleccionado.precio }}</span>
+          <span class="modal-price-new modal-price-promo text-[1.6rem] sm:text-[2rem]">
+            Bs {{ calcularPrecioFinal(seleccionado.precio, seleccionado.descuento) }}
+          </span>
+          <span class="modal-savings">
+            🎉 Ahorras Bs {{ seleccionado.precio - calcularPrecioFinal(seleccionado.precio, seleccionado.descuento) |
+            number:'1.0-0' }}
+          </span>
+          } @else {
+          <span class="modal-price-new text-[1.6rem] sm:text-[2rem]">Bs {{ seleccionado.precio }}</span>
           }
         </div>
 
-        <div class="modal-body">
-          <span class="modal-category" [ngClass]="categoryStyles[seleccionado.type] || categoryStyles.otro">
-            {{ categoriesObj[seleccionado.type] || 'Varios' }}
-          </span>
-          <h2 class="modal-title">{{ seleccionado.nombre }}</h2>
-          <p class="modal-desc">{{ seleccionado.descripcion }}</p>
-
-          <div class="modal-price-block">
-            @if (isModePromotion && seleccionado.descuento) {
-              <span class="modal-price-old">Bs {{ seleccionado.precio }}</span>
-              <span class="modal-price-new modal-price-promo">
-                Bs {{ calcularPrecioFinal(seleccionado.precio, seleccionado.descuento) }}
-              </span>
-              <span class="modal-savings">
-                🎉 Ahorras Bs {{ seleccionado.precio - calcularPrecioFinal(seleccionado.precio, seleccionado.descuento) | number:'1.0-0' }}
-              </span>
-            } @else {
-              <span class="modal-price-new">Bs {{ seleccionado.precio }}</span>
-            }
-          </div>
-
-          <a
-            [href]="'https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20info%20sobre%20' + (seleccionado.nombre || '')"
-            target="_blank" rel="noopener"
-            class="modal-whatsapp-btn">
-            <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="wa-icon-sm" />
-            ¡Pedir por WhatsApp!
-          </a>
-        </div>
+        <a [href]="'https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20info%20sobre%20' + (seleccionado.nombre || '')"
+          target="_blank" rel="noopener" class="modal-whatsapp-btn">
+          <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="wa-icon-sm" />
+          ¡Pedir por WhatsApp!
+        </a>
       </div>
     </div>
+  </div>
   }
 
-  <!-- ═══════════════════════════════════════════
-       MODAL — Mapa
-  ════════════════════════════════════════════ -->
+  <!-- MODAL MAPA -->
   @if (viewMap) {
-    <div class="modal-overlay" (click)="viewMap = false">
-      <div class="modal-box modal-map" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
-        <button class="modal-close" (click)="viewMap = false" aria-label="Cerrar">✕</button>
-        <div class="map-header">
-          <img src="/assets/imagenes/logo.png" alt="Play Land Logo" class="map-logo" />
-          <h3 class="map-title">📍 Encuéntranos aquí</h3>
-          <p class="map-address">Calle Junín, Pasaje San Rafael N° 2, Sucre</p>
-        </div>
-        <div class="map-wrapper">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d891.3113844239632!2d-65.25758475065233!3d-19.04176777877487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d-19.020444599999998!2d-65.2749437!4m5!1s0x93fbcf5e5d7cb2ff%3A0x6e92dff3389b52fd!2sJunin%202%2C%20Sucre!3m2!1d-19.0417678!2d-65.2563937!5e1!3m2!1ses!2sbo!4v1768446772169!5m2!1ses!2sbo"
-            width="100%"
-            height="300"
-            style="border:0; border-radius: 12px;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Mapa Play Land Sucre">
-          </iframe>
-        </div>
+  <div class="modal-overlay" (click)="viewMap = false">
+    <div class="modal-box modal-map !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()" role="dialog"
+      aria-modal="true">
+      <button class="modal-close" (click)="viewMap = false" aria-label="Cerrar">✕</button>
+      <div class="map-header">
+        <img src="/assets/imagenes/logo.png" alt="Play Land Logo" class="map-logo" />
+        <h3 class="map-title">📍 Encuéntranos aquí</h3>
+        <p class="map-address">Calle Junín, Pasaje San Rafael N° 2, Sucre</p>
+      </div>
+      <div class="map-wrapper">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d891.3113844239632!2d-65.25758475065233!3d-19.04176777877487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d-19.020444599999998!2d-65.2749437!4m5!1s0x93fbcf5e5d7cb2ff%3A0x6e92dff3389b52fd!2sJunin%202%2C%20Sucre!3m2!1d-19.0417678!2d-65.2563937!5e1!3m2!1ses!2sbo!4v1768446772169!5m2!1ses!2sbo"
+          width="100%" height="300" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Mapa Play Land Sucre">
+        </iframe>
       </div>
     </div>
+  </div>
   }
 
-  <!-- ═══════════════════════════════════════════
-       MODAL — Promoción (video)
-  ════════════════════════════════════════════ -->
   @if (viewPromotion) {
-    <div class="modal-overlay promo-overlay" (click)="viewPromotion = false">
-      <div class="promo-box" (click)="$event.stopPropagation()">
-        <button class="modal-close promo-close" (click)="viewPromotion = false">✕ Cerrar</button>
-        <video
-          src="./assets/videos/promo.mp4"
-          autoplay loop muted playsinline
-          class="promo-video">
-        </video>
-      </div>
+  <div class="modal-overlay promo-overlay" (click)="viewPromotion = false">
+    <div class="promo-box" (click)="$event.stopPropagation()">
+      <button class="modal-close promo-close" (click)="viewPromotion = false">✕ Cerrar</button>
+      <video src="./assets/videos/promo.mp4" autoplay loop muted playsinline class="promo-video">
+      </video>
     </div>
+  </div>
   }
 
-  <!-- ═══════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════════ -->
-  <footer class="store-footer">
-    <div class="footer-inner">
-      <span class="footer-brand">🧸 Play Land</span>
-      <span class="footer-sep">·</span>
-      <span class="footer-copy">Todos los derechos reservados © {{ 2025 }}</span>
+  <!-- FOOTER -->
+  <footer class="store-footer !bg-gradient-to-r !from-[#0D47A1] !via-[#1565C0] !to-[#2196C8] h-[48px] flex items-center justify-center !z-[1000]">
+    <div class="footer-inner flex items-center gap-2.5 text-[rgba(255,255,255,.9)] text-[0.85rem] font-semibold">
+      <span class="footer-brand font-extrabold text-[0.92rem]">🧸 Play Land</span>
+      <span class="footer-sep text-[rgba(255,255,255,.4)]">·</span>
+      <span class="footer-copy text-[rgba(255,255,255,.7)]">Todos los derechos reservados © 2025</span>
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════
-       BOTÓN FLOTANTE WHATSAPP
-  ════════════════════════════════════════════ -->
+  <!-- BOTÓN FLOTANTE WHATSAPP -->
   @if (seleccionado === null) {
-    <a
-      id="whatsapp-float-btn"
-      href="https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20informaci%C3%B3n%20por%20favor"
-      target="_blank"
-      rel="noopener"
-      aria-label="Escríbenos por WhatsApp"
-      class="whatsapp-fab">
-      <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="wa-icon" />
-      <span class="wa-label">¡Escríbenos!</span>
-    </a>
+  <a id="whatsapp-float-btn"
+    href="https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20informaci%C3%B3n%20por%20favor"
+    target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"
+    class="whatsapp-fab fixed bottom-16 right-5 z-[999] flex items-center gap-2.5 bg-white border-[2.5px] border-[#25D366] rounded-full p-2.5 sm:p-[10px_18px_10px_10px]">
+    <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="wa-icon" />
+    <span class="wa-label text-[0.88rem] font-extrabold text-[#128C7E] max-sm:hidden">¡Escríbenos!</span>
+  </a>
   }
 
 </div>

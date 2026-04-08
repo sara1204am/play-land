@@ -9,6 +9,11 @@ html {
   font-family: "Montserrat", serif;
 }
 
+body {
+  margin: 0px!important;
+  padding: 0px!important;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
@@ -38,42 +43,56 @@ html {
   }
 }
 
-@theme {
-  --color-secondary-50: #edfffd;
-  --color-secondary-100: #c1fffb;
-  --color-secondary-200: #84fff8;
-  --color-secondary-300: #3efff5;
-  --color-secondary-400: #05f0e0;
-  --color-secondary-500: #00ddd0;
-  --color-secondary-600: #00b3ab;
-  --color-secondary-700: #008d8a;
-  --color-secondary-800: #006f6e;
-  --color-secondary-900: #065b5b;
-  --color-secondary-950: #003839;
-
-  --color-primary: #2D73AB;
-  --color-primary-50: #e4f0f9;
-  --color-primary-100: #c7dff1;
-  --color-primary-200: #a9cdea;
-  --color-primary-300: #8bbbe2;
-  --color-primary-400: #0F5BA7;
-  --color-primary-500: #2D73AB;
-  --color-primary-600: #276696;
-  --color-primary-700: #205780;
-  --color-primary-800: #1a496b;
-  --color-primary-900: #143b58;
-  --color-primary-950: #0F5BA7;
-
-  --color-red-50: #fde8ed;
-  --color-red-100: #fbd1dc;
-  --color-red-200: #f7a7bb;
-  --color-red-300: #f2789a;
-  --color-red-400: #ef4c79;
-  --color-red-500: #EE2C5C;
-  --color-red-600: #d82652;
-  --color-red-700: #bd2047;
-  --color-red-800: #a11a3d;
-  --color-red-900: #851432;
-  --color-red-950: #52061e;
+/* ─── Play Land Design System ─── */
+:root {
+  --c-blue: #1565C0;
+  --c-blue-d: #0D47A1;
+  --c-blue-l: #42A5F5;
+  --c-yellow: #FFCC00;
+  --c-yellow-l: #FFE566;
+  --c-pink: #E91E8C;
+  --c-pink-l: #F48FB1;
+  --c-orange: #FF6B35;
+  --c-orange-l: #FFAB76;
+  --c-teal: #5BBFB5;
+  --c-teal-l: #A7D9D4;
+  --c-bg: #EFF8FF;
+  --c-surface: #ffffff;
+  --c-text: #0D2B54;
+  --c-muted: #546E7A;
+  --radius-card: 20px;
+  --shadow-card: 0 4px 20px rgba(21, 101, 192, .13);
+  --shadow-hover: 0 14px 44px rgba(21, 101, 192, .28);
+  --font-body: 'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
 
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .55; }
+}
+@keyframes bounce-fab {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes float-bubble {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: .18; }
+  50% { transform: translateY(-20px) rotate(10deg); opacity: .28; }
+}
+@keyframes bg-shift {
+  0% { background-position: 0% 0%; }
+  33% { background-position: 100% 30%; }
+  66% { background-position: 50% 100%; }
+  100% { background-position: 20% 60%; }
+}
