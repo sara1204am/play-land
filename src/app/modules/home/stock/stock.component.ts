@@ -5,7 +5,7 @@ import { HomeService } from '../home.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalStockComponent } from './modal-stock/modal-stock.component';
 import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { CommonModule, DecimalPipe, NgClass } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
@@ -19,7 +19,8 @@ interface DynamicDialogRefWithContent<T = any> extends DynamicDialogRef {
     PlayTableComponent,
     FormsModule,
     NgClass,
-    ToastModule
+    ToastModule, 
+    CommonModule
   ],
   templateUrl: './stock.component.html',
   styleUrl: './stock.component.css'

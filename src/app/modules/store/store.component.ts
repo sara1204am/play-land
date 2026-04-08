@@ -5,14 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { SearchPipe } from './search.pipe';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { NgClass, NgOptimizedImage } from '@angular/common';
+import { DecimalPipe, NgClass, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-store',
   standalone: true,
-  imports: [FormsModule, DropdownModule, SearchPipe, ProgressSpinnerModule, NgClass, NgOptimizedImage],
+  imports: [FormsModule, DropdownModule, SearchPipe, ProgressSpinnerModule, NgClass, NgOptimizedImage, DecimalPipe],
   templateUrl: './store.component.html',
-  styleUrl: './store.component.css'
+  styleUrl: './store.component.css',
+  host: {
+    class: 'h-full'
+  }
 })
 export class StoreComponent implements OnInit {
 
