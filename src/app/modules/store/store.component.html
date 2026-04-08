@@ -3,12 +3,6 @@
 
   <!-- HERO BANNER -->
   <section class="hero-banner max-sm:min-h-0 max-sm:px-4 max-sm:pb-[90px]">
-    <!-- Burbujas decorativas -->
-    <div class="bubble bubble-1">🎈</div>
-    <div class="bubble bubble-2">⭐</div>
-    <div class="bubble bubble-3">🎠</div>
-    <div class="bubble bubble-4">🌈</div>
-    <div class="bubble bubble-5">✨</div>
 
     <!-- Layout dos columnas -->
     <div class="hero-inner max-sm:flex-col max-sm:gap-5 max-sm:text-center">
@@ -24,18 +18,20 @@
         <div class="hero-tag">🎁 ¡Bienvenidos!</div>
         <h1 class="hero-title flex flex-col gap-[2px]">
           <span class="hero-title-main max-sm:text-[2.6rem]">Play Land</span>
-          <span class="hero-title-sub max-sm:text-base">Juguetería Mágica ✨</span>
+          <p class="text-white max-sm:text-base">Juguetería Mágica ✨</p>
         </h1>
         <p class="hero-desc mt-4 text-[rgba(255,255,255,.92)] leading-[1.7] max-sm:text-[.9rem]">
           El mundo de los sueños infantiles está aquí.<br>
           <span class="hero-highlight">¡Descuentos irresistibles en todos nuestros juguetes!</span>
         </p>
-        <div class="hero-badges flex flex-wrap justify-start gap-2 mt-6 max-sm:justify-center">
-          <span class="badge badge-purple max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🧸 Peluches</span>
-          <span class="badge badge-blue max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🚗 Vehículos</span>
-          <span class="badge badge-pink max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🎀 Amigurumis</span>
-          <span class="badge badge-green max-sm:text-[.78rem] max-sm:px-3 max-sm:py-[6px]">🍼 Bebés</span>
+        <div class="hero-badges flex flex-wrap justify-start gap-4 mt-8 max-sm:justify-center">
+          <span class="badge badge-purple">🧸 Peluches</span>
+          <span class="badge badge-blue">🚗 Vehículos</span>
+          <span class="badge badge-pink">🎀 Amigurumis</span>
+          <span class="badge badge-green">🍼 Bebés</span>
+          <span class="badge badge-cyan">🎮 Juguetes</span>
         </div>
+
       </div>
 
     </div>
@@ -51,8 +47,8 @@
   <div class="info-ribbon py-[14px] px-5">
     <div class="info-ribbon-inner max-w-[1100px] mx-auto flex flex-wrap gap-3 items-stretch justify-center">
 
-      <div class="ribbon-card ribbon-card-blue !bg-blue-900/60 min-w-[260px] max-w-[420px] flex-1" (click)="viewMap = true"
-        role="button" tabindex="0">
+      <div class="ribbon-card ribbon-card-blue !bg-blue-900/60 min-w-[260px] max-w-[420px] flex-1"
+        (click)="viewMap = true" role="button" tabindex="0">
         <span class="ribbon-emoji">📍</span>
         <div class="ribbon-card-body">
           <span class="ribbon-card-label">¡Visítanos!</span>
@@ -83,6 +79,7 @@
       @for (c of categories; track $index) {
       <li class="flex">
         <a (click)="selectCategory = c.key; getData()" [class.active]="selectCategory === c.key"
+          [ngClass]="selectCategory === c.key ? 'active-' + c.key : ''"
           class="category-link max-sm:px-3 max-sm:py-2 max-sm:text-[.82rem]" role="button" tabindex="0">
           <span class="cat-icon text-[1.1rem]">
             @if (c.key === 'juguete') { 🎮 }
@@ -111,7 +108,7 @@
       </div>
 
       <div class="sort-field flex items-center gap-2 max-sm:w-full max-sm:justify-start">
-        <span class="sort-label text-[1.1rem]">🔀</span>
+        <span class="sort-label text-[1.1rem] px-5">🔀 </span>
         <p-dropdown id="store-sort-dropdown" [options]="opcionesOrden" [(ngModel)]="ordenSeleccionado"
           placeholder="Ordenar por..." optionLabel="label" (onChange)="ordenarPeluches()" [showClear]="false"
           class="sort-dropdown flex-1" appendTo="body">
@@ -179,10 +176,9 @@
             }
           </div>
 
-          <div
-            class="card-cta max-sm:hidden flex items-center justify-between mt-2.5 p-[10px_14px] rounded-xl text-[0.85rem] font-bold transition-all duration-300 !group-hover:bg-blue-600 !group-hover:text-white group-hover:shadow-lg">
+          <div class="card-cta max-sm:hidden">
             <span class="cta-text">Ver detalle</span>
-            <span class="cta-arrow text-[1.2rem] transition-transform duration-300 !group-hover:translate-x-1">→</span>
+            <span class="cta-arrow text-[1.2rem] transition-transform duration-300">→</span>
           </div>
         </div>
 
@@ -197,20 +193,23 @@
   <!-- MODAL DETALLE -->
   @if (seleccionado) {
   <div class="modal-overlay" (click)="cerrarModal()">
-    <div class="modal-box !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <div class="modal-box !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()"
+      role="dialog" aria-modal="true">
       <button class="modal-close" (click)="cerrarModal()" aria-label="Cerrar">✕</button>
 
       <div class="modal-image-wrap h-[200px] sm:h-[260px] bg-gradient-to-br from-blue-50 to-pink-50">
         <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="modal-image" />
-        @if (isModePromotion && seleccionado.descuento) {
-        <span class="modal-discount-badge">-{{ seleccionado.descuento }}%</span>
-        }
       </div>
 
       <div class="modal-body p-5 sm:p-[20px_24px_28px] flex flex-col gap-2">
-        <span class="modal-category" [ngClass]="categoryStyles[seleccionado.type] || categoryStyles.otro">
-          {{ categoriesObj[seleccionado.type] || 'Varios' }}
-        </span>
+        <div class="flex items-center gap-3 flex-wrap">
+          <p class="modal-category pl-5" [ngClass]="categoryStyles[seleccionado.type] || categoryStyles.otro">
+            {{ categoriesObj[seleccionado.type] || 'Varios' }}
+          </p>
+          @if (isModePromotion && seleccionado.descuento) {
+          <p class="modal-discount-badge">-{{ seleccionado.descuento }}%</p>
+          }
+        </div>
         <h2 class="modal-title text-[1.2rem] sm:text-[1.5rem] font-black m-1 sm:m-[4px_0_0]">{{ seleccionado.nombre }}
         </h2>
         <p class="modal-desc">{{ seleccionado.descripcion }}</p>
@@ -232,7 +231,7 @@
 
         <a [href]="'https://wa.me/59170315404?text=Hola%20Play%20Land%20Sucre%2C%20quiero%20info%20sobre%20' + (seleccionado.nombre || '')"
           target="_blank" rel="noopener" class="modal-whatsapp-btn">
-          <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="wa-icon-sm" />
+          <img src="./assets/imagenes/whatsapp.png" alt="WhatsApp" class="h-8 w-5 object-contain rounded" />
           ¡Pedir por WhatsApp!
         </a>
       </div>
@@ -243,8 +242,8 @@
   <!-- MODAL MAPA -->
   @if (viewMap) {
   <div class="modal-overlay" (click)="viewMap = false">
-    <div class="modal-box modal-map !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()" role="dialog"
-      aria-modal="true">
+    <div class="modal-box modal-map !bg-white !bg-opacity-100 max-sm:rounded-[20px]" (click)="$event.stopPropagation()"
+      role="dialog" aria-modal="true">
       <button class="modal-close" (click)="viewMap = false" aria-label="Cerrar">✕</button>
       <div class="map-header">
         <img src="/assets/imagenes/logo.png" alt="Play Land Logo" class="map-logo" />
@@ -273,9 +272,10 @@
   }
 
   <!-- FOOTER -->
-  <footer class="store-footer !bg-gradient-to-r !from-[#0D47A1] !via-[#1565C0] !to-[#2196C8] h-[48px] flex items-center justify-center !z-[1000]">
+  <footer
+    class="store-footer !bg-gradient-to-r !from-[#0D47A1] !via-[#1565C0] !to-[#2196C8] h-[48px] flex items-center justify-center !z-[1000]">
     <div class="footer-inner flex items-center gap-2.5 text-[rgba(255,255,255,.9)] text-[0.85rem] font-semibold">
-      <span class="footer-brand font-extrabold text-[0.92rem]">🧸 Play Land</span>
+      <span class="footer-brand font-extrabold text-[0.92rem] !text-white">🧸 Play Land</span>
       <span class="footer-sep text-[rgba(255,255,255,.4)]">·</span>
       <span class="footer-copy text-[rgba(255,255,255,.7)]">Todos los derechos reservados © 2025</span>
     </div>

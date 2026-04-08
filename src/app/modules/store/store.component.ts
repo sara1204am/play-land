@@ -55,7 +55,8 @@ export class StoreComponent implements OnInit {
     peluche: 'Peluches',
     amigurumi: 'Amigurumis',
     bebes: 'Bebes',
-    otro: 'Varios'
+    otro: 'Varios',
+    vehiculos: 'Vehículos'
   }
   categoryStyles: any = {
     juguete: 'bg-blue-100 text-blue-700 border-blue-300',
