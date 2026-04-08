@@ -2,34 +2,33 @@
 <div class="store-wrapper">
 
   <!-- HERO BANNER -->
-  <section class="hero-banner max-sm:min-h-0 max-sm:px-4 max-sm:pb-[90px]">
-
-    <!-- Layout dos columnas -->
-    <div class="hero-inner max-sm:flex-col max-sm:gap-5 max-sm:text-center">
+  <section class="hero-banner">
+    <div class="hero-inner">
 
       <!-- Columna Logo -->
-      <div class="hero-logo-col shrink-0 flex items-center justify-center">
-        <img src="/assets/imagenes/logo-transparent.png" alt="Play Land Logo"
-          class="hero-logo-img max-sm:w-[clamp(140px,55vw,200px)]" />
+      <div class="hero-logo-col">
+        <img src="/assets/imagenes/logo-transparent.png" alt="Play Land Logo" class="hero-logo-img max-sm:w-[180px]" />
       </div>
 
       <!-- Columna Texto -->
-      <div class="hero-content relative z-[2] text-left max-w-[500px] flex-1 max-sm:text-center max-sm:max-w-full">
+      <div class="hero-content relative z-[2]">
         <div class="hero-tag">🎁 ¡Bienvenidos!</div>
-        <h1 class="hero-title flex flex-col gap-[2px]">
-          <span class="hero-title-main max-sm:text-[2.6rem]">Play Land</span>
-          <p class="text-white max-sm:text-base">Juguetería Mágica ✨</p>
+        <h1 class="hero-title">
+          <span class="hero-title-main max-sm:text-[clamp(2.2rem,10vw,3.2rem)] block">Play Land</span>
+          <p class="hero-subtitle">Juguetería Mágica ✨</p>
         </h1>
-        <p class="hero-desc mt-4 text-[rgba(255,255,255,.92)] leading-[1.7] max-sm:text-[.9rem]">
+        <p class="hero-desc mt-4">
           El mundo de los sueños infantiles está aquí.<br>
           <span class="hero-highlight">¡Descuentos irresistibles en todos nuestros juguetes!</span>
         </p>
-        <div class="hero-badges flex flex-wrap justify-start gap-4 mt-8 max-sm:justify-center">
-          <span class="badge badge-purple">🧸 Peluches</span>
-          <span class="badge badge-blue">🚗 Vehículos</span>
-          <span class="badge badge-pink">🎀 Amigurumis</span>
-          <span class="badge badge-green">🍼 Bebés</span>
-          <span class="badge badge-cyan">🎮 Juguetes</span>
+        <div class="hero-badges">
+          @for (c of categories; track $index) {
+          <span class="badge"
+            [ngClass]="'badge-' + (c.key === 'juguete' ? 'cyan' : (c.key === 'vehiculos' ? 'blue' : (c.key === 'peluche' ? 'purple' : (c.key === 'amigurumi' ? 'pink' : (c.key === 'bebes' ? 'green' : 'orange')))))"
+            (click)="selectCategory = c.key; getData(); scrollToStore()" role="button" tabindex="0">
+            {{ c.emoji }} {{ c.label }}
+          </span>
+          }
         </div>
 
       </div>
@@ -73,23 +72,15 @@
     </div>
   </div>
 
-  <!-- NAV DE CATEGORÍAS -->
-  <nav class="category-nav py-[6px] px-5 pb-3 border-b-2 border-[#BBDEFB]" aria-label="Categorías de productos">
-    <ul class="category-list flex flex-wrap justify-center gap-2 max-w-[1100px] mx-auto list-none p-0 m-0">
+  <nav class="category-nav" aria-label="Categorías de productos">
+    <ul class="category-list">
       @for (c of categories; track $index) {
-      <li class="flex">
+      <li class="flex shrink-0">
         <a (click)="selectCategory = c.key; getData()" [class.active]="selectCategory === c.key"
-          [ngClass]="selectCategory === c.key ? 'active-' + c.key : ''"
-          class="category-link max-sm:px-3 max-sm:py-2 max-sm:text-[.82rem]" role="button" tabindex="0">
-          <span class="cat-icon text-[1.1rem]">
-            @if (c.key === 'juguete') { 🎮 }
-            @if (c.key === 'vehiculos') { 🚗 }
-            @if (c.key === 'peluche') { 🧸 }
-            @if (c.key === 'amigurumi') { 🎀 }
-            @if (c.key === 'bebes') { 🍼 }
-            @if (c.key === 'otro') { 🎁 }
-          </span>
-          <span class="cat-label max-sm:hidden lg:inline">{{ c.label }}</span>
+          [ngClass]="selectCategory === c.key ? 'active-' + c.key : ''" class="category-link" role="button"
+          tabindex="0">
+          <span class="cat-icon">{{ c.emoji }}</span>
+          <span class="cat-label">{{ c.label }}</span>
         </a>
       </li>
       }
@@ -122,17 +113,17 @@
   <main class="products-section flex-1 max-w-[1400px] mx-auto py-8 px-4 pb-10">
 
     @if (loading) {
-    <div class="loading-container flex flex-col items-center justify-center py-20 px-5 gap-5">
+    <div class="w-full grid place-items-center py-20 px-5 gap-4">
       <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-      <p class="loading-text">Cargando productos mágicos...</p>
+      <p class="text-center font-bold text-blue-800">Cargando productos mágicos...</p>
     </div>
     } @else {
 
     @if ((list | search:searchTerm).length === 0) {
-    <div class="empty-state text-center py-20 px-5">
-      <span class="empty-icon text-[4rem] block mb-4">🔍</span>
-      <h3 class="text-2xl font-extrabold mb-2">¡Ups! No encontramos nada</h3>
-      <p class="text-base">No hay productos que coincidan con "<strong>{{ searchTerm }}</strong>"</p>
+    <div class="w-full grid place-items-center text-center py-24 px-5 gap-2">
+      <span class="text-[5rem] block mb-2">🔍</span>
+      <h3 class="text-2xl font-black text-gray-800">¡Ups! No encontramos nada</h3>
+      <p class="text-gray-500 font-medium">No hay productos que coincidan con "<strong>{{ searchTerm }}</strong>"</p>
     </div>
     } @else {
     <div class="products-grid grid grid-cols-2 lg:grid-cols-5 gap-[14px] sm:gap-6">
@@ -168,7 +159,7 @@
           <div class="card-price-row flex items-center gap-2.5 mt-1 flex-wrap">
             @if (isModePromotion && product.descuento) {
             <span class="price-original">Bs {{ product.precio }}</span>
-            <span class="price-final price-promo text-[1.15rem] sm:text-[1.4rem]">
+            <span class="price-final price-promo">
               Bs {{ calcularPrecioFinal(product.precio, product.descuento) }}
             </span>
             } @else {
@@ -197,7 +188,9 @@
       role="dialog" aria-modal="true">
       <button class="modal-close" (click)="cerrarModal()" aria-label="Cerrar">✕</button>
 
-      <div class="modal-image-wrap h-[200px] sm:h-[260px] bg-gradient-to-br from-blue-50 to-pink-50">
+      <div class="modal-image-wrap mt-0">
+        <img [src]="seleccionado.img" class="modal-image-bg" aria-hidden="true" />
+        <div class="modal-image-overlay"></div>
         <img [src]="seleccionado.img" [alt]="seleccionado.nombre" class="modal-image" />
       </div>
 

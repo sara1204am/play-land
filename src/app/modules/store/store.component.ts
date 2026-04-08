@@ -42,12 +42,12 @@ export class StoreComponent implements OnInit {
   loading = false;
 
   categories = [
-    { key: 'juguete', label: 'Juguetes', icon: 'toys' },
-    { key: 'vehiculos', label: 'Vehículos Infantiles', icon: 'directions_car' },
-    { key: 'peluche', label: 'Peluches', icon: 'pets' },
-    { key: 'amigurumi', label: 'Amigurumis', icon: 'favorite' },
-    { key: 'bebes', label: 'Bebes', icon: 'child_care' },
-    { key: 'otro', label: 'Varios', icon: 'category' },
+    { key: 'juguete', label: 'Juguetes', emoji: '🎮' },
+    { key: 'vehiculos', label: 'Vehículos', emoji: '🚗' },
+    { key: 'peluche', label: 'Peluches', emoji: '🧸' },
+    { key: 'amigurumi', label: 'Amigurumis', emoji: '🎀' },
+    { key: 'bebes', label: 'Bebés', emoji: '🍼' },
+    { key: 'otro', label: 'Varios', emoji: '🎁' },
   ];
 
   categoriesObj: any = {
@@ -149,6 +149,13 @@ export class StoreComponent implements OnInit {
     } catch (e) {
       console.log(e)
       this.loading = false;
+    }
+  }
+
+  scrollToStore() {
+    const element = document.querySelector('.category-nav');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 }
