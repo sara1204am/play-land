@@ -23,14 +23,22 @@
   <!-- Menú desplegable para móvil -->
    @if(isMenuOpen){
     <div class="absolute top-22 left-0 w-full bg-white shadow-md flex flex-col p-4 gap-4 md:hidden">
+      <a [routerLink]="['./dashboard']" class="text-green-600 font-semibold">Dashboard</a>
       <a [routerLink]="['./sales']" class="text-pink-600 font-semibold">Ventas</a>
-      <a [routerLink]="['./stock']" class="text-yellow-700 font-semibold">Inventario</a>
+      <a [routerLink]="['./stock']" class="text-yellow-700 font-semibold">Stock</a>
+      <a [routerLink]="['./physical-inventory']" class="text-blue-600 font-semibold">Inventario Físico</a>
     </div>
    }
 
 
     <!-- Nav links -->
     <nav class="hidden md:flex gap-6">
+      <a
+        [routerLink]="['./dashboard']" routerLinkActive="router-link-active" 
+        class="text-green-600 bg-green-100 hover:bg-green-200 hover:text-green-800 font-semibold text-lg px-5 py-2 rounded-full transition-colors duration-200 cursor-pointer shadow-sm"
+      >
+        Dashboard
+      </a>
       <a
         [routerLink]="['./sales']" routerLinkActive="router-link-active" 
         class="text-pink-600 bg-pink-100 hover:bg-pink-200 hover:text-pink-800 font-semibold text-lg px-5 py-2 rounded-full transition-colors duration-200 cursor-pointer shadow-sm"
@@ -41,7 +49,13 @@
           [routerLink]="['./stock']" routerLinkActive="router-link-active" 
         class="text-yellow-700 bg-yellow-100 hover:bg-yellow-200 hover:text-yellow-900 font-semibold text-lg px-5 py-2 rounded-full transition-colors duration-200 cursor-pointer shadow-sm"
       >
-        Inventario
+        Stock
+      </a>
+      <a
+          [routerLink]="['./physical-inventory']" routerLinkActive="router-link-active" 
+        class="text-blue-700 bg-blue-100 hover:bg-blue-200 hover:text-blue-900 font-semibold text-lg px-5 py-2 rounded-full transition-colors duration-200 cursor-pointer shadow-sm"
+      >
+        Inv. Físico
       </a>
     </nav>
 

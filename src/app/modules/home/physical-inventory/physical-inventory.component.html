@@ -1,0 +1,79 @@
+<div class="w-full h-full p-5 overflow-auto bg-white dark:bg-gray-900">
+  <div class="container mx-auto h-full p-5">
+
+    <div class="flex flex-wrap gap-4 mb-8 border-b pb-4">
+      <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
+        [class.bg-blue-600]="activeTab === 'dashboard'" [class.text-white]="activeTab === 'dashboard'"
+        [class.border-blue-600]="activeTab === 'dashboard'" [class.bg-white]="activeTab !== 'dashboard'"
+        [class.text-gray-600]="activeTab !== 'dashboard'" (click)="activeTab = 'dashboard'">
+        <span class="material-symbols-outlined align-middle mr-1">monitoring</span>
+        Dashboard
+      </button>
+      <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
+        [class.bg-purple-600]="activeTab === 'conteos'" [class.text-white]="activeTab === 'conteos'"
+        [class.border-purple-600]="activeTab === 'conteos'" [class.bg-white]="activeTab !== 'conteos'"
+        [class.text-gray-600]="activeTab !== 'conteos'" (click)="activeTab = 'conteos'">
+        <span class="material-symbols-outlined align-middle mr-1">assignment</span>
+        Conteos / Inventarios
+      </button>
+      <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
+        [class.bg-green-600]="activeTab === 'ubicaciones'" [class.text-white]="activeTab === 'ubicaciones'"
+        [class.border-green-600]="activeTab === 'ubicaciones'" [class.bg-white]="activeTab !== 'ubicaciones'"
+        [class.text-gray-600]="activeTab !== 'ubicaciones'" (click)="activeTab = 'ubicaciones'">
+        <span class="material-symbols-outlined align-middle mr-1">location_on</span>
+        Ubicaciones
+      </button>
+    </div>
+
+    <div class="bg-gray-50 rounded-xl p-4 shadow-inner min-h-[500px]">
+      @if(activeTab === 'dashboard'){
+        <app-sales-dashboard (tabChange)="activeTab = $any($event)"></app-sales-dashboard>
+      }
+
+      @if(activeTab === 'stock'){
+      <div class="mb-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-700">Stock Físico Actual</h2>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+          (click)="addStock()">
+          + Actualizar Stock
+        </button>
+      </div>
+      <play-table [uid]="'stock_fisico'" [columns]="columnsStock" [data]="dataStock" [config]="config"></play-table>
+      }
+
+      @if(activeTab === 'ubicaciones'){
+      <div class="mb-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-700">Gestión de Ubicaciones</h2>
+        <button class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+          (click)="addUbicacion()">
+          + Nueva Ubicación
+        </button>
+      </div>
+      <play-table [uid]="'ubicaciones'" [columns]="columnsUbi" [data]="dataUbi" [config]="config"
+        (selectItem)="editUbicacion($event)"></play-table>
+      }
+
+      @if(activeTab === 'conteos'){
+      <div class="mb-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-700">Historial de Conteos</h2>
+        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+          (click)="addConteo()">
+          + Iniciar Conteo
+        </button>
+      </div>
+      <play-table [uid]="'conteos'" [columns]="columnsConteo" [data]="dataConteo" [config]="config"
+        (selectItem)="editConteo($event)"></play-table>
+      }
+    </div>
+
+  </div>
+</div>
+
+<p-toast></p-toast>
+
+<ng-template #actionsTpl let-data>
+  <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 text-blue-600 transition-colors" 
+    (click)="viewReport(data.id); $event.stopPropagation()" pTooltip="Ver Reporte Agrupado">
+    <span class="material-symbols-outlined">visibility</span>
+  </button>
+</ng-template>

@@ -10,6 +10,10 @@ const API_IMG_URL = `${environment.host}/imagenes`;
 const API_SALES_URL = `${environment.host}/venta`;
 const API_CLOUDINARY_URL = `${environment.host}/upload-cloudinary`;
 const API_S3_URL = `${environment.host}/upload-s3`;
+const API_UBICACION_URL = `${environment.host}/ubicacion`;
+const API_STOCK_FISICO_URL = `${environment.host}/stock-fisico`;
+const API_CONTEO_FISICO_URL = `${environment.host}/conteo-fisico`;
+const API_CONTEO_DETALLE_URL = `${environment.host}/conteo-fisico-detalle`;
 
 const API_URL = `${environment.host}`;
 
@@ -298,5 +302,59 @@ export class HomeService {
 
   backup(): Observable<any> {
     return this.http.get(`${API_S3_URL}/backup`, {});
+  }
+
+  // --- Ubicaciones ---
+  getUbicaciones(): Observable<any[]> {
+    return this.http.get<any[]>(API_UBICACION_URL);
+  }
+  saveUbicacion(data: any): Observable<any> {
+    return this.http.post(API_UBICACION_URL, data);
+  }
+  editUbicacion(id: string, data: any): Observable<any> {
+    return this.http.patch(`${API_UBICACION_URL}/${id}`, data);
+  }
+
+  // --- Stock Físico ---
+  getStockFisico(): Observable<any[]> {
+    const filter = {
+      include: {
+        articulo: true,
+        ubicacion: true
+      }
+    };
+    const obj = encodeURIComponent(JSON.stringify(filter));
+    return this.http.get<any[]>(`${API_STOCK_FISICO_URL}?filter=${obj}`);
+  }
+  saveStockFisico(data: any): Observable<any> {
+    return this.http.post(API_STOCK_FISICO_URL, data);
+  }
+
+  // --- Conteos Físicos ---
+  getConteos(): Observable<any[]> {
+    return this.http.get<any[]>(API_CONTEO_FISICO_URL);
+  }
+  saveConteo(data: any): Observable<any> {
+    return this.http.post(API_CONTEO_FISICO_URL, data);
+  }
+  editConteo(id: string, data: any): Observable<any> {
+    return this.http.put(`${API_CONTEO_FISICO_URL}/${id}`, data);
+  }
+  getConteoDetalles(conteoId: string): Observable<any[]> {
+    const filter = { where: { conteoId } };
+    const obj = encodeURIComponent(JSON.stringify(filter));
+    return this.http.get<any[]>(`${API_CONTEO_DETALLE_URL}?filter=${obj}`);
+  }
+  saveConteoDetallesBulk(data: any[]): Observable<any> {
+    return this.http.post(`${API_CONTEO_DETALLE_URL}/create-bulk`, data);
+  }
+  deleteConteoDetalles(conteoId: string): Observable<any> {
+    const filter = { where: { conteoId } };
+    const obj = encodeURIComponent(JSON.stringify(filter));
+    return this.http.delete(`${API_CONTEO_DETALLE_URL}?filter=${obj}`);
+  }
+
+  getVentas(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.host}/venta`);
   }
 }

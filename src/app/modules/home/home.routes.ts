@@ -5,7 +5,7 @@ import { AuthGuard } from '../../guards/auth.guard';
 export const homeRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   },
   {
@@ -15,6 +15,13 @@ export const homeRoutes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./sales-dashboard/sales-dashboard.component').then(
+            (m) => m.SalesDashboardComponent,
+          ),
+      },
       {
         path: 'stock',
         loadComponent: () =>
@@ -27,6 +34,20 @@ export const homeRoutes: Routes = [
         loadComponent: () =>
           import('./sales/sales.component').then(
             (m) => m.SalesComponent,
+          ),
+      },
+      {
+        path: 'physical-inventory',
+        loadComponent: () =>
+          import('./physical-inventory/physical-inventory.component').then(
+            (m) => m.PhysicalInventoryComponent,
+          ),
+      },
+      {
+        path: 'physical-inventory/report/:id',
+        loadComponent: () =>
+          import('./physical-inventory/conteo-reporte.component').then(
+            (m) => m.ConteoReporteComponent,
           ),
       },
     ],

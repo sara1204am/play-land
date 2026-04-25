@@ -66,7 +66,7 @@ export class LoginComponent {
 
   private postLogin(userData: any): void {
     this.service.setUserToken(userData);
-    this.router.navigate(['/home/stock']);
+    this.router.navigate(['/home/dashboard']);
     this.disabled = false;
   }
 
