@@ -11,7 +11,6 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { ModalUbicacionComponent } from './modal-ubicacion.component';
 import { ModalConteoComponent } from './modal-conteo.component';
-import { SalesDashboardComponent } from '../sales-dashboard/sales-dashboard.component';
 
 @Component({
   selector: 'app-physical-inventory',
@@ -21,8 +20,7 @@ import { SalesDashboardComponent } from '../sales-dashboard/sales-dashboard.comp
     PlayTableComponent,
     ToastModule,
     ButtonModule,
-    TooltipModule,
-    SalesDashboardComponent
+    TooltipModule
   ],
   providers: [DialogService, MessageService],
   templateUrl: './physical-inventory.component.html',
@@ -36,7 +34,7 @@ export class PhysicalInventoryComponent implements OnInit {
 
   @ViewChild('actionsTpl', { static: true }) actionsTpl!: TemplateRef<any>;
 
-  public activeTab: 'dashboard' | 'stock' | 'ubicaciones' | 'conteos' = 'dashboard';
+  public activeTab: 'stock' | 'ubicaciones' | 'conteos' = 'conteos';
 
   public config = {
     globalSearch: true,

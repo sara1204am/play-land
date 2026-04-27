@@ -2,13 +2,13 @@
   <div class="container mx-auto h-full p-5">
 
     <div class="flex flex-wrap gap-4 mb-8 border-b pb-4">
-      <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
+<!--       <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
         [class.bg-blue-600]="activeTab === 'dashboard'" [class.text-white]="activeTab === 'dashboard'"
         [class.border-blue-600]="activeTab === 'dashboard'" [class.bg-white]="activeTab !== 'dashboard'"
         [class.text-gray-600]="activeTab !== 'dashboard'" (click)="activeTab = 'dashboard'">
         <span class="material-symbols-outlined align-middle mr-1">monitoring</span>
         Dashboard
-      </button>
+      </button> -->
       <button class="px-6 py-2 rounded-full font-bold transition-all shadow-sm border"
         [class.bg-purple-600]="activeTab === 'conteos'" [class.text-white]="activeTab === 'conteos'"
         [class.border-purple-600]="activeTab === 'conteos'" [class.bg-white]="activeTab !== 'conteos'"
@@ -26,10 +26,6 @@
     </div>
 
     <div class="bg-gray-50 rounded-xl p-4 shadow-inner min-h-[500px]">
-      @if(activeTab === 'dashboard'){
-        <app-sales-dashboard (tabChange)="activeTab = $any($event)"></app-sales-dashboard>
-      }
-
       @if(activeTab === 'stock'){
       <div class="mb-4 flex justify-between items-center">
         <h2 class="text-xl font-bold text-gray-700">Stock Físico Actual</h2>
