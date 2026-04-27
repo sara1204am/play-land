@@ -105,9 +105,9 @@ export class SalesComponent implements OnInit {
   }
 
   public async onSelectItem(event: any) {
-    this.ref = this.dialogService.open(ModalViewComponent, {
-      header: 'Ver venta',
-      width: '50vw',
+    this.ref = this.dialogService.open(ModalSalesGenericoComponent, {
+      header: 'Editar venta genérica',
+      width: '70vw',
       modal: true,
       closable: true,
       breakpoints: {
@@ -116,11 +116,29 @@ export class SalesComponent implements OnInit {
       },
       data: {
         initial: event
-      }
+      },
+      focusOnShow: false,
     });
 
-    const resp = await firstValueFrom(this.ref.onClose);
+    const respData = await firstValueFrom(this.ref.onClose);
+    if (!respData) return;
+    
+    const { resp, fecha } = respData;
     if (!resp) return;
+
+    const total = resp.productos.reduce((acc: any, producto: any) => {
+      return acc + (producto.cantidad * producto.precio);
+    }, 0);
+
+    const dataSales = {
+      id: event.id,
+      fecha: fecha,
+      total: total,
+      detail: resp.productos
+    };
+
+    await lastValueFrom(this.service.editSale(dataSales));
+    this.getData();
   }
 
   public async add() {

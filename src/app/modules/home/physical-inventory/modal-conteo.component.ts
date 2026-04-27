@@ -69,13 +69,33 @@ import { lastValueFrom } from 'rxjs';
 
       <!-- Detalle del Conteo -->
       <div class="border rounded-lg overflow-hidden shadow-sm bg-white">
-        <p-table [value]="detalles" [scrollable]="true" scrollHeight="350px" styleClass="p-datatable-sm">
+        <p-table #dt [value]="detalles" [scrollable]="true" scrollHeight="350px" styleClass="p-datatable-sm">
           <ng-template pTemplate="header">
             <tr>
-              <th>Producto</th>
-              <th style="width: 150px">Ubicación</th>
-              <th style="width: 150px">Variante / Detalle</th>
-              <th style="width: 100px">Cantidad</th>
+              <th pSortableColumn="articuloNombre">
+                <div class="flex items-center gap-1">
+                  Producto <p-sortIcon field="articuloNombre"></p-sortIcon>
+                  <p-columnFilter type="text" field="articuloNombre" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+              </th>
+              <th style="width: 180px" pSortableColumn="ubicacionNombre">
+                <div class="flex items-center gap-1">
+                  Ubicación <p-sortIcon field="ubicacionNombre"></p-sortIcon>
+                  <p-columnFilter type="text" field="ubicacionNombre" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+              </th>
+              <th style="width: 180px" pSortableColumn="variante">
+                <div class="flex items-center gap-1">
+                  Variante / Detalle <p-sortIcon field="variante"></p-sortIcon>
+                  <p-columnFilter type="text" field="variante" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+              </th>
+              <th style="width: 120px" pSortableColumn="cantidadContada">
+                <div class="flex items-center gap-1">
+                  Cantidad <p-sortIcon field="cantidadContada"></p-sortIcon>
+                  <p-columnFilter type="numeric" field="cantidadContada" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+              </th>
               <th style="width: 50px"></th>
             </tr>
           </ng-template>
@@ -87,7 +107,7 @@ import { lastValueFrom } from 'rxjs';
                   <span class="text-[10px] text-gray-400">{{item.articuloId}}</span>
                 </div>
               </td>
-              <td>
+              <td style="width: 180px">
                 <p-dropdown 
                   [options]="ubicaciones" 
                   [(ngModel)]="item.ubicacionId" 
@@ -96,15 +116,16 @@ import { lastValueFrom } from 'rxjs';
                   placeholder="Selec..."
                   appendTo="body"
                   [style]="{'width':'100%'}"
+                  (onChange)="item.ubicacionNombre = getUbicacionNombre(item.ubicacionId)"
                 ></p-dropdown>
               </td>
-              <td>
+              <td style="width: 180px">
                 <input pInputText [(ngModel)]="item.variante" placeholder="Color, talla..." class="p-inputtext-sm w-full" />
               </td>
-              <td>
+              <td style="width: 120px">
                 <p-inputNumber [(ngModel)]="item.cantidadContada" [min]="0" class="p-inputtext-sm w-full"></p-inputNumber>
               </td>
-              <td>
+              <td style="width: 50px">
                 <button class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-50 text-red-600 transition-colors" (click)="removeItem(i)">
                   <span class="material-symbols-outlined text-sm">delete</span>
                 </button>
@@ -163,17 +184,23 @@ export class ModalConteoComponent implements OnInit {
     this.ubicaciones = await lastValueFrom(this.service.getUbicaciones());
   }
 
+  getUbicacionNombre(id: string): string {
+    const ubi = this.ubicaciones.find(u => u.id === id);
+    return ubi ? ubi.nombre : 'N/A';
+  }
+
   async loadDetalles(conteoId: string) {
     const rawDetalles = await lastValueFrom(this.service.getConteoDetalles(conteoId));
-    // Enriquecer con nombre del artículo para mostrar en la tabla
     const ids = rawDetalles.map(d => d.articuloId);
     const articulos = await lastValueFrom(this.service.getProductosByFilter(ids));
     
     this.detalles = rawDetalles.map(d => {
       const art = articulos.find(a => a.id === d.articuloId);
+      const ubi = this.ubicaciones.find(u => u.id === d.ubicacionId);
       return {
         ...d,
-        articuloNombre: art?.nombre || 'Producto Desconocido'
+        articuloNombre: art?.nombre || 'Producto Desconocido',
+        ubicacionNombre: ubi?.nombre || 'N/A'
       };
     });
   }
@@ -185,14 +212,16 @@ export class ModalConteoComponent implements OnInit {
 
   onProductSelect(event: any) {
     const product = event.value;
-    // Agregar al detalle
+    const ubiId = this.ubicaciones.length > 0 ? this.ubicaciones[0].id : null;
+    const ubiNombre = this.ubicaciones.length > 0 ? this.ubicaciones[0].nombre : 'N/A';
     this.detalles.push({
       articuloId: product.id,
       articuloNombre: product.nombre,
       variante: '',
-      ubicacionId: this.ubicaciones.length > 0 ? this.ubicaciones[0].id : null,
+      ubicacionId: ubiId,
+      ubicacionNombre: ubiNombre,
       cantidadContada: 1,
-      cantidadSistema: 0, // Esto se podría traer del stock actual si se quisiera comparar
+      cantidadSistema: 0,
       diferencia: 0
     });
     this.selectedProduct = null;

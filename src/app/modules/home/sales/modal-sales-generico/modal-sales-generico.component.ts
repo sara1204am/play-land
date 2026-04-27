@@ -4,7 +4,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { HomeService } from '../../home.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
@@ -21,7 +21,8 @@ import { DatePickerModule } from 'primeng/datepicker';
   styleUrl: './modal-sales-generico.component.css'
 })
 export class ModalSalesGenericoComponent {
-public ref: DynamicDialogRef = inject(DynamicDialogRef);
+  public ref: DynamicDialogRef = inject(DynamicDialogRef);
+  public configData: DynamicDialogConfig = inject(DynamicDialogConfig);
 
   public quantityTemplate: Signal<TemplateRef<ElementRef>> =
     viewChild.required<TemplateRef<ElementRef>>('quantityTemplate');
@@ -70,6 +71,26 @@ public ref: DynamicDialogRef = inject(DynamicDialogRef);
     this.form = this.fb.group({
       productos: this.fb.array([])
     });
+
+    if (this.configData.data?.initial) {
+      const initial = this.configData.data.initial;
+      this.fecha = initial.fecha ? new Date(initial.fecha) : null;
+      
+      if (initial.detail && Array.isArray(initial.detail)) {
+        initial.detail.forEach((prod: any) => {
+          const group = this.fb.group({
+            tipoVenta: [prod.tipoVenta || 'tienda', Validators.required],
+            nombre: [prod.nombre || '', Validators.required],
+            cantidad: [prod.cantidad || 0, [Validators.required, Validators.min(1)]],
+            precio: [prod.precio || 0, [Validators.required, Validators.min(0)]],
+            tipoPago: [prod.tipoPago || 'efectivo', Validators.required],
+            nota: [prod.nota || null]
+          });
+          this.productos.push(group);
+        });
+        this.viewProduct = true;
+      }
+    }
   }
 
   get productos() {

@@ -64,11 +64,11 @@ import { lastValueFrom } from 'rxjs';
           </div>
 
           <!-- Custom Bar Chart (CSS Based for zero dependencies) -->
-          <div class="flex items-end gap-2 md:gap-4 h-64 border-b border-gray-100 dark:border-gray-700 pb-2 overflow-x-auto">
+          <div class="flex items-end gap-2 md:gap-4 h-80 border-b border-gray-100 dark:border-gray-700 pb-2 overflow-x-auto pt-10">
              <div *ngFor="let month of monthlyStats" class="flex-1 flex flex-col items-center group">
                 <div class="relative w-full flex flex-col items-center">
-                   <!-- Tooltip on hover -->
-                   <div class="absolute -top-12 bg-gray-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
+                   <!-- Amount badge always visible -->
+                   <div class="absolute -top-7 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap z-10">
                       {{ month.total | currency:'Bs. ':'symbol':'1.0-0' }}
                    </div>
                    
@@ -76,7 +76,7 @@ import { lastValueFrom } from 'rxjs';
                    <div 
                       class="w-full max-w-[40px] rounded-t-lg transition-all duration-500 ease-out cursor-pointer hover:brightness-110"
                       [style.height.px]="(month.total / maxMonthlyTotal) * 200 + 10"
-                      [ngClass]="month.isCurrent ? 'bg-blue-600 shadow-lg shadow-blue-200 dark:shadow-none' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'"
+                      [ngClass]="month.isCurrent ? 'bg-blue-600 shadow-lg shadow-blue-200 dark:shadow-none' : 'bg-blue-500 hover:bg-blue-600'"
                    ></div>
                 </div>
                 <div class="mt-4 text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-tighter">
@@ -172,33 +172,44 @@ export class SalesDashboardComponent implements OnInit {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    // Group by month
+    // Group by month dynamically based on sales dates
     const months: { [key: string]: number } = {};
     const monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-    // Get last 6 months
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    this.sales.forEach(s => {
+      if (!s.fecha) return;
+      const d = new Date(s.fecha);
+      if (isNaN(d.getTime())) return;
       const key = `${d.getFullYear()}-${d.getMonth()}`;
-      months[key] = 0;
+      if (months[key] === undefined) {
+        months[key] = 0;
+      }
+      months[key] += (s.total || 0);
+    });
+
+    // If no sales data, initialize with last 6 months
+    if (Object.keys(months).length === 0) {
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${d.getMonth()}`;
+        months[key] = 0;
+      }
     }
 
-    this.sales.forEach(s => {
-      const d = new Date(s.fecha);
-      const key = `${d.getFullYear()}-${d.getMonth()}`;
-      if (months[key] !== undefined) {
-        months[key] += (s.total || 0);
-      }
-    });
-
-    this.monthlyStats = Object.keys(months).map(key => {
-      const [year, month] = key.split('-').map(Number);
-      return {
-        label: monthLabels[month] + ' ' + (year % 100),
-        total: months[key],
-        isCurrent: year === currentYear && month === currentMonth
-      };
-    });
+    this.monthlyStats = Object.keys(months)
+      .sort((a, b) => {
+        const [yearA, monthA] = a.split('-').map(Number);
+        const [yearB, monthB] = b.split('-').map(Number);
+        return new Date(yearA, monthA, 1).getTime() - new Date(yearB, monthB, 1).getTime();
+      })
+      .map(key => {
+        const [year, month] = key.split('-').map(Number);
+        return {
+          label: monthLabels[month] + ' ' + (year % 100),
+          total: months[key],
+          isCurrent: year === currentYear && month === currentMonth
+        };
+      });
 
     this.maxMonthlyTotal = Math.max(...this.monthlyStats.map(m => m.total), 1);
     
