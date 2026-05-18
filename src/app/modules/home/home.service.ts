@@ -382,4 +382,8 @@ export class HomeService {
   getVentas(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.host}/venta`);
   }
+
+  deleteVenta(id: string): Observable<any> {
+    return this.http.delete(`${environment.host}/venta/${id}`);
+  }
 }

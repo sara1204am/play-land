@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PlayTableComponent } from '../../table/play-table.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalSalesComponent } from './modal-sales/modal-sales.component';
@@ -14,17 +15,20 @@ interface DynamicDialogRefWithContent<T = any> extends DynamicDialogRef {
 @Component({
   selector: 'app-sales',
   imports: [
-    PlayTableComponent
+    PlayTableComponent,
+    CommonModule
   ],
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.css'
 })
-export class SalesComponent implements OnInit {
+export class SalesComponent implements OnInit, AfterViewInit {
 
   private dialogService: DialogService = inject(DialogService);
   public ref?: DynamicDialogRefWithContent<ModalSalesComponent>;
 
   private service: HomeService = inject(HomeService);
+
+  @ViewChild('deleteTemplate', { static: true }) deleteTemplate!: TemplateRef<any>;
 
   public columns: any[] = [
     {
@@ -64,15 +68,6 @@ export class SalesComponent implements OnInit {
       globalSearch: true
     },
     {
-      key: 'nota',
-      header: 'Método de Pago / Nota',
-      type: 'text',
-      hidden: false,
-      sortable: true,
-      filterable: true,
-      globalSearch: true
-    },
-    {
       key: 'total',
       header: 'Total Venta',
       type: 'number',
@@ -82,6 +77,16 @@ export class SalesComponent implements OnInit {
       globalSearch: false,
       prefix: 'Bs ',
       format: '1.2-2'
+    },
+    {
+      key: 'actions',
+      header: 'Acciones',
+      type: 'template',
+      cellTemplate: null,
+      hidden: false,
+      sortable: false,
+      filterable: false,
+      globalSearch: false
     }
   ];
 
@@ -95,6 +100,14 @@ export class SalesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+  }
+
+  ngAfterViewInit(): void {
+    const actionsCol = this.columns.find(c => c.key === 'actions');
+    if (actionsCol) {
+      actionsCol.cellTemplate = this.deleteTemplate;
+      this.columns = [...this.columns];
+    }
   }
 
   async getData() {
@@ -227,6 +240,56 @@ export class SalesComponent implements OnInit {
     const listArt = await lastValueFrom(this.service.getProductosByFilter(idsVentas));
     await this.reduceStock(listArt, resp);
     this.getData();
+  }
+
+  public canDelete(fecha: string | Date): boolean {
+    if (!fecha) return false;
+    const saleDate = new Date(fecha);
+    const today = new Date();
+    
+    // Clear hours to compare calendar dates
+    const d1 = new Date(saleDate.getFullYear(), saleDate.getMonth(), saleDate.getDate());
+    const d2 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    const diffTime = d2.getTime() - d1.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays <= 2;
+  }
+
+  public async deleteSale(row: any) {
+    if (!this.canDelete(row.fecha)) {
+      alert('Solo se pueden eliminar ventas de hasta 2 días de antigüedad.');
+      return;
+    }
+
+    if (!confirm('¿Está seguro de eliminar esta venta? Esta acción no se puede deshacer y restaurará el stock de los productos.')) {
+      return;
+    }
+
+    try {
+      let detailArr: any[] = [];
+      if (typeof row.detail === 'string') {
+        try {
+          detailArr = JSON.parse(row.detail);
+        } catch (e) {
+          detailArr = [];
+        }
+      } else if (Array.isArray(row.detail)) {
+        detailArr = row.detail;
+      }
+
+      if (detailArr && detailArr.length > 0) {
+        const oldProductIds = detailArr.map((v: any) => v.productoId);
+        const oldProducts = await lastValueFrom(this.service.getProductosByFilter(oldProductIds));
+        await this.restoreStock(oldProducts, row);
+      }
+
+      await lastValueFrom(this.service.deleteVenta(row.id));
+      this.getData();
+    } catch (error) {
+      console.error('Error deleting sale', error);
+      alert('Ocurrió un error al eliminar la venta.');
+    }
   }
 
   public async addGenerico() {

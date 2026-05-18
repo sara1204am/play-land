@@ -46,9 +46,12 @@ export class StockComponent implements OnInit {
 
   private messageService: MessageService = inject(MessageService);
 
+  public originalData: any[] = [];
+  public activeFilter: 'all' | 'peluche' | 'juguete' = 'all';
+
   public columns!: any[];
 
-  public data: unknown[] = [];
+  public data: any[] = [];
 
   public config = {
     globalSearch: true,
@@ -188,9 +191,30 @@ export class StockComponent implements OnInit {
 
   async getData() {
     try {
-      this.data = await lastValueFrom(this.service.getProductosAll());
+      const resp = await lastValueFrom(this.service.getProductosAll());
+      this.originalData = resp || [];
+      this.filterCategory(this.activeFilter);
     } catch (e) {
       console.log(e)
+    }
+  }
+
+  public filterCategory(cat: 'all' | 'peluche' | 'juguete') {
+    this.activeFilter = cat;
+    if (cat === 'all') {
+      this.data = [...this.originalData];
+    } else if (cat === 'peluche') {
+      this.data = this.originalData.filter(item => {
+        const name = (item.nombre || '').toLowerCase();
+        const typeVal = (item.type || '').toLowerCase();
+        return name.includes('peluche') || typeVal.includes('peluche') || item.type === '2';
+      });
+    } else if (cat === 'juguete') {
+      this.data = this.originalData.filter(item => {
+        const name = (item.nombre || '').toLowerCase();
+        const typeVal = (item.type || '').toLowerCase();
+        return name.includes('juguete') || name.includes('juguetes') || typeVal.includes('juguete') || typeVal.includes('juguetes') || item.type === '1';
+      });
     }
   }
 

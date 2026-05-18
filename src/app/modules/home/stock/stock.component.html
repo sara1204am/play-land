@@ -99,7 +99,28 @@
         </ng-template>
 
         <ng-template #actionsTpl>
-            <button class="btn btn-primary" (click)="add()">Agregar Articulo</button>
+            <div class="flex items-center gap-3 flex-wrap">
+                <button class="btn btn-primary" (click)="add()">Agregar Articulo</button>
+                <div class="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
+                <!-- Botones de filtrado rápido de categoría -->
+                <div class="flex gap-2">
+                    <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+                            [ngClass]="activeFilter === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200'"
+                            (click)="filterCategory('all')">
+                        Mostrar Todo
+                    </button>
+                    <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+                            [ngClass]="activeFilter === 'peluche' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200'"
+                            (click)="filterCategory('peluche')">
+                        🧸 Peluches
+                    </button>
+                    <button class="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+                            [ngClass]="activeFilter === 'juguete' ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200'"
+                            (click)="filterCategory('juguete')">
+                        🎮 Juguetes
+                    </button>
+                </div>
+            </div>
         </ng-template>
         @if(view){
         <play-table [uid]="'stok'" [columns]="columns" [data]="data" [catalogs]="catalogs" [config]="config"
