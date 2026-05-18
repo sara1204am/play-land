@@ -100,11 +100,16 @@ import { lastValueFrom } from 'rxjs';
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item let-i="rowIndex">
-            <tr>
-              <td>
+            <tr [ngClass]="{'bg-amber-50/70 border-l-4 border-l-amber-500': !item.id, 'hover:bg-slate-50': item.id}">
+              <td class="pl-3">
                 <div class="flex flex-col">
-                  <span class="font-bold text-xs">{{item.articuloNombre}}</span>
-                  <span class="text-[10px] text-gray-400">{{item.articuloId}}</span>
+                  <span class="font-bold text-xs flex items-center gap-1.5">
+                    {{item.articuloNombre}}
+                    @if(!item.id) {
+                      <span class="text-[9px] font-extrabold uppercase bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full tracking-wider shadow-sm animate-pulse border border-amber-200">Pendiente</span>
+                    }
+                  </span>
+                  <span class="text-[10px] text-gray-400 font-mono">{{item.articuloId}}</span>
                 </div>
               </td>
               <td style="width: 180px">
@@ -207,14 +212,14 @@ export class ModalConteoComponent implements OnInit {
 
   async searchProduct(event: any) {
     const query = event.query;
-    this.filteredProducts = await lastValueFrom(this.service.getProductStoreBySearchWithTag(query));
+    this.filteredProducts = await lastValueFrom(this.service.getProductStoreBySearchWithTagAll(query));
   }
 
   onProductSelect(event: any) {
-    const product = event.value;
+    const product = event.value || event;
     const ubiId = this.ubicaciones.length > 0 ? this.ubicaciones[0].id : null;
     const ubiNombre = this.ubicaciones.length > 0 ? this.ubicaciones[0].nombre : 'N/A';
-    this.detalles.push({
+    this.detalles.unshift({
       articuloId: product.id,
       articuloNombre: product.nombre,
       variante: '',

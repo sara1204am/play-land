@@ -9,6 +9,8 @@ import { TagModule } from 'primeng/tag';
 import { SumQuantityPipe } from '../sum-quantity.pipe';
 import { ChipsModule } from 'primeng/chips'; 
 import { CheckboxModule } from 'primeng/checkbox';
+import { HomeService } from '../../home.service';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-modal-stock',
   standalone: true,
@@ -38,8 +40,10 @@ export class ModalStockComponent implements OnInit, OnDestroy {
 
   public ref: DynamicDialogRef = inject(DynamicDialogRef);
   public dynamicDialogConfig: DynamicDialogConfig = inject(DynamicDialogConfig);
+  private homeService = inject(HomeService);
 
   public initial!: any;
+  public locations: any[] = [];
 
   productForm: FormGroup;
 
@@ -73,7 +77,6 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     if (this.dynamicDialogConfig.data?.id) {
 
       this.initial = this.dynamicDialogConfig.data;
-      // Llenar formulario con valores iniciales
       this.productForm.patchValue({
         tipo: this.initial.type || '',
         nombre: this.initial.nombre || '',
@@ -87,27 +90,31 @@ export class ModalStockComponent implements OnInit, OnDestroy {
         lote: this.initial.id_lote || ''
       });
 
-      // Si hay colores, agregarlos al FormArray
       if (this.initial.stock_by_option?.length) {
         const coloresArray = this.productForm.get('colores') as FormArray;
         this.initial.stock_by_option.forEach((item: any) => {
           coloresArray.push(
             this.fb.group({
-              color: [item.color, Validators.required],
-              cantidad: [item.cantidad, [Validators.required, Validators.min(0)]],
-              cantidad_almacen: [item.cantidad_almacen, [Validators.required, Validators.min(0)]],
-              cantidad_feria: [item.cantidad_feria, []]
+              id: [item.id || new Date().getTime()],
+              color: [item.color || '', Validators.required],
+              ubicacionId: [item.ubicacionId || 'e23f61c2-9025-4761-8a75-a5146de03473', Validators.required],
+              cantidad: [item.cantidad || 0, [Validators.required, Validators.min(0)]]
             })
           );
         });
       }
     } else {
-      // Por defecto, agregamos dos colores
       this.addItem();
     }
   }
 
   async ngOnInit(): Promise<void> {
+    try {
+      this.locations = await lastValueFrom(this.homeService.getUbicaciones());
+    } catch (e) {
+      console.error('Error fetching locations in stock modal', e);
+    }
+
     if (this.uploadMethod === 'camera') {
       this.initCamera();
     }
@@ -163,10 +170,10 @@ export class ModalStockComponent implements OnInit, OnDestroy {
   }
   createColorGroup(): FormGroup {
     return this.fb.group({
+      id: [new Date().getTime()],
       color: ['', Validators.required],
-      cantidad: [null, Validators.required],
-      cantidad_almacen: [null, Validators.required],
-      cantidad_feria: [null]
+      ubicacionId: ['e23f61c2-9025-4761-8a75-a5146de03473', Validators.required],
+      cantidad: [null, Validators.required]
     });
   }
 
@@ -180,9 +187,8 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       this.fb.group({
         id: new Date().getTime(),
         color: [''],
+        ubicacionId: ['e23f61c2-9025-4761-8a75-a5146de03473', Validators.required],
         cantidad: [0, [Validators.min(0)]],
-        cantidad_almacen: [0, [Validators.min(0)]],
-        cantidad_feria: [0, [Validators.min(0)]],
       })
     );
   }

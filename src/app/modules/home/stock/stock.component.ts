@@ -67,13 +67,19 @@ export class StockComponent implements OnInit {
       { value: '5', label: 'Amigurumis' },
     ]
   };
+  public locations: any[] = [];
   view = false;
   editingIndex: number | null = null;
   editQuantity: any = { index: null, option: null, row: null, }
-  editedOption: { id: string, color: string; cantidad: number } = { id: '', color: '', cantidad: 0 };
+  editedOption: any = { id: '', color: '', cantidad: 0, ubicacionId: '' };
   viewQuantity = true;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    try {
+      this.locations = await lastValueFrom(this.service.getUbicaciones());
+    } catch (e) {
+      console.error('Error fetching locations in stock component', e);
+    }
 
     this.columns = [
       {
@@ -175,6 +181,11 @@ export class StockComponent implements OnInit {
     this.getData();
   }
 
+  getLocationName(locationId: string): string {
+    const loc = this.locations.find((l: any) => l.id === locationId);
+    return loc ? loc.nombre : 'No especificado';
+  }
+
   async getData() {
     try {
       this.data = await lastValueFrom(this.service.getProductosAll());
@@ -218,6 +229,15 @@ export class StockComponent implements OnInit {
     const data = await firstValueFrom(this.ref.onClose);
 
 
+    const enrichedColores = (data.colores || []).map((col: any) => {
+      const loc = this.locations.find((l: any) => l.id === col.ubicacionId);
+      return {
+        ...col,
+        variante: col.color,
+        ubicacion: loc ? loc.nombre : 'No especificado'
+      };
+    });
+
     const articulo: any = {
       nombre: data.nombre,
       nombre_corto: data.nombre_corto ?? data.nombre,
@@ -225,7 +245,7 @@ export class StockComponent implements OnInit {
       costo_unitario: data.costo_unitario,
       descuento: data.descuento,
       precio: data.precio ?? 0,
-      stock_by_option: data.colores,
+      stock_by_option: enrichedColores,
       type: data.tipo,
       id_lote: data.lote,
       precio_maximo: data. precio_maximo,
@@ -273,6 +293,15 @@ export class StockComponent implements OnInit {
     if (data?.imagen) {
       const file = data.imagen;
 
+      const enrichedColores = (data.colores || []).map((col: any) => {
+        const loc = this.locations.find((l: any) => l.id === col.ubicacionId);
+        return {
+          ...col,
+          variante: col.color,
+          ubicacion: loc ? loc.nombre : 'No especificado'
+        };
+      });
+
       const articulo: any = {
         nombre: data.nombre,
         nombre_corto: data.nombre_corto ?? data.nombre,
@@ -280,7 +309,7 @@ export class StockComponent implements OnInit {
         costo_unitario: data.costo_unitario,
         precio: data.precio ?? 0,
         active: true,
-        stock_by_option: data.colores,
+        stock_by_option: enrichedColores,
         type: data.tipo,
         id_lote: data.lote,
         precio_maximo: data. precio_maximo,
@@ -310,7 +339,8 @@ export class StockComponent implements OnInit {
     this.editedOption = {
       id: option.id,
       color: option.color,
-      cantidad: option.cantidad
+      cantidad: option.cantidad,
+      ubicacionId: option.ubicacionId
     };
   }
 
@@ -324,14 +354,18 @@ export class StockComponent implements OnInit {
       alert('La cantidad no puede ser negativa');
       return;
     }
-    option = { ...this.editedOption }
+    const loc = this.locations.find((l: any) => l.id === this.editedOption.ubicacionId);
+    option = { 
+      ...this.editedOption,
+      variante: this.editedOption.color,
+      ubicacion: loc ? loc.nombre : 'No especificado'
+    };
     row.stock_by_option[index] = option;
 
     const finalRow = { ...row };
     const stock = finalRow.stock_by_option;
     const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
-    const totalStockAlmacen = stock?.reduce((sum: any, item: any) => sum + (item.cantidad_almacen || 0), 0) || 0;
-    finalRow.active = totalStock + totalStockAlmacen > 0;
+    finalRow.active = totalStock > 0;
 
     delete finalRow.imagenes;
     delete finalRow.photo;
@@ -350,8 +384,7 @@ export class StockComponent implements OnInit {
 
     const stock = finalRow.stock_by_option;
     const totalStock = stock?.reduce((sum: any, item: any) => sum + (item.cantidad || 0), 0) || 0;
-    const totalStockAlmacen = stock?.reduce((sum: any, item: any) => sum + (item.cantidad_almacen || 0), 0) || 0;
-    finalRow.active = totalStock + totalStockAlmacen > 0;
+    finalRow.active = totalStock > 0;
 
     await lastValueFrom(this.service.editProduct(finalRow));
     this.messageService.add({
@@ -368,7 +401,7 @@ export class StockComponent implements OnInit {
       id: new Date().getTime(),
       color: '',
       cantidad: 0,
-      cantidad_almacen: 0
+      ubicacionId: 'e23f61c2-9025-4761-8a75-a5146de03473'
     })
     this.editQuantity = { index: null, option: null, row: null, }
   }
@@ -378,9 +411,7 @@ export class StockComponent implements OnInit {
   }
 
   getTotalCantidad(stock: any[]): number {
-    const tienda = stock?.reduce((total, item) => total + (item.cantidad || 0), 0) ?? 0;
-    const almacen = stock?.reduce((total, item) => total + (item.cantidad_almacen || 0), 0) ?? 0;
-    return tienda + almacen;
+    return stock?.reduce((total, item) => total + (item.cantidad || 0), 0) ?? 0;
   }
 
 }

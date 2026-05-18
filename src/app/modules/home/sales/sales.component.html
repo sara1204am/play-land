@@ -3,21 +3,15 @@
 
         <ng-template #actionsTpl>
             <div class="flex gap-3">
-                <button class="btn btn-primary" (click)="addGenerico()">Agregar Venta Generica</button>
+                <!--                 <button class="btn btn-primary" (click)="addGenerico()">Agregar Venta Generica</button> -->
                 <button class="btn btn-secondary" (click)="add()">Agregar Venta</button>
             </div>
         </ng-template>
 
 
-    <play-table 
-        [uid]="'sales'" 
-        [columns]="columns" 
-        [data]="data" 
-        [config]="config"
-        [saveState]="false" 
-        [actionsTemplate]="actionsTpl" 
-        (selectItem)="onSelectItem($event)">
-    </play-table>
+        <play-table [uid]="'sales'" [columns]="columns" [data]="data" [config]="config" [saveState]="false"
+            [actionsTemplate]="actionsTpl" (selectItem)="onSelectItem($event)">
+        </play-table>
 
     </div>
 </div>

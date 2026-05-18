@@ -280,25 +280,46 @@ export class HomeService {
   }
 
   getProductStoreBySearchWithTag(search: string): Observable<any[]> {
-  const q = (search ?? '').trim();
+    const q = (search ?? '').trim();
 
-  if (!q) return of([]);
+    if (!q) return of([]);
 
-  const params = new HttpParams().set('q', q);
+    const params = new HttpParams().set('q', q);
 
-  return this.http
-    .get<any[]>(`${API_PRODUCT_URL}/search`, { params })
-    .pipe(
-      map((articulos) =>
-        (articulos ?? []).map((articulo) => ({
-          ...articulo,
-          img: articulo.imagenes?.length
-            ? `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`
-            : null,
-        })),
-      ),
-    );
-}
+    return this.http
+      .get<any[]>(`${API_PRODUCT_URL}/search`, { params })
+      .pipe(
+        map((articulos) =>
+          (articulos ?? []).map((articulo) => ({
+            ...articulo,
+            img: articulo.imagenes?.length
+              ? `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`
+              : null,
+          })),
+        ),
+      );
+  }
+
+  getProductStoreBySearchWithTagAll(search: string): Observable<any[]> {
+    const q = (search ?? '').trim();
+
+    if (!q) return of([]);
+
+    const params = new HttpParams().set('q', q).set('all', 'true');
+
+    return this.http
+      .get<any[]>(`${API_PRODUCT_URL}/search`, { params })
+      .pipe(
+        map((articulos) =>
+          (articulos ?? []).map((articulo) => ({
+            ...articulo,
+            img: articulo.imagenes?.length
+              ? `https://play-land-images.s3.us-east-1.amazonaws.com/${articulo.imagenes[0].url}`
+              : null,
+          })),
+        ),
+      );
+  }
 
   getAllCloudinary(): Observable<any> {
     return this.http.get(`${API_S3_URL}/all`, {});

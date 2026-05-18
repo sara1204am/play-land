@@ -64,6 +64,15 @@ export class SalesComponent implements OnInit {
       globalSearch: true
     },
     {
+      key: 'nota',
+      header: 'Método de Pago / Nota',
+      type: 'text',
+      hidden: false,
+      sortable: true,
+      filterable: true,
+      globalSearch: true
+    },
+    {
       key: 'total',
       header: 'Total Venta',
       type: 'number',
@@ -92,9 +101,23 @@ export class SalesComponent implements OnInit {
     try {
       const resp = await lastValueFrom(this.service.getSales());
       const final: any = [];
-      resp.forEach((item: any, index: number) => {
-        const nombres = item.detail.map((item: any) => item.nombre).join(', ');
-        final.push({ id: item.id, nombre: nombres, total: item.total, fecha: item.fecha, detail: item.detail })
+      resp.forEach((item: any) => {
+        const nombres = item.detail?.map((item: any) => item.nombre).join(', ') || '';
+        final.push({ 
+          id: item.id, 
+          nombre: nombres, 
+          total: item.total, 
+          fecha: item.fecha, 
+          detail: item.detail,
+          nota: item.nota || '-'
+        });
+      });
+
+      // Always sort sales from most recent to oldest
+      final.sort((a: any, b: any) => {
+        const dateA = a.fecha ? new Date(a.fecha).getTime() : 0;
+        const dateB = b.fecha ? new Date(b.fecha).getTime() : 0;
+        return dateB - dateA;
       });
 
       this.data = final;
@@ -105,8 +128,8 @@ export class SalesComponent implements OnInit {
   }
 
   public async onSelectItem(event: any) {
-    this.ref = this.dialogService.open(ModalSalesGenericoComponent, {
-      header: 'Editar venta genérica',
+    this.ref = this.dialogService.open(ModalSalesComponent, {
+      header: 'Editar venta',
       width: '70vw',
       modal: true,
       closable: true,
@@ -120,21 +143,47 @@ export class SalesComponent implements OnInit {
       focusOnShow: false,
     });
 
-    const respData = await firstValueFrom(this.ref.onClose);
-    if (!respData) return;
-    
-    const { resp, fecha } = respData;
+    const resp = await firstValueFrom(this.ref.onClose);
     if (!resp) return;
 
     const total = resp.productos.reduce((acc: any, producto: any) => {
       return acc + (producto.cantidad * producto.precio);
     }, 0);
 
+    const parts: string[] = [];
+    if (resp.pago_efectivo > 0) parts.push(`Efectivo: ${resp.pago_efectivo} Bs`);
+    if (resp.pago_qr > 0) parts.push(`QR: ${resp.pago_qr} Bs`);
+    if (resp.pago_tarjeta > 0) parts.push(`Tarjeta: ${resp.pago_tarjeta} Bs`);
+    const paymentNote = parts.length > 0 ? parts.join(' | ') : 'Efectivo';
+
+    // 1. Restore the old stock of original items
+    if (event.detail && event.detail.length > 0) {
+      try {
+        const oldProductIds = event.detail.map((v: any) => v.productoId);
+        const oldProducts = await lastValueFrom(this.service.getProductosByFilter(oldProductIds));
+        await this.restoreStock(oldProducts, event);
+      } catch (error) {
+        console.error('Error restoring old stock during edit', error);
+      }
+    }
+
+    // 2. Reduce stock for the new items
+    if (resp.productos && resp.productos.length > 0) {
+      try {
+        const newProductIds = resp.productos.map((v: any) => v.productoId);
+        const newProducts = await lastValueFrom(this.service.getProductosByFilter(newProductIds));
+        await this.reduceStock(newProducts, resp);
+      } catch (error) {
+        console.error('Error reducing new stock during edit', error);
+      }
+    }
+
     const dataSales = {
       id: event.id,
-      fecha: fecha,
+      fecha: resp.fecha || event.fecha || new Date(), // Use selected date or keep original
       total: total,
-      detail: resp.productos
+      detail: resp.productos,
+      nota: paymentNote
     };
 
     await lastValueFrom(this.service.editSale(dataSales));
@@ -160,17 +209,23 @@ export class SalesComponent implements OnInit {
       return acc + (producto.cantidad * producto.precio);
     }, 0);
 
+    const parts: string[] = [];
+    if (resp.pago_efectivo > 0) parts.push(`Efectivo: ${resp.pago_efectivo} Bs`);
+    if (resp.pago_qr > 0) parts.push(`QR: ${resp.pago_qr} Bs`);
+    if (resp.pago_tarjeta > 0) parts.push(`Tarjeta: ${resp.pago_tarjeta} Bs`);
+    const paymentNote = parts.length > 0 ? parts.join(' | ') : 'Efectivo';
+
     const dataSales = {
-      fecha: new Date(),
+      fecha: resp.fecha || new Date(), // Use selected date from modal
       total: total,
-      detail: resp.productos
+      detail: resp.productos,
+      nota: paymentNote
     };
 
     await lastValueFrom(this.service.saveVenta(dataSales));
-
     const idsVentas = resp.productos.map((v: any) => v.productoId);
- /*    const listArt = await lastValueFrom(this.service.getProductosByFilter(idsVentas));
-    this.reduceStock(listArt, resp); */
+    const listArt = await lastValueFrom(this.service.getProductosByFilter(idsVentas));
+    await this.reduceStock(listArt, resp);
     this.getData();
   }
 
@@ -211,25 +266,35 @@ export class SalesComponent implements OnInit {
 
       if (!venta) return articulo;
 
-      const tipoVenta = venta.tipoVenta; // ahora usamos el tipo de venta de la fila
+      const tipoVenta = venta.tipoVenta;
 
-      if (Array.isArray(articulo.stock_by_option) && venta.modelo) {
-        articulo.stock_by_option = articulo.stock_by_option.map((opt: any) => {
+      let options: any[] = [];
+      if (articulo.stock_by_option) {
+        if (Array.isArray(articulo.stock_by_option)) {
+          options = articulo.stock_by_option;
+        } else if (typeof articulo.stock_by_option === 'string') {
+          try {
+            options = JSON.parse(articulo.stock_by_option);
+          } catch (e) {
+            options = [];
+          }
+        }
+      }
+
+      if (options && options.length > 0 && venta.modelo) {
+        options = options.map((opt: any) => {
           if (opt.id === venta.modelo) {
             return {
               ...opt,
-              cantidad: tipoVenta === 'tienda' ? opt.cantidad - venta.cantidad : opt.cantidad,
-              cantidad_almacen: tipoVenta === 'almacen' ? opt.cantidad_almacen - venta.cantidad : opt.cantidad_almacen
+              cantidad: Math.max(0, (Number(opt.cantidad) || 0) - venta.cantidad)
             };
           }
           return opt;
         });
-      }
-      else if (typeof articulo.cantidad === 'number') {
-        if (tipoVenta === 'tienda') {
-          articulo.cantidad = articulo.cantidad - venta.cantidad;
-        } else if (tipoVenta === 'almacen') {
-          articulo.cantidad_almacen = (articulo.cantidad_almacen || 0) - venta.cantidad;
+        articulo.stock_by_option = options;
+      } else if (typeof articulo.cantidad === 'number') {
+        if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
+          articulo.cantidad = Math.max(0, articulo.cantidad - venta.cantidad);
         }
       }
 
@@ -238,14 +303,28 @@ export class SalesComponent implements OnInit {
 
     for (const product of updatedList) {
       try {
-        const tipoVenta = listVenta.productos.find((v: any) => v.productoId === product.id)?.tipoVenta;
+        let options: any[] = [];
+        if (product.stock_by_option) {
+          if (Array.isArray(product.stock_by_option)) {
+            options = product.stock_by_option;
+          } else if (typeof product.stock_by_option === 'string') {
+            try {
+              options = JSON.parse(product.stock_by_option);
+            } catch (e) {
+              options = [];
+            }
+          }
+        }
 
-        const stock = product.stock_by_option;
-        const totalStock = stock?.reduce((sum: any, item: any) =>
-          sum + (tipoVenta === 'tienda' ? (item.cantidad || 0) : (item.cantidad_almacen || 0)), 0
-        ) || (tipoVenta === 'tienda' ? product.cantidad : product.cantidad_almacen) || 0;
+        const totalStock = options && options.length > 0
+          ? options.reduce((sum: any, item: any) => sum + (Number(item.cantidad) || 0), 0)
+          : Number(product.cantidad) || 0;
 
+        product.cantidad = totalStock;
         product.active = totalStock > 0;
+
+        delete product.imagenes;
+        delete product.photo;
 
         await lastValueFrom(this.service.editProduct(product));
       } catch (error) {
@@ -254,6 +333,77 @@ export class SalesComponent implements OnInit {
     }
   }
 
+  async restoreStock(listArt: any, listVenta: any) {
+    const updatedList = listArt.map((articulo: any) => {
+      const venta = listVenta.detail.find((v: any) => v.productoId === articulo.id);
 
+      if (!venta) return articulo;
+
+      const tipoVenta = venta.tipoVenta;
+
+      let options: any[] = [];
+      if (articulo.stock_by_option) {
+        if (Array.isArray(articulo.stock_by_option)) {
+          options = articulo.stock_by_option;
+        } else if (typeof articulo.stock_by_option === 'string') {
+          try {
+            options = JSON.parse(articulo.stock_by_option);
+          } catch (e) {
+            options = [];
+          }
+        }
+      }
+
+      if (options && options.length > 0 && venta.modelo) {
+        options = options.map((opt: any) => {
+          if (opt.id === venta.modelo) {
+            return {
+              ...opt,
+              cantidad: (Number(opt.cantidad) || 0) + venta.cantidad
+            };
+          }
+          return opt;
+        });
+        articulo.stock_by_option = options;
+      } else if (typeof articulo.cantidad === 'number') {
+        if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
+          articulo.cantidad = articulo.cantidad + venta.cantidad;
+        }
+      }
+
+      return articulo;
+    });
+
+    for (const product of updatedList) {
+      try {
+        let options: any[] = [];
+        if (product.stock_by_option) {
+          if (Array.isArray(product.stock_by_option)) {
+            options = product.stock_by_option;
+          } else if (typeof product.stock_by_option === 'string') {
+            try {
+              options = JSON.parse(product.stock_by_option);
+            } catch (e) {
+              options = [];
+            }
+          }
+        }
+
+        const totalStock = options && options.length > 0
+          ? options.reduce((sum: any, item: any) => sum + (Number(item.cantidad) || 0), 0)
+          : Number(product.cantidad) || 0;
+
+        product.cantidad = totalStock;
+        product.active = totalStock > 0;
+
+        delete product.imagenes;
+        delete product.photo;
+
+        await lastValueFrom(this.service.editProduct(product));
+      } catch (error) {
+        console.error('Error restaurando producto', product.id, error);
+      }
+    }
+  }
 
 }

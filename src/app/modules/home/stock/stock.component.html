@@ -42,8 +42,12 @@
                         <!-- Datos -->
                         <div class="flex flex-col space-y-1">
                             <span class="font-semibold text-gray-700">
-                                Color:
+                                Variante / Detalle:
                                 <span class="font-normal text-gray-600">{{ option.color || '(vacío)' }}</span>
+                            </span>
+                            <span class="font-semibold text-gray-700">
+                                Ubicación:
+                                <span class="font-normal text-gray-600">{{ getLocationName(option.ubicacionId) }}</span>
                             </span>
                             <span class="font-semibold text-gray-700">
                                 Cantidad:
@@ -69,8 +73,14 @@
                     && editQuantity.option.id === option.id
                     && editQuantity.row.id === row.id
                     ){
-                    <input type="text" [(ngModel)]="editedOption.color" placeholder="Color"
+                    <input type="text" [(ngModel)]="editedOption.color" placeholder="Variante / Detalle"
                         class="border border-gray-300 rounded px-3 py-1 mb-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <select [(ngModel)]="editedOption.ubicacionId"
+                        class="border border-gray-300 rounded px-3 py-1 mb-2 w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @for(loc of locations; track loc.id) {
+                            <option [value]="loc.id">{{ loc.nombre }}</option>
+                        }
+                    </select>
                     <input type="number" [(ngModel)]="editedOption.cantidad" min="0" placeholder="Cantidad"
                         class="border border-gray-300 rounded px-3 py-1 mb-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <button class="bg-green-600 text-white px-4 py-1 rounded mr-2 hover:bg-green-700 transition"
