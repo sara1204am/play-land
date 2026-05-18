@@ -115,13 +115,24 @@ export class SalesComponent implements OnInit, AfterViewInit {
       const resp = await lastValueFrom(this.service.getSales());
       const final: any = [];
       resp.forEach((item: any) => {
-        const nombres = item.detail?.map((item: any) => item.nombre).join(', ') || '';
+        let detailArr: any[] = [];
+        if (typeof item.detail === 'string') {
+          try {
+            detailArr = JSON.parse(item.detail);
+          } catch (e) {
+            detailArr = [];
+          }
+        } else if (Array.isArray(item.detail)) {
+          detailArr = item.detail;
+        }
+
+        const nombres = detailArr?.map((item: any) => item.nombre).join(', ') || '';
         final.push({ 
           id: item.id, 
           nombre: nombres, 
           total: item.total, 
           fecha: item.fecha, 
-          detail: item.detail,
+          detail: detailArr,
           nota: item.nota || '-'
         });
       });
@@ -170,11 +181,22 @@ export class SalesComponent implements OnInit, AfterViewInit {
     const paymentNote = parts.length > 0 ? parts.join(' | ') : 'Efectivo';
 
     // 1. Restore the old stock of original items
-    if (event.detail && event.detail.length > 0) {
+    let detailArr: any[] = [];
+    if (typeof event.detail === 'string') {
       try {
-        const oldProductIds = event.detail.map((v: any) => v.productoId);
+        detailArr = JSON.parse(event.detail);
+      } catch (e) {
+        detailArr = [];
+      }
+    } else if (Array.isArray(event.detail)) {
+      detailArr = event.detail;
+    }
+
+    if (detailArr && detailArr.length > 0) {
+      try {
+        const oldProductIds = detailArr.map((v: any) => v.productoId).filter(id => !!id);
         const oldProducts = await lastValueFrom(this.service.getProductosByFilter(oldProductIds));
-        await this.restoreStock(oldProducts, event);
+        await this.restoreStock(oldProducts, { ...event, detail: detailArr });
       } catch (error) {
         console.error('Error restoring old stock during edit', error);
       }
@@ -279,9 +301,9 @@ export class SalesComponent implements OnInit, AfterViewInit {
       }
 
       if (detailArr && detailArr.length > 0) {
-        const oldProductIds = detailArr.map((v: any) => v.productoId);
+        const oldProductIds = detailArr.map((v: any) => v.productoId).filter(id => !!id);
         const oldProducts = await lastValueFrom(this.service.getProductosByFilter(oldProductIds));
-        await this.restoreStock(oldProducts, row);
+        await this.restoreStock(oldProducts, { ...row, detail: detailArr });
       }
 
       await lastValueFrom(this.service.deleteVenta(row.id));
@@ -324,12 +346,23 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async reduceStock(listArt: any, listVenta: any) {
+    let productosArr: any[] = [];
+    if (listVenta && listVenta.productos) {
+      if (typeof listVenta.productos === 'string') {
+        try {
+          productosArr = JSON.parse(listVenta.productos);
+        } catch (e) {
+          productosArr = [];
+        }
+      } else if (Array.isArray(listVenta.productos)) {
+        productosArr = listVenta.productos;
+      }
+    }
+
     const updatedList = listArt.map((articulo: any) => {
-      const venta = listVenta.productos.find((v: any) => v.productoId === articulo.id);
+      const ventasProducto = productosArr.filter((v: any) => v.productoId === articulo.id);
 
-      if (!venta) return articulo;
-
-      const tipoVenta = venta.tipoVenta;
+      if (ventasProducto.length === 0) return articulo;
 
       let options: any[] = [];
       if (articulo.stock_by_option) {
@@ -344,21 +377,27 @@ export class SalesComponent implements OnInit, AfterViewInit {
         }
       }
 
-      if (options && options.length > 0 && venta.modelo) {
-        options = options.map((opt: any) => {
-          if (opt.id === venta.modelo) {
-            return {
-              ...opt,
-              cantidad: Math.max(0, (Number(opt.cantidad) || 0) - venta.cantidad)
-            };
+      for (const venta of ventasProducto) {
+        const tipoVenta = venta.tipoVenta;
+        if (options && options.length > 0 && venta.modelo) {
+          options = options.map((opt: any) => {
+            if (opt.id === venta.modelo) {
+              return {
+                ...opt,
+                cantidad: Math.max(0, (Number(opt.cantidad) || 0) - venta.cantidad)
+              };
+            }
+            return opt;
+          });
+        } else if (typeof articulo.cantidad === 'number') {
+          if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
+            articulo.cantidad = Math.max(0, (articulo.cantidad || 0) - venta.cantidad);
           }
-          return opt;
-        });
-        articulo.stock_by_option = options;
-      } else if (typeof articulo.cantidad === 'number') {
-        if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
-          articulo.cantidad = Math.max(0, articulo.cantidad - venta.cantidad);
         }
+      }
+
+      if (options && options.length > 0) {
+        articulo.stock_by_option = options;
       }
 
       return articulo;
@@ -397,12 +436,23 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async restoreStock(listArt: any, listVenta: any) {
+    let detailArr: any[] = [];
+    if (listVenta && listVenta.detail) {
+      if (typeof listVenta.detail === 'string') {
+        try {
+          detailArr = JSON.parse(listVenta.detail);
+        } catch (e) {
+          detailArr = [];
+        }
+      } else if (Array.isArray(listVenta.detail)) {
+        detailArr = listVenta.detail;
+      }
+    }
+
     const updatedList = listArt.map((articulo: any) => {
-      const venta = listVenta.detail.find((v: any) => v.productoId === articulo.id);
+      const ventasProducto = detailArr.filter((v: any) => v.productoId === articulo.id);
 
-      if (!venta) return articulo;
-
-      const tipoVenta = venta.tipoVenta;
+      if (ventasProducto.length === 0) return articulo;
 
       let options: any[] = [];
       if (articulo.stock_by_option) {
@@ -417,21 +467,27 @@ export class SalesComponent implements OnInit, AfterViewInit {
         }
       }
 
-      if (options && options.length > 0 && venta.modelo) {
-        options = options.map((opt: any) => {
-          if (opt.id === venta.modelo) {
-            return {
-              ...opt,
-              cantidad: (Number(opt.cantidad) || 0) + venta.cantidad
-            };
+      for (const venta of ventasProducto) {
+        const tipoVenta = venta.tipoVenta;
+        if (options && options.length > 0 && venta.modelo) {
+          options = options.map((opt: any) => {
+            if (opt.id === venta.modelo) {
+              return {
+                ...opt,
+                cantidad: (Number(opt.cantidad) || 0) + venta.cantidad
+              };
+            }
+            return opt;
+          });
+        } else if (typeof articulo.cantidad === 'number') {
+          if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
+            articulo.cantidad = (articulo.cantidad || 0) + venta.cantidad;
           }
-          return opt;
-        });
-        articulo.stock_by_option = options;
-      } else if (typeof articulo.cantidad === 'number') {
-        if (tipoVenta === 'e23f61c2-9025-4761-8a75-a5146de03473') {
-          articulo.cantidad = articulo.cantidad + venta.cantidad;
         }
+      }
+
+      if (options && options.length > 0) {
+        articulo.stock_by_option = options;
       }
 
       return articulo;
