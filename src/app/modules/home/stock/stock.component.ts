@@ -251,7 +251,7 @@ export class StockComponent implements OnInit {
     });
 
     const data = await firstValueFrom(this.ref.onClose);
-
+    if (!data) return;
 
     const enrichedColores = (data.colores || []).map((col: any) => {
       const loc = this.locations.find((l: any) => l.id === col.ubicacionId);
@@ -274,7 +274,7 @@ export class StockComponent implements OnInit {
       id_lote: data.lote,
       precio_maximo: data. precio_maximo,
       active: data.active,
-      chips:  data.chips,
+      chips:  data.chips || [],
     };
     let respProduct;
     if (data.id) {
@@ -314,33 +314,35 @@ export class StockComponent implements OnInit {
     });
 
     const data = await firstValueFrom(this.ref.onClose);
-    if (data?.imagen) {
-      const file = data.imagen;
+    if (!data) return;
 
-      const enrichedColores = (data.colores || []).map((col: any) => {
-        const loc = this.locations.find((l: any) => l.id === col.ubicacionId);
-        return {
-          ...col,
-          variante: col.color,
-          ubicacion: loc ? loc.nombre : 'No especificado'
-        };
-      });
-
-      const articulo: any = {
-        nombre: data.nombre,
-        nombre_corto: data.nombre_corto ?? data.nombre,
-        descripcion: data.descripcion ?? '',
-        costo_unitario: data.costo_unitario,
-        precio: data.precio ?? 0,
-        active: true,
-        stock_by_option: enrichedColores,
-        type: data.tipo,
-        id_lote: data.lote,
-        precio_maximo: data. precio_maximo,
-        chips:  data.chips,
+    const enrichedColores = (data.colores || []).map((col: any) => {
+      const loc = this.locations.find((l: any) => l.id === col.ubicacionId);
+      return {
+        ...col,
+        variante: col.color,
+        ubicacion: loc ? loc.nombre : 'No especificado'
       };
+    });
 
-      const respProduct = await lastValueFrom(this.service.saveProduct(articulo));
+    const articulo: any = {
+      nombre: data.nombre,
+      nombre_corto: data.nombre_corto ?? data.nombre,
+      descripcion: data.descripcion ?? '',
+      costo_unitario: data.costo_unitario,
+      precio: data.precio ?? 0,
+      active: true,
+      stock_by_option: enrichedColores,
+      type: data.tipo,
+      id_lote: data.lote,
+      precio_maximo: data. precio_maximo,
+      chips:  data.chips || [],
+    };
+
+    const respProduct = await lastValueFrom(this.service.saveProduct(articulo));
+
+    if (data.imagen) {
+      const file = data.imagen;
       const temp = await this.service.uploadImagen(file);
 
       const dataImg = { nombre: temp.body.url.split('/').pop(), id_articulo: respProduct.id, url: temp.body.url.split('/').pop() }
@@ -349,7 +351,7 @@ export class StockComponent implements OnInit {
 
     this.messageService.add({
       severity: 'success',
-      summary: 'Login',
+      summary: 'Stock',
       detail: 'Datos guardados correctamente',
       life: 2000
     });

@@ -137,10 +137,13 @@
             <tbody>
             @for(color of colores.controls; track $index){
               <tr [formGroupName]="$index">
-                <td class="p-2">
+                <td class="p-2 align-top">
                   <input type="text" pInputText class="input w-full" formControlName="color" placeholder="Ej: azul, grande, etc." />
+                  @if(color.get('color')?.touched && color.get('color')?.invalid) {
+                    <div class="text-red-500 text-xs mt-1">Requerido</div>
+                  }
                 </td>
-                <td class="p-2">
+                <td class="p-2 align-top">
                   <p-dropdown 
                     [options]="locations" 
                     formControlName="ubicacionId" 
@@ -151,11 +154,17 @@
                     class="w-full"
                   >
                   </p-dropdown>
+                  @if(color.get('ubicacionId')?.touched && color.get('ubicacionId')?.invalid) {
+                    <div class="text-red-500 text-xs mt-1">Requerido</div>
+                  }
                 </td>
-                <td class="p-2">
+                <td class="p-2 align-top">
                   <input type="number" pInputText class="input w-full" formControlName="cantidad" min="0" />
+                  @if(color.get('cantidad')?.touched && color.get('cantidad')?.invalid) {
+                    <div class="text-red-500 text-xs mt-1">Requerido</div>
+                  }
                 </td>
-                <td class="p-2 text-center">
+                <td class="p-2 text-center align-top">
                   <button 
                     type="button" 
                     class="text-red-600 hover:text-red-800 transition" 
@@ -169,6 +178,12 @@
             </tbody>
           </table>
         </div>
+
+        @if(colores.touched && colores.invalid){
+          <div class="text-red-500 text-sm font-bold mt-2">
+            * Debe agregar por lo menos un registro de Variante y Ubicación completo.
+          </div>
+        }
 
         <button type="button" class="flex items-center gap-2 mt-2 text-blue-600 hover:text-blue-800 font-bold transition" (click)="addItem()">
           <span class="text-xl font-bold">+</span> Agregar Variante / Detalle

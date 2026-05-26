@@ -67,7 +67,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
       precio: [null],
       precio_maximo: [null],
       descripcion: [''],
-      chips:[null],
+      chips:[[]],
       lote: [''],
       cantidad: [null],
       active:[true],
@@ -86,7 +86,7 @@ export class ModalStockComponent implements OnInit, OnDestroy {
         precio_maximo: this.initial.precio_maximo ?? null,
         descripcion: this.initial.descripcion || '',
         active: this.initial.active,
-        chips: this.initial.chips ?? null,
+        chips: this.initial.chips ?? [],
         lote: this.initial.id_lote || ''
       });
 
@@ -186,9 +186,9 @@ export class ModalStockComponent implements OnInit, OnDestroy {
     this.colores.push(
       this.fb.group({
         id: new Date().getTime(),
-        color: [''],
+        color: ['', Validators.required],
         ubicacionId: ['e23f61c2-9025-4761-8a75-a5146de03473', Validators.required],
-        cantidad: [0, [Validators.min(0)]],
+        cantidad: [0, [Validators.min(0), Validators.required]],
       })
     );
   }
