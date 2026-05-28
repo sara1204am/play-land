@@ -422,6 +422,30 @@ export class StockComponent implements OnInit {
     this.getData();
   }
 
+  async deleteProduct(row: any) {
+    const confirmDelete = confirm(`¿Está seguro de que desea eliminar el producto "${row.nombre}"? Esta acción no se puede deshacer.`);
+    if (!confirmDelete) return;
+
+    try {
+      await lastValueFrom(this.service.deleteProduct(row.id));
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Stock',
+        detail: 'Producto eliminado correctamente',
+        life: 2000
+      });
+      this.getData();
+    } catch (e) {
+      console.error('Error al eliminar producto', e);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Stock',
+        detail: 'Error al eliminar el producto',
+        life: 3000
+      });
+    }
+  }
+
   addFile(row: any) {
     row.stock_by_option.push({
       id: new Date().getTime(),

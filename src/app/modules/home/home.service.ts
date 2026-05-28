@@ -113,6 +113,10 @@ export class HomeService {
     return this.http.patch(`${API_PRODUCT_URL}`, { ...data });
   }
 
+  deleteProduct(id: string): Observable<any> {
+    return this.http.delete(`${API_PRODUCT_URL}/${id}`);
+  }
+
   editSale(data: any): Observable<any> {
     return this.http.patch(`${API_SALES_URL}`, { ...data });
   }
